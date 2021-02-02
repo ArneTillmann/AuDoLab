@@ -2,7 +2,7 @@ import pandas as pd
 import os, sys
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/..")
-from AbScoc_smvlda.preprocessing import Preprocessor
+from AbScoc_svmlda.subclasses.preprocessing import Preprocessor
 
 
 preprocessing = Preprocessor()

@@ -8,13 +8,6 @@ class One_Class_SVM:
     def __init__(self):
         3+4
 
-
-
-
-
-
-
-
     def classification(training, predicting, nus, quality_train, min_pred, max_pred):
         df = pd.DataFrame()
         for i in nus:

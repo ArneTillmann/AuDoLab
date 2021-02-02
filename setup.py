@@ -2,7 +2,7 @@ from setuptools import find_packages, setup
 
 setup(
     name=’AbScoc_smvlda’,
-    packages=find_packages(include=[`AbScoc_smvlda´]),
+    packages=find_packages(include=[`AbScoc_svmlda´]),
     version=’0.1.0',
     description=’My first Python library’,
     author=’Arne Tillmann’,
