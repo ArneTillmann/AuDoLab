@@ -1,4 +1,6 @@
 from sklearn.metrics import roc_auc_score
+from sklearn.svm import OneClassSVM
+import pandas as pd
 
 class One_Class_SVM:
     """
@@ -8,6 +10,7 @@ class One_Class_SVM:
     def __init__(self):
         3+4
 
+    @staticmethod
     def classification(training, predicting, nus, quality_train, min_pred, max_pred):
         df = pd.DataFrame()
         for i in nus:

@@ -5,9 +5,8 @@ from AbScoc_svmlda.subclasses.preprocessing import Preprocessor
 from load_papers import papers
 from load_data import data
 
-print(data.shape)
+
 preprocessing = Preprocessor()
-print(type(preprocessing))
 papers_processed = Preprocessor.basic_preprocessing(papers)
 if __name__ == "__main__":
     print(papers_processed)
