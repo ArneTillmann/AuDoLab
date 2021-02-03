@@ -44,7 +44,6 @@ class Preprocessor:
         return " ".join([lemmatizer.lemmatize(w, 'v') for w in text])
 
     def basic_preprocessing(df):
-
         df_temp = df.copy(deep = True)
 
         try:

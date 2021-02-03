@@ -1,16 +1,16 @@
-import pandas as pd
 import os, sys
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/..")
 from AbScoc_svmlda.subclasses.preprocessing import Preprocessor
+from load_papers import papers
+from load_data import data
 
-
+print(data.shape)
 preprocessing = Preprocessor()
-papers = pd.read_csv(r"tests\dentistry_teeth.txt")
-papers.head()
-papers = papers.drop_duplicates(subset=["text"])
-print(papers)
-mistake = papers["text"].iloc[77]
-papers = papers[papers["text"] != mistake]
+print(type(preprocessing))
 papers_processed = Preprocessor.basic_preprocessing(papers)
-print(papers_processed)
+if __name__ == "__main__":
+    print(papers_processed)
+df_processed = Preprocessor.basic_preprocessing(data)
+if __name__ == "__main__":
+    print(data)
