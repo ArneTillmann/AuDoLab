@@ -1,3 +1,6 @@
+import gensim
+
+
 class LDA:
     """
     Keywordscraper
@@ -23,3 +26,17 @@ class LDA:
             train_vecs.append(topic_vec)
             counter = counter + 1
         return train_vecs
+
+    @staticmethod
+    def model(corpus, num_topics, id2word,
+              random_state, passes):
+
+        lda_model = gensim.models.LdaMulticore(
+            corpus,
+            num_topics=num_topics,
+            id2word=id2word,
+            random_state=random_state,
+            passes=passes,
+            )
+
+        return lda_model
