@@ -56,7 +56,6 @@ class LDA:
             lda_model, bow_corpus, dictionary
         )
 
-        visualization_html = pyLDAvis.prepared_data_to_html(visualization, template_type='simple')
 
 
-        pyLDAvis.show(visualization_html)
+        pyLDAvis.show(visualization)
