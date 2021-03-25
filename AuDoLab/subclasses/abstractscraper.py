@@ -15,10 +15,10 @@ class AbstractScraper:
     scrapes the abstracts of scientific papers
     """
 
-    def __init__(self):
+    def __init__(self, url):
         # define url - is already the result of search for the keyword
         # "Artificial Intelligence"
-        self.url = "https://ieeexplore.ieee.org/search/searchresult.jsp?action=search&newsearch=true&matchBoolean=true&queryText=(%22Author%20Keywords%22:cotton)&highlight=true&returnFacets=ALL&returnType=SEARCH&matchPubs=true&rowsPerPage=100&pageNumber=1"
+        self.url = url
         self.web = webbot.Browser()
         # define a delay and wait function in order to prevent empty results
         # when internet connection is slow
@@ -112,7 +112,7 @@ class AbstractScraper:
 if __name__ == "__main__":
 
     # Execute the above code
-    ks = AbstractScraper()
+    ks = AbstractScraper("https://ieeexplore.ieee.org/search/searchresult.jsp?action=search&newsearch=true&matchBoolean=true&queryText=(%22Author%20Keywords%22:cotton)&highlight=true&returnFacets=ALL&returnType=SEARCH&matchPubs=true&rowsPerPage=100&pageNumber=1")
 
     html_code = ks.open()
     links = ks.find_links()

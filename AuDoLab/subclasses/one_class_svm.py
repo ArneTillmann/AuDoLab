@@ -9,7 +9,8 @@ class One_Class_SVM:
 
     def __init__(self):
         3+4
-
+        
+    @staticmethod
     def choose_classifier(df, i):
         return df["tokens"][classifier.index[classifier.iloc[:, i] == 1].tolist()]
 
