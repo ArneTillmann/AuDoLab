@@ -3,7 +3,7 @@ from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 import os, sys
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/..")
-from AbScoc_svmlda.subclasses.preprocessing import Preprocessor
+from AuDoLab.subclasses.preprocessing import Preprocessor
 class Tf_idf:
     """
     Beschreibung

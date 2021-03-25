@@ -1,5 +1,6 @@
 import gensim
-
+import pyLDAvis.gensim
+import pyLDAvis
 
 class LDA:
     """
@@ -28,6 +29,13 @@ class LDA:
         return train_vecs
 
     @staticmethod
+    def preperation(df_processed, no_below, no_above):
+        dictionary = gensim.corpora.Dictionary(df_processed["tokens"])
+        dictionary.filter_extremes(no_below, no_above)
+        bow_corpus = [dictionary.doc2bow(doc) for doc in df_processed["tokens"]]
+        return dictionary, bow_corpus
+
+    @staticmethod
     def model(corpus, num_topics, id2word,
               random_state, passes):
 
@@ -40,3 +48,14 @@ class LDA:
             )
 
         return lda_model
+
+    @staticmethod
+    def visualize_topics(lda_model, bow_corpus, dictionary):
+
+        visualization = pyLDAvis.gensim.prepare(
+            lda_model, bow_corpus, dictionary
+        )
+
+
+
+        pyLDAvis.show(visualization)
