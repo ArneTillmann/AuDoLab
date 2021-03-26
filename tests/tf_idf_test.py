@@ -2,8 +2,10 @@ import os, sys
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/..")
 from AuDoLab.subclasses.tf_idf import Tf_idf
+
 from load_papers import papers
 from load_data import data
+
 
 
 tf_idf = Tf_idf()

@@ -9,10 +9,10 @@ class One_Class_SVM:
 
     def __init__(self):
         3+4
-        
+
     @staticmethod
-    def choose_classifier(df, i):
-        return df["tokens"][classifier.index[classifier.iloc[:, i] == 1].tolist()]
+    def choose_classifier(df, classifier, i):
+        return pd.DataFrame(df["tokens"][classifier.index[classifier.iloc[:, i] == 1].tolist()])
 
     @staticmethod
     def classification(training, predicting, nus, quality_train, min_pred, max_pred):
