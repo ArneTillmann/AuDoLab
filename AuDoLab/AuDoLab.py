@@ -54,12 +54,44 @@ class AuDoLab:
     def choose_classifier(self, df, classifier, i):
         return one_class_svm.One_Class_SVM.choose_classifier(df, classifier, i)
 
-
-    def lda_preperation(df_processed, no_below, no_above):
-        return lda.LDA.preperation(df_processed, no_below, no_above)
-
     def lda_modeling(self, data, num_topics=5,  random_state=101, passes=20):
-        self.dictionary, self.bow_corpus = lda.LDA.preperation(data, no_below=2, no_above=0.3)
+        self.dictionary, self.bow_corpus = lda.LDA.preperation(data)
+        self.l = lda.LDA()
+        self.lda_model = self.l.model(
+            self.bow_corpus,
+            num_topics=num_topics,
+            id2word=self.dictionary,
+            random_state=random_state,
+            passes=passes,
+            )
+        return self.lda_model
+
+    def lda_modeling(self, data, no_below, no_above, num_topics=5,  random_state=101, passes=20):
+        self.dictionary, self.bow_corpus = lda.LDA.preperation(data, no_below, no_above)
+        self.l = lda.LDA()
+        self.lda_model = self.l.model(
+            self.bow_corpus,
+            num_topics=num_topics,
+            id2word=self.dictionary,
+            random_state=random_state,
+            passes=passes,
+            )
+        return self.lda_model
+
+    def lda_modeling(self, data, no_below, num_topics=5,  random_state=101, passes=20):
+        self.dictionary, self.bow_corpus = lda.LDA.preperation(data, no_below=no_below)
+        self.l = lda.LDA()
+        self.lda_model = self.l.model(
+            self.bow_corpus,
+            num_topics=num_topics,
+            id2word=self.dictionary,
+            random_state=random_state,
+            passes=passes,
+            )
+        return self.lda_model
+
+    def lda_modeling(self, data, no_above, num_topics=5,  random_state=101, passes=20):
+        self.dictionary, self.bow_corpus = lda.LDA.preperation2(data, no_above=no_above)
         self.l = lda.LDA()
         self.lda_model = self.l.model(
             self.bow_corpus,

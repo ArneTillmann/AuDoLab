@@ -19,5 +19,5 @@ if __name__ == '__main__':
     # lda = audo.lda_modeling(papers_processed)
     # audo.lda_visualize_topics()
 
-    lda2 = audo.lda_modeling(df_data)
+    lda2 = audo.lda_modeling(df_data, no_above=0.3)
     audo.lda_visualize_topics()
