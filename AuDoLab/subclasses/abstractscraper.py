@@ -42,7 +42,8 @@ class AbstractScraper:
             time.sleep(self.wait)
             self.html_page.append(self.web.get_page_source())
 
-        print("The algorithm is iterating through", len(self.html_page), "pages")
+        print("The algorithm is iterating through",
+              len(self.html_page), "pages")
         return self.html_page
 
     def find_links(self):
@@ -106,7 +107,6 @@ class AbstractScraper:
         self.abstracts = self.abstracts.drop_duplicates(subset=["text"])
         mistake = self.abstracts["text"].iloc[77]
         self.abstracts = self.abstracts[self.abstracts["text"] != mistake]
-
 
 
 if __name__ == "__main__":

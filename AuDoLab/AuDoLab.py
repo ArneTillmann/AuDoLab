@@ -6,6 +6,7 @@ from AuDoLab.subclasses import one_class_svm
 from AuDoLab.subclasses import preprocessing
 from AuDoLab.subclasses import tf_idf
 
+
 class AuDoLab:
 
     def __init__(self):
@@ -14,7 +15,10 @@ class AuDoLab:
     def scrape_abstracts(self, url, file_name):
         """Function to scrap abstracts of scientific papers from the givin url.
         We used https://ieeexplore.ieee.org/search/advanced to generate a
-        list like https://ieeexplore.ieee.org/search/searchresult.jsp?action=search&newsearch=true&matchBoolean=true&queryText=(%22Author%20Keywords%22:cotton)&highlight=true&returnFacets=ALL&returnType=SEARCH&matchPubs=true&rowsPerPage=100&pageNumber=1
+        list like https://ieeexplore.ieee.org/search/searchresult.jsp?action=sea
+        rch&newsearch=true&matchBoolean=true&queryText=(%22Author%20Keywords%22:
+        cotton)&highlight=true&returnFacets=ALL&returnType=SEARCH&matchPubs=true
+        &rowsPerPage=100&pageNumber=1
         with the search results.
         The abstracts of the papers listet on that list of search results will
         be stored in a .txt file with the givin file name.
@@ -24,14 +28,13 @@ class AuDoLab:
         - file_name (string)
         """
 
-
         ks = abstractscraper.AbstractScraper(url)
 
         html_code = ks.open()
         links = ks.find_links()
         self.abstracts = ks.get_abstracts()
         file_name = file_name + ".txt"
-        self.abstracts.to_csv(file_name , header=True, index=False)
+        self.abstracts.to_csv(file_name, header=True, index=False)
         return self.abstracts
 
     def preprocessing(self, data):
@@ -42,10 +45,11 @@ class AuDoLab:
         - data (<class 'pandas.core.frame.DataFrame'>)
         """
 
-        self.data_processed = preprocessing.Preprocessor.basic_preprocessing(data)
+        self.data_processed = preprocessing.Preprocessor.basic_preprocessing(
+            data)
         return self.data_processed
 
-    def tf_idf_features(self, data, papers, features = 8000):
+    def tf_idf_features(self, data, papers, features=8000):
         """The function tf_idf_features(...) calculates the tfidf scores, but
         return only the <features> amount of words with the highest tfidf
         scores.
@@ -56,7 +60,7 @@ class AuDoLab:
         """
         tfidf = tf_idf.Tf_idf()
         self.data_tfidf_features, self.papers_tfidf_features = tfidf.tfidf_features(
-            data, papers, features)
+            data, papers, features=features)
         return self.data_tfidf_features, self.papers_tfidf_features
 
     def tf_idf(self, data, papers):
@@ -129,7 +133,7 @@ class AuDoLab:
             id2word=self.dictionary,
             random_state=random_state,
             passes=passes,
-            )
+        )
         return self.lda_model
 
     def lda_modeling(self, data, no_below, no_above, num_topics=5,  random_state=101, passes=20):
@@ -144,7 +148,8 @@ class AuDoLab:
         - random_state (int)
         - passes (int)
         """
-        self.dictionary, self.bow_corpus = lda.LDA.preperation(data, no_below, no_above)
+        self.dictionary, self.bow_corpus = lda.LDA.preperation(
+            data, no_below, no_above)
         self.l = lda.LDA()
         self.lda_model = self.l.model(
             self.bow_corpus,
@@ -152,7 +157,7 @@ class AuDoLab:
             id2word=self.dictionary,
             random_state=random_state,
             passes=passes,
-            )
+        )
         return self.lda_model
 
     def lda_modeling(self, data, no_below, num_topics=5,  random_state=101, passes=20):
@@ -167,7 +172,8 @@ class AuDoLab:
         - passes (int)
         """
 
-        self.dictionary, self.bow_corpus = lda.LDA.preperation(data, no_below=no_below)
+        self.dictionary, self.bow_corpus = lda.LDA.preperation(
+            data, no_below=no_below)
         self.l = lda.LDA()
         self.lda_model = self.l.model(
             self.bow_corpus,
@@ -175,13 +181,13 @@ class AuDoLab:
             id2word=self.dictionary,
             random_state=random_state,
             passes=passes,
-            )
+        )
         return self.lda_model
 
     def lda_modeling(self, data, no_above, num_topics=5,  random_state=101, passes=20):
         """The function performs lda modelling as described in this
         https://www.jmlr.org/papers/volume3/blei03a/blei03a.pdf paper.
-        
+
         Arguments:
         - data (<class 'pandas.core.frame.DataFrame'>)
         - no_above (int)
@@ -189,7 +195,8 @@ class AuDoLab:
         - random_state (int)
         - passes (int)
         """
-        self.dictionary, self.bow_corpus = lda.LDA.preperation2(data, no_above=no_above)
+        self.dictionary, self.bow_corpus = lda.LDA.preperation2(
+            data, no_above=no_above)
         self.l = lda.LDA()
         self.lda_model = self.l.model(
             self.bow_corpus,
@@ -197,11 +204,12 @@ class AuDoLab:
             id2word=self.dictionary,
             random_state=random_state,
             passes=passes,
-            )
+        )
         return self.lda_model
 
     def lda_visualize_topics(self):
         """The lda model calculated with the function lda_modeling is visualized
         in an html frame and opened in the standard browser.
         """
-        lda.LDA.visualize_topics(self.lda_model, self.bow_corpus, self.dictionary)
+        lda.LDA.visualize_topics(
+            self.lda_model, self.bow_corpus, self.dictionary)

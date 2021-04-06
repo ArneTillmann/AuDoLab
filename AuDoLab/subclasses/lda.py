@@ -2,6 +2,7 @@ import gensim
 import pyLDAvis.gensim
 import pyLDAvis
 
+
 class LDA:
     """
     Keywordscraper
@@ -31,30 +32,33 @@ class LDA:
     @staticmethod
     def preperation(df_processed, no_below, no_above):
 
-        
         dictionary = gensim.corpora.Dictionary(df_processed["tokens"])
-        dictionary.filter_extremes(no_above = no_above, no_below=no_below)
-        bow_corpus = [dictionary.doc2bow(doc) for doc in df_processed["tokens"]]
+        dictionary.filter_extremes(no_above=no_above, no_below=no_below)
+        bow_corpus = [dictionary.doc2bow(doc)
+                      for doc in df_processed["tokens"]]
         return dictionary, bow_corpus
 
     @staticmethod
     def preperation2(df_processed, no_above):
         dictionary = gensim.corpora.Dictionary(df_processed["tokens"])
-        dictionary.filter_extremes(no_above = no_above)
-        bow_corpus = [dictionary.doc2bow(doc) for doc in df_processed["tokens"]]
+        dictionary.filter_extremes(no_above=no_above)
+        bow_corpus = [dictionary.doc2bow(doc)
+                      for doc in df_processed["tokens"]]
         return dictionary, bow_corpus
 
     @staticmethod
     def preperation(df_processed, no_below):
         dictionary = gensim.corpora.Dictionary(df_processed["tokens"])
-        dictionary.filter_extremes(no_below = no_below)
-        bow_corpus = [dictionary.doc2bow(doc) for doc in df_processed["tokens"]]
+        dictionary.filter_extremes(no_below=no_below)
+        bow_corpus = [dictionary.doc2bow(doc)
+                      for doc in df_processed["tokens"]]
         return dictionary, bow_corpus
 
     @staticmethod
     def preperation(df_processed):
         dictionary = gensim.corpora.Dictionary(df_processed["tokens"])
-        bow_corpus = [dictionary.doc2bow(doc) for doc in df_processed["tokens"]]
+        bow_corpus = [dictionary.doc2bow(doc)
+                      for doc in df_processed["tokens"]]
         return dictionary, bow_corpus
 
     @staticmethod
@@ -67,7 +71,7 @@ class LDA:
             id2word=id2word,
             random_state=random_state,
             passes=passes,
-            )
+        )
 
         return lda_model
 
@@ -77,7 +81,5 @@ class LDA:
         visualization = pyLDAvis.gensim.prepare(
             lda_model, bow_corpus, dictionary, sort_topics=False
         )
-
-
 
         pyLDAvis.show(visualization)

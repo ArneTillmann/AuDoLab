@@ -1,9 +1,12 @@
 
+from AuDoLab.subclasses.preprocessing import Preprocessor
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
-import os, sys
+import os
+import sys
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/..")
-from AuDoLab.subclasses.preprocessing import Preprocessor
+
+
 class Tf_idf:
     """
     Beschreibung
@@ -22,7 +25,8 @@ class Tf_idf:
         papers_temp = papers.copy(deep=True)
         papers_temp = Preprocessor.basic_preprocessing(papers_temp)
 
-        tfidf_vectorizer = TfidfVectorizer(ngram_range=(1, ngrams), max_features=features)
+        tfidf_vectorizer = TfidfVectorizer(
+            ngram_range=(1, ngrams), max_features=features)
 
         corpus = df_temp['lemma'].append(papers_temp['lemma'])
         tfidf_vectorizer.fit(corpus)
@@ -39,7 +43,7 @@ class Tf_idf:
     def tfidf(df, papers, ngrams=2, labels=True):
 
         preprocessing = Preprocessor()
-        df_temp = df.copy(deep = True)
+        df_temp = df.copy(deep=True)
         df_temp = Preprocessor.basic_preprocessing(df_temp)
 
         papers_temp = papers.copy(deep=True)

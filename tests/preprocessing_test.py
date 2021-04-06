@@ -1,9 +1,10 @@
-import os, sys
+from load_data import data
+from load_papers import papers
+from AuDoLab.subclasses.preprocessing import Preprocessor
+import os
+import sys
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/..")
-from AuDoLab.subclasses.preprocessing import Preprocessor
-from load_papers import papers
-from load_data import data
 
 
 preprocessing = Preprocessor()

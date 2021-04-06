@@ -2,6 +2,7 @@ from sklearn.metrics import roc_auc_score
 from sklearn.svm import OneClassSVM
 import pandas as pd
 
+
 class One_Class_SVM:
     """
     Keywordscraper

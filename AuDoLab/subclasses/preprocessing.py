@@ -24,7 +24,8 @@ class Preprocessor:
         STOPWORDS = set(stopwords.words('english'))
 
         text = text.lower()
-        text = REPLACE_BY_SPACE_RE.sub('', text) # replace REPLACE_BY_SPACE_RE symbols by space in text
+        # replace REPLACE_BY_SPACE_RE symbols by space in text
+        text = REPLACE_BY_SPACE_RE.sub('', text)
         text = BAD_SYMBOLS_RE.sub('', text)
         text = NUMBERS.sub('', text)
         # delete symbols which are in BAD_SYMBOLS_RE from text
@@ -35,7 +36,7 @@ class Preprocessor:
                 words.pop(i)
             else:
                 i += 1
-        text = ' '.join(map(str, words))# delete stopwords from text
+        text = ' '.join(map(str, words))  # delete stopwords from text
 
         return text
 
@@ -44,22 +45,23 @@ class Preprocessor:
         return " ".join([lemmatizer.lemmatize(w, 'v') for w in text])
 
     def basic_preprocessing(df):
-        df_temp = df.copy(deep = True)
+        df_temp = df.copy(deep=True)
 
         try:
-            df_temp = df_temp.rename(index = str, columns = {'transcription': 'text'})
+            df_temp = df_temp.rename(
+                index=str, columns={'transcription': 'text'})
         except:
             pass
 
-
-        df_temp.loc[:, 'text'] = [Preprocessor.text_prepare(x) for x in df_temp['text'].values]
-        df_temp["text"]= [item for item in df_temp['text'] if not item.isdigit()]
+        df_temp.loc[:, 'text'] = [Preprocessor.text_prepare(
+            x) for x in df_temp['text'].values]
+        df_temp["text"] = [
+            item for item in df_temp['text'] if not item.isdigit()]
 
         tokenizer = RegexpTokenizer(r'\w+')
 
         df_temp["tokens"] = df_temp["text"].apply(tokenizer.tokenize)
         df_temp["lemma"] = df_temp["tokens"].apply(Preprocessor.lemmatize_text)
         df_temp["tokens"] = df_temp["lemma"].apply(tokenizer.tokenize)
-
 
         return df_temp

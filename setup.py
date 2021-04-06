@@ -9,6 +9,6 @@ setup(
     license=’GNU General Public License v3.0’,
     install_requires=[],
     setup_requires=[‘pytest-runner’],
-    tests_require=[‘pytest==4.4.1’],
+    tests_require=[‘pytest == 4.4.1’],
     test_suite=’tests’,
 )
