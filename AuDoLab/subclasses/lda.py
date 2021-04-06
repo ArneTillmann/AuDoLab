@@ -73,7 +73,7 @@ class LDA:
     def visualize_topics(lda_model, bow_corpus, dictionary):
 
         visualization = pyLDAvis.gensim.prepare(
-            lda_model, bow_corpus, dictionary
+            lda_model, bow_corpus, dictionary, sort_topics=False
         )
 
 
