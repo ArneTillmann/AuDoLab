@@ -1,10 +1,11 @@
-from load_data import data
-from load_papers import papers
-from AuDoLab.AuDoLab import AuDoLab
 import os
 import sys
 import numpy as np
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/..")
+from load_data import data
+from load_papers import papers
+from AuDoLab.AuDoLab import AuDoLab
+
 
 
 audo = AuDoLab()
