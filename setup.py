@@ -39,7 +39,7 @@ setup(
     },
     install_requires=requirements,
     license="GNU General Public License v3",
-    long_description=readme + '\n\n' + history,
+    long_description=readme,
     include_package_data=True,
     keywords='AuDoLab',
     name='AuDoLab',
@@ -48,6 +48,6 @@ setup(
     test_suite='tests',
     tests_require=test_requirements,
     url='https://github.com/ArneTillmann/AuDoLab',
-    version='0.0.9',
+    version='0.0.32',
     zip_safe=False,
 )
