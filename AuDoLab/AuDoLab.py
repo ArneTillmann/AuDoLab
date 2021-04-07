@@ -10,7 +10,7 @@ from AuDoLab.subclasses import tf_idf
 class AuDoLab:
 
     def __init__(self):
-        4+5
+        4+4
 
     def scrape_abstracts(self, url, file_name):
         """Function to scrap abstracts of scientific papers from the givin url.
