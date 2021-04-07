@@ -35,3 +35,26 @@ def test_command_line_interface():
     help_result = runner.invoke(cli.main, ['--help'])
     assert help_result.exit_code == 0
     assert '--help  Show this message and exit.' in help_result.output
+
+
+from load_data import data
+from load_papers import papers
+from AuDoLab.AuDoLab import AuDoLab
+
+
+
+audo = AuDoLab()
+#papers2 = audo.scrape_abstracts("https://ieeexplore.ieee.org/search/searchresult.jsp?action=search&newsearch=true&matchBoolean=true&queryText=(%22Author%20Keywords%22:cotton)&highlight=true&returnFacets=ALL&returnType=SEARCH&matchPubs=true&rowsPerPage=100&pageNumber=1", cotton)
+papers_processed = audo.preprocessing(papers)
+data_processed = audo.preprocessing(data)
+data_tfidf_features, papers_tfidf_features = audo.tf_idf_features(
+    data, papers, )
+data_tfidf, papers_tfidf = audo.tf_idf(data, papers)
+classifier = audo.one_class_svm(papers_tfidf, data_tfidf)
+df_data = audo.choose_classifier(data_processed, classifier, 0)
+if __name__ == '__main__':
+    # lda = audo.lda_modeling(papers_processed)
+    # audo.lda_visualize_topics()
+
+    lda2 = audo.lda_modeling(df_data, no_above=0.3)
+    audo.lda_visualize_topics()
