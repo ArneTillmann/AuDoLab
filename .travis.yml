@@ -7,8 +7,8 @@ deploy:
   skip_cleanup: true
   provider: pypi
   distributions: sdist bdist_wheel
-  user: "__token__"
-  password: "pypi-AgEIcHlwaS5vcmcCJGMzNmFhMzIwLTU5MmItNDcyZi05NmZlLTViZjAyMWEwMTE1OAACJXsicGVybWlzc2lvbnMiOiAidXNlciIsICJ2ZXJzaW9uIjogMX0AAAYg9Unaq312M9hknJGHzgpltyukgYvu3ifm7yHURcLpIes"
+  user: ArneTillmann
+  password: eE82nyx#*@j
   on:
     tag: true
     all_branches: true
