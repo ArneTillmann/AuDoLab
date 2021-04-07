@@ -48,6 +48,6 @@ setup(
     test_suite='tests',
     tests_require=test_requirements,
     url='https://github.com/ArneTillmann/AuDoLab',
-    version='0.0.10',
+    version='0.0.11',
     zip_safe=False,
 )
