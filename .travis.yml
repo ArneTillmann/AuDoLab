@@ -7,7 +7,7 @@ deploy:
   skip_cleanup: true
   provider: https://test.pypi.org/legacy/
   distributions: sdist bdist_wheel
-  user: "__token__"
+  user: __token__
   password:
     secure: "FrnN8vw1LcXnC78YFRBA2M5mQ1/4lZTWVRSWKnlrynzpLaeuYrhKEopNLI1aJVEAjpS4zzsjtxnv7xWZAQ2fVcvreuUSZjurp2n7aTL7/q3B/ncwyAvKvmQfM+FQFJ1SYEREWJyG26nXlJKGzMndbXyNa3Jl5slEUYeIrAdn7r+VgdYGLImxe/tiQxfGA0SzWnHuKhfHk/2kTxP3m7j8fqQ4chc5Nqitp3WqDqxaOdi9I+Xv4dcaQYe4RtO0UdNxigCtMaCf5zriZvKNKiU/siOq3ILyDbWC7shPkvQ7ewU4DQHvzqxazcBJXvz5uzpGBqUMkyZUZ8jdHiSndYozH1vMiQcw4mYNT8QvdU/W9mtzIjAg5RhNpicU8iOvLvODNxGR70dCZhPN414zV0wM6BiU2JZMpY2h41pnxZXnnHW7dx6RDk/e+4H47pYLv8svfTH/+tF+SYfkztMKGx0hyK6/HQvhQoHBY24OjNpafBmrOS/ZVf6Gkd9Ubaiu5UjndVfyy5LenJrBGQr9i50zvt9njoHdBfH3cOqZqsFrfE7WbTj0usGrS3aNYwrcMDO9SVQltPZnrxf3Dfk2IDzsieD+3SFyGdr+0HsFHds8KlWwovIw5BHnq2R7PTIe3lrKAoUKYEgDuasNHOabkD20Zp45Isz2ePH4r0o4aHCGOW8="
   on:
