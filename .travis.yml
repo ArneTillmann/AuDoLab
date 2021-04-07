@@ -5,7 +5,7 @@ install: pip install -U tox-travis
 script: tox
 deploy:
   skip_cleanup: true
-  provider: pypi
+  provider: https://test.pypi.org/legacy/
   distributions: sdist bdist_wheel
   user: __token__
   password:
