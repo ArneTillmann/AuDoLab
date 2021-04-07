@@ -12,6 +12,3 @@ deploy:
   on:
     repo: ArneTillmann/AuDoLab
     python: 3.8
-    branches:
-      only:
-        - main
