@@ -12,7 +12,7 @@ with open('HISTORY.rst') as history_file:
 
 requirements = ['Click>=7.0', ]
 
-setup_requirements = ['pytest-runner', ]
+setup_requirements = ['pytest-runner', 'numpy==1.19.2', 'pandas==1.2.3', 'webbot==0.34', 'bs4==0.0.1', 'gensim==3.8.3', 'pyldavis==2.1.2', 'scikit-learn==0.24.1', 'keras==2.3.1', 'nltk==3.5', 'lime==0.2.0.1', 'matplotlib==3.3.4']
 
 test_requirements = ['pytest>=3', ]
 
@@ -48,6 +48,6 @@ setup(
     test_suite='tests',
     tests_require=test_requirements,
     url='https://github.com/ArneTillmann/AuDoLab',
-    version='0.0.33',
+    version='0.0.36',
     zip_safe=False,
 )
