@@ -1,5 +1,5 @@
-import numpy as np
-
+from numpy import round as np_round
+from numpy import arange as np_arange
 from AuDoLab.subclasses import abstractscraper
 from AuDoLab.subclasses import lda
 from AuDoLab.subclasses import one_class_svm
@@ -75,7 +75,7 @@ class AuDoLab:
         return self.data_tfidf, self.papers_tfidf
 
     def one_class_svm(self, training, predicting,
-                      nus=np.round(np.arange(0.001, 0.5, 0.001), 5),
+                      nus=np_round(np_arange(0.001, 0.5, 0.001), 5),
                       quality_train=0.85, min_pred=0.01, max_pred=0.1):
         """
         This is a one class classifier, that uses the training data (usually the
