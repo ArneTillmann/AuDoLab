@@ -1,4 +1,3 @@
-
 import pyLDAvis.gensim
 import pyLDAvis
 from gensim import corpora, models
@@ -10,8 +9,7 @@ class LDA:
     """
 
     def __init__(self):
-        3+4
-
+        3 + 4
 
     @staticmethod
     def preperation(df_processed, no_below=None, no_above=None):
@@ -32,46 +30,41 @@ class LDA:
             no_below = 0
         if no_above == None:
             no_above = 1
-        bow_corpus = [dictionary.doc2bow(doc)
-                      for doc in df_processed["tokens"]]
+        bow_corpus = [dictionary.doc2bow(doc) for doc in df_processed["tokens"]]
         return dictionary, bow_corpus
 
-#####---- Should not be necessary anymore ----############
+    #####---- Should not be necessary anymore ----############
 
     @staticmethod
     def preperation2(df_processed, no_above):
         dictionary = corpora.Dictionary(df_processed["tokens"])
         dictionary.filter_extremes(no_above=no_above)
-        bow_corpus = [dictionary.doc2bow(doc)
-                      for doc in df_processed["tokens"]]
+        bow_corpus = [dictionary.doc2bow(doc) for doc in df_processed["tokens"]]
         return dictionary, bow_corpus
 
     @staticmethod
     def preperation(df_processed, no_below):
         dictionary = gensim.corpora.Dictionary(df_processed["tokens"])
         dictionary.filter_extremes(no_below=no_below)
-        bow_corpus = [dictionary.doc2bow(doc)
-                      for doc in df_processed["tokens"]]
+        bow_corpus = [dictionary.doc2bow(doc) for doc in df_processed["tokens"]]
         return dictionary, bow_corpus
 
     @staticmethod
     def preperation(df_processed):
         dictionary = gensim.corpora.Dictionary(df_processed["tokens"])
-        bow_corpus = [dictionary.doc2bow(doc)
-                      for doc in df_processed["tokens"]]
+        bow_corpus = [dictionary.doc2bow(doc) for doc in df_processed["tokens"]]
         return dictionary, bow_corpus
 
     @staticmethod
-    def model(corpus, num_topics, id2word,
-              random_state, passes):
+    def model(corpus, num_topics, id2word, random_state, passes):
         """LDA model
 
         Args:
             corpus (iterable of list of (int, float), optional): [Stream of document vectors or sparse matrix of shape]
             num_topics (int): [pre-defined number of topics]
-            id2word ({dict of (int, str): gensim.corpora.dictionary.Dictionary}) – 
-                                            Mapping from word IDs to words. It is 
-                                            used to determine the vocabulary size, 
+            id2word ({dict of (int, str): gensim.corpora.dictionary.Dictionary}) –
+                                            Mapping from word IDs to words. It is
+                                            used to determine the vocabulary size,
                                             as well as for debugging and topic printing.
             random_state (int): [for recreating exact identical output]
             passes (int): [Number of passes through the corpus during training.]
