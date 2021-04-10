@@ -45,7 +45,7 @@ from AuDoLab import AuDoLab
 #     assert '--help  Show this message and exit.' in help_result.output
 
 
-data = pd.read_csv("tests\mtsamples.csv")
+data = pd.read_csv(r"tests\mtsamples.csv")
 data = data.sort_values("medical_specialty")
 
 new_list = list(data[data["medical_specialty"] ==
