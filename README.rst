@@ -1,7 +1,7 @@
 =======
 AuDoLab
 =======
-
+ 
 .. image:: https://img.shields.io/pypi/v/AuDoLab.svg
         :target: https://pypi.python.org/pypi/AuDoLab
 
