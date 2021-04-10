@@ -14,8 +14,8 @@ class Tf_idf:
     def tfidf(
         data,
         papers,
-        data_column="lemma",
-        papers_column="lemma",
+        data_column="tokens",
+        papers_column="tokens",
         features=None,
         ngrams=2,
     ):

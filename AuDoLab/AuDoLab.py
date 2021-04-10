@@ -114,28 +114,9 @@ class AuDoLab:
         """
         return one_class_svm.One_Class_SVM.choose_classifier(df, classifier, i)
 
-    def lda_modeling(self, data, num_topics=5,  random_state=101, passes=20):
-        """The function performs lda modelling as described in this
-        https://www.jmlr.org/papers/volume3/blei03a/blei03a.pdf paper.
 
-        Arguments:
-        - data (<class 'pandas.core.frame.DataFrame'>)
-        - num_topics (int)
-        - random_state (int)
-        - passes (int)
-        """
-        self.dictionary, self.bow_corpus = lda.LDA.preperation(data)
-        self.l = lda.LDA()
-        self.lda_model = self.l.model(
-            self.bow_corpus,
-            num_topics=num_topics,
-            id2word=self.dictionary,
-            random_state=random_state,
-            passes=passes,
-        )
-        return self.lda_model
 
-    def lda_modeling(self, data, no_below, no_above, num_topics=5,  random_state=101, passes=20):
+    def lda_modeling(self, data, no_below=None, no_above=None, num_topics=5,  random_state=101, passes=20):
         """The function performs lda modelling as described in this
         https://www.jmlr.org/papers/volume3/blei03a/blei03a.pdf paper.
 
@@ -159,52 +140,6 @@ class AuDoLab:
         )
         return self.lda_model
 
-    def lda_modeling(self, data, no_below, num_topics=5,  random_state=101, passes=20):
-        """The function performs lda modelling as described in this
-        https://www.jmlr.org/papers/volume3/blei03a/blei03a.pdf paper.
-
-        Arguments:
-        - data (<class 'pandas.core.frame.DataFrame'>)
-        - no_below (int)
-        - num_topics (int)
-        - random_state (int)
-        - passes (int)
-        """
-
-        self.dictionary, self.bow_corpus = lda.LDA.preperation(
-            data, no_below=no_below)
-        self.l = lda.LDA()
-        self.lda_model = self.l.model(
-            self.bow_corpus,
-            num_topics=num_topics,
-            id2word=self.dictionary,
-            random_state=random_state,
-            passes=passes,
-        )
-        return self.lda_model
-
-    def lda_modeling(self, data, no_above, num_topics=5,  random_state=101, passes=20):
-        """The function performs lda modelling as described in this
-        https://www.jmlr.org/papers/volume3/blei03a/blei03a.pdf paper.
-
-        Arguments:
-        - data (<class 'pandas.core.frame.DataFrame'>)
-        - no_above (int)
-        - num_topics (int)
-        - random_state (int)
-        - passes (int)
-        """
-        self.dictionary, self.bow_corpus = lda.LDA.preperation2(
-            data, no_above=no_above)
-        self.l = lda.LDA()
-        self.lda_model = self.l.model(
-            self.bow_corpus,
-            num_topics=num_topics,
-            id2word=self.dictionary,
-            random_state=random_state,
-            passes=passes,
-        )
-        return self.lda_model
 
     def lda_visualize_topics(self):
         """The lda model calculated with the function lda_modeling is visualized
