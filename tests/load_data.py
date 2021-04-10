@@ -1,52 +1,7 @@
 # %load_ext nb_black
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
-import nltk
-import random
-import itertools
-from collections import defaultdict
 
-
-# Preprocessing
-
-from sklearn.preprocessing import LabelEncoder
-from sklearn.model_selection import train_test_split, StratifiedKFold
-from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
-from itertools import combinations
-from nltk.tokenize import RegexpTokenizer
-from nltk.corpus import stopwords
-from nltk.stem.porter import PorterStemmer
-import gensim
-from keras.preprocessing.text import Tokenizer
-from keras.preprocessing.sequence import pad_sequences
-from keras.utils import to_categorical
-
-
-# Models
-
-from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
-from sklearn.svm import OneClassSVM
-
-
-# Evaluation
-
-from sklearn.metrics import (
-    f1_score,
-    accuracy_score,
-    precision_score,
-    recall_score,
-    confusion_matrix,
-    make_scorer,
-)
-from lime import lime_text
-from lime.lime_text import LimeTextExplainer
-from sklearn.model_selection import PredefinedSplit, ShuffleSplit
-
-
-import warnings
-
-warnings.filterwarnings("ignore")
 
 # %matplotlib inline
 
@@ -100,5 +55,6 @@ try:
     data = data.drop("index", 1)
 except:
     pass
+data=data[["transcription"]]
 if __name__ == "__main__":
     print(data)

@@ -14,10 +14,10 @@ class Tf_idf:
     def tfidf(
         data,
         papers,
-        data_column="lemma",
-        papers_column="lemma",
+        data_column="tokens",
+        papers_column="tokens",
+        features=None,
         ngrams=2,
-        features=8000,
     ):
         """[creates tf-idf objects for one-class SVM classification. The tf-idf scores are calculated over a joint corpus,
         however, the target data and the out-of-domain training data are stored in seperate, as the one-class SVM is only trained on
@@ -37,20 +37,20 @@ class Tf_idf:
 
         preprocessing = Preprocessor()
         df_temp = data.copy(deep=True)
-        df_temp = Preprocessor.basic_preprocessing(df_temp)
+        df_temp = Preprocessor.basic_preprocessing(df_temp, data_column)
 
         papers_temp = papers.copy(deep=True)
-        papers_temp = Preprocessor.basic_preprocessing(papers_temp)
+        papers_temp = Preprocessor.basic_preprocessing(papers_temp, papers_column)
 
         tfidf_vectorizer = TfidfVectorizer(
             ngram_range=(1, ngrams), max_features=features
         )
 
-        corpus = df_temp[data_column].append(papers_temp[papers_column])
+        corpus = df_temp['lemma'].tolist() +papers_temp['lemma'].tolist()
         tfidf_vectorizer.fit(corpus)
 
-        data_corpus = df_temp[data_column].tolist()
-        paper_corpus = papers_temp[papers_column].tolist()
+        data_corpus = df_temp['lemma'].tolist()
+        paper_corpus = papers_temp['lemma'].tolist()
 
         data = tfidf_vectorizer.transform(data_corpus)
         papers = tfidf_vectorizer.transform(paper_corpus)

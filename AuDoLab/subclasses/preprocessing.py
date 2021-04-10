@@ -69,11 +69,6 @@ class Preprocessor:
         """
         df_temp = df.copy(deep=True)
 
-        try:
-            df_temp = df_temp.rename(index=str, columns={"transcription": "text"})
-        except:
-            pass
-
         df_temp.loc[:, column] = [
             Preprocessor._text_prepare(x, "english") for x in df_temp[column].values
         ]
