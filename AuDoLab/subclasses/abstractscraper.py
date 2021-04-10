@@ -4,9 +4,8 @@ import time
 from bs4 import BeautifulSoup
 import numpy as np
 import pandas as pd
-
-
-sub = " Abstract:\n"
+import requests
+import json
 
 
 class AbstractScraper:
@@ -15,107 +14,159 @@ class AbstractScraper:
     scrapes the abstracts of scientific papers
     """
 
-    def __init__(self, url):
-        # define url - is already the result of search for the keyword
-        # "Artificial Intelligence"
-        self.url = url
+    def __init__(self):
         self.web = webbot.Browser()
-        # define a delay and wait function in order to prevent empty results
-        # when internet connection is slow
-        self.delay = 3
-        self.wait = 6
+        self.wait = 5
+        self.first = "https://ieeexplore.ieee.org/search/searchresult.jsp?action=search&newsearch=true&matchBoolean=true&"
+        self.second = "&highlight=true&returnFacets=ALL&returnType=SEARCH&matchPubs=true&rowsPerPage=100&pageNumber=1"
 
-    def open(self):
+    def _open(self, url=None, keywords=None, operator="OR", in_data="author", pages=2):
+        """
+        defines the users search query
+
+        :param url: when the user specifies an own search query on IEEEXplore
+        :type url: string
+        :param keywords: keywords that are searched for
+        :type keywords: list
+        :param operator: "and" / "or" operator between keywords
+        :type operator: string
+        :param pages: number of pages that is iterated over
+        :type pages: int
+        :param in_data: "author" or "all_meta" whether to search in author keywords or all metadata
+        :type in_data: string
+        :return:
+        """
+        operator = ")%20" + operator.upper() + "%20("
+        if in_data == "all_meta":
+            in_data = "%22All%20Metadata%22:"
+        elif in_data == "author":
+            in_data = "%22Author%20Keywords%22:"
+        if url:
+            self.url = url
+            self.web.go_to(self.url)
+
+        else:
+            if len(keywords) > 3:
+                print("You can only specify 3 Keywords/phrases")
+            elif len(keywords) == 1:
+                self.middle = "queryText=" + in_data + keywords[0]
+            elif len(keywords) == 2:
+                self.middle = (
+                    "queryText=(("
+                    + in_data
+                    + keywords[0]
+                    + operator
+                    + in_data
+                    + keywords[1]
+                    + "))"
+                )
+            else:
+                self.middle = (
+                    "queryText=(("
+                    + in_data
+                    + keywords[0]
+                    + operator
+                    + in_data
+                    + keywords[1]
+                    + operator
+                    + in_data
+                    + keywords[2]
+                    + "))"
+                )
+            self.url = self.first + self.middle + self.second
+            self.web.go_to(self.url)
+            time.sleep(self.wait)
+
+
         """goes through the number of defined pages on IEEE Xplore"""
         # go to web page
-        self.web.go_to(self.url)
-
-        time.sleep(self.delay)
+        self.web.click("Accept")
         self.html_page = []
-        self.html_page.append(self.web.get_page_source())
 
-        time.sleep(self.wait)
-
-        for i in range(1, 3):
-            time.sleep(self.wait)
+        for i in range(1, pages + 1):
             self.web.click(str(i))
             time.sleep(self.wait)
             self.html_page.append(self.web.get_page_source())
+            time.sleep(self.wait)
+        print("The algorithm is iterating through", len(self.html_page), "pages")
+        self.web.quit()
 
-        print("The algorithm is iterating through",
-              len(self.html_page), "pages")
-        return self.html_page
-
-    def find_links(self):
+    def _find_links(self):
         """goes through every paper on every page and collects all links to the subpages of the papers"""
         document_links = []
         self.data = []
         for j in range(len(self.html_page)):
-            soup = BeautifulSoup(self.html_page[j], features="html.parser")
-            time.sleep(self.wait)
-
-            # get the hyperlinks for all the documents and temporarily save
-            # them
             for link in BeautifulSoup(
                 self.html_page[j], features="html.parser"
             ).findAll("a", attrs={"href": re.compile("^/document")}):
                 document_links.append(link.get("href"))
-            time.sleep(self.wait)
 
         # remove unnecessary results of the href search
         matching = [s for s in document_links if "citation" in s]
         x = [i for i in document_links if i not in matching]
         self.data = x
-        time.sleep(self.wait)
-
         self.data = np.array(self.data)
         # remove duplicates that are in there due to multiple occurrence in the
-        # href
         self.data = np.unique(self.data)
         print("Total number of abstracts that will be scraped:", len(self.data))
-        return self.data
 
-    def get_abstracts(self):
+    def _find_abstracts(self):
         """Opens all links for the webpages for each paper and scrapes the paper's abstract"""
-
+        # initialize empty lists to fill
         self.abstracts = []
+        self.title = []
 
-        # go through every search result and do the following: open the keywords section,
-        # extract the keywords (+ unnecessary stuff) ,append the keywords to
-        # self.keys
+        # loop through number of  "link"
         for i in range(len(self.data)):
+            # only "try" because sometimes the javascript is corrupted
+            try:
+                data = json.loads(
+                    re.search(
+                        r"\.metadata=(.*?);",
+                        requests.get("https://ieeexplore.ieee.org" + self.data[i]).text,
+                    ).group(1)
+                )
+                # only get title and abstracts -> we could also go for author etc.
+                title = data["title"]
+                data = data["abstract"]
 
-            self.web.go_to("https://ieeexplore.ieee.org" + self.data[i])
-            time.sleep(self.delay)
+                self.title.append(title)
+                self.abstracts.append(data)
+            except:
+                pass
 
-            html_page = self.web.get_page_source()
-            soup = BeautifulSoup(html_page, features="html.parser")
-            time.sleep(self.delay)
+    def get_abstracts(self, url=None, keywords=None, operator="OR", pages=2, in_data="author"):
+        """
+        :param url: when the user specifies an own search query on IEEEXplore
+        :type url: string
+        :param keywords: keywords that are searched for
+        :type keywords: list
+        :param operator: "and" / "or" operator between keywords
+        :type operator: string
+        :param pages: number of pages that is iterated over
+        :type pages: int
+        :param in_data: "author" or "all_meta" whether to search in author keywords or all metadata
+        :type in_data: string
+        :return: pd.DataFrame
+        """
+        self._open(
+            url=url, keywords=keywords, operator=operator, pages=pages, in_data=in_data
+        )
+        self._find_links()
+        self._find_abstracts()
 
-            texts = soup.find_all("div", {"class": "u-mb-1"})
-            for t in texts:
-                text = t.text.strip()
-                text = text.replace("Abstract:\n", " ")
-                df_dict = {"text": text}
-            self.abstracts.append(df_dict)
-
-        self.abstracts = pd.DataFrame(self.abstracts)
-        self.paper_cleaning()
-        return self.abstracts
-
-    def paper_cleaning(self):
-        self.abstracts = self.abstracts.drop_duplicates(subset=["text"])
-        mistake = self.abstracts["text"].iloc[77]
-        self.abstracts = self.abstracts[self.abstracts["text"] != mistake]
+        data = pd.DataFrame({"text": self.abstracts, "titles": self.title})
+        data = data.drop_duplicates()
+        return data
 
 
 if __name__ == "__main__":
-
     # Execute the above code
-    ks = AbstractScraper("https://ieeexplore.ieee.org/search/searchresult.jsp?action=search&newsearch=true&matchBoolean=true&queryText=(%22Author%20Keywords%22:cotton)&highlight=true&returnFacets=ALL&returnType=SEARCH&matchPubs=true&rowsPerPage=100&pageNumber=1")
-
-    html_code = ks.open()
-    links = ks.find_links()
-    abstracts = ks.get_abstracts()
-
-    abstracts.to_csv("cotton.txt", header=True, index=False)
+    AS = AbstractScraper()
+    data = AS.get_abstracts(
+        keywords=["dentistry", "teeth", "tooth"],
+        in_data="all_meta",
+        pages=12,
+        operator="or"
+    )
+    print(data["text"])

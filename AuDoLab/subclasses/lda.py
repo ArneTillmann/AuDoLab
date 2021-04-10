@@ -44,14 +44,14 @@ class LDA:
 
     @staticmethod
     def preperation(df_processed, no_below):
-        dictionary = gensim.corpora.Dictionary(df_processed["tokens"])
+        dictionary = corpora.Dictionary(df_processed["tokens"])
         dictionary.filter_extremes(no_below=no_below)
         bow_corpus = [dictionary.doc2bow(doc) for doc in df_processed["tokens"]]
         return dictionary, bow_corpus
 
     @staticmethod
     def preperation(df_processed):
-        dictionary = gensim.corpora.Dictionary(df_processed["tokens"])
+        dictionary = corpora.Dictionary(df_processed["tokens"])
         bow_corpus = [dictionary.doc2bow(doc) for doc in df_processed["tokens"]]
         return dictionary, bow_corpus
 
@@ -73,7 +73,7 @@ class LDA:
             [lda_model]: [returns lda_model output]
         """
 
-        lda_model = gensim.models.LdaMulticore(
+        lda_model = models.LdaMulticore(
             corpus,
             num_topics=num_topics,
             id2word=id2word,

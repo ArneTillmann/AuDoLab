@@ -47,12 +47,17 @@ def test_command_line_interface():
 
 
 audo = AuDoLab.AuDoLab()
-# papers2 = audo.scrape_abstracts("https://ieeexplore.ieee.org/search/searchresult.jsp?action=search&newsearch=true&matchBoolean=true&queryText=(%22Author%20Keywords%22:cotton)&highlight=true&returnFacets=ALL&returnType=SEARCH&matchPubs=true&rowsPerPage=100&pageNumber=1", "cotton")
-papers_processed = audo.preprocessing(papers)
-data_processed = audo.preprocessing(data)
-data_tfidf_features, papers_tfidf_features = audo.tf_idf_features(
-    data, papers)
-data_tfidf, papers_tfidf = audo.tf_idf(data, papers)
+# papers = audo.scrape_abstracts(
+#     keywords=["dentistry", "teeth", "tooth"],
+#     in_data="all_meta",
+#     pages=12,
+#     operator="or"
+# )
+papers_processed = audo.preprocessing(papers, "text")
+data_processed = audo.preprocessing(data, "transcription")
+
+data_tfidf, papers_tfidf = audo.tf_idf(
+    data, papers,"transcription", "text")
 classifier = audo.one_class_svm(papers_tfidf, data_tfidf)
 df_data = audo.choose_classifier(data_processed, classifier, 0)
 if __name__ == '__main__':

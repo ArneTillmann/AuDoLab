@@ -37,33 +37,32 @@ class AuDoLab:
         self.abstracts.to_csv(file_name, header=True, index=False)
         return self.abstracts
 
-    def preprocessing(self, data):
+    def preprocessing(self, data, column):
         """ The data will be lemmatized, tokenized and the stopwords will be
         deleted.
 
         Arguments:
         - data (<class 'pandas.core.frame.DataFrame'>)
         """
-
         self.data_processed = preprocessing.Preprocessor.basic_preprocessing(
-            data)
+            data, column)
         return self.data_processed
 
-    def tf_idf_features(self, data, papers, features=8000):
-        """The function tf_idf_features(...) calculates the tfidf scores, but
-        return only the <features> amount of words with the highest tfidf
-        scores.
+    # def tf_idf_features(self, data, papers, features=8000):
+    #     """The function tf_idf_features(...) calculates the tfidf scores, but
+    #     return only the <features> amount of words with the highest tfidf
+    #     scores.
+    #
+    #     Arguments:
+    #     - data (<class 'pandas.core.frame.DataFrame'>)
+    #     - papers (<class 'pandas.core.frame.DataFrame'>)
+    #     """
+    #     tfidf = tf_idf.Tf_idf()
+    #     self.data_tfidf_features, self.papers_tfidf_features = tfidf.tfidf_features(
+    #         data, papers, features=features)
+    #     return self.data_tfidf_features, self.papers_tfidf_features
 
-        Arguments:
-        - data (<class 'pandas.core.frame.DataFrame'>)
-        - papers (<class 'pandas.core.frame.DataFrame'>)
-        """
-        tfidf = tf_idf.Tf_idf()
-        self.data_tfidf_features, self.papers_tfidf_features = tfidf.tfidf_features(
-            data, papers, features=features)
-        return self.data_tfidf_features, self.papers_tfidf_features
-
-    def tf_idf(self, data, papers):
+    def tf_idf(self, data, papers, data_column, papers_column, features=None):
         """ The function tf_idf(...) calculates the tfidf scores.
 
         Arguments:
@@ -71,7 +70,7 @@ class AuDoLab:
         - papers (<class 'pandas.core.frame.DataFrame'>)
         """
         tfidf = tf_idf.Tf_idf()
-        self.data_tfidf, self.papers_tfidf = tfidf.tfidf(data, papers)
+        self.data_tfidf, self.papers_tfidf = tfidf.tfidf(data, papers, data_column, papers_column, features)
         return self.data_tfidf, self.papers_tfidf
 
     def one_class_svm(self, training, predicting,
