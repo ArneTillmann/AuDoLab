@@ -6,12 +6,13 @@ import pytest
 
 from click.testing import CliRunner
 
-from load_data import data
-from load_papers import papers
 import os
 import sys
 import numpy as np
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/..")
+
+from load_data import data
+from load_papers import papers
 from AuDoLab import cli
 from AuDoLab import AuDoLab
 #
