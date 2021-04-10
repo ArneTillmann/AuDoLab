@@ -9,41 +9,69 @@ from click.testing import CliRunner
 import os
 import sys
 import numpy as np
+import pandas as pd
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/..")
 
-from load_data import data
-from load_papers import papers
 from AuDoLab import cli
 from AuDoLab import AuDoLab
 #
 
 
 
-@pytest.fixture
-def response():
-    """Sample pytest fixture.
+# @pytest.fixture
+# def response():
+#     """Sample pytest fixture.
+#
+#     See more at: http://doc.pytest.org/en/latest/fixture.html
+#     """
+#     # import requests
+#     # return requests.get('https://github.com/audreyr/cookiecutter-pypackage')
+#
+#
+# def test_content(response):
+#     """Sample pytest test function with the pytest fixture as an argument."""
+#     # from bs4 import BeautifulSoup
+#     # assert 'GitHub' in BeautifulSoup(response.content).title.string
+#
+#
+# def test_command_line_interface():
+#     """Test the CLI."""
+#     runner = CliRunner()
+#     result = runner.invoke(cli.main)
+#     assert result.exit_code == 0
+#     assert 'AuDoLab.cli.main' in result.output
+#     help_result = runner.invoke(cli.main, ['--help'])
+#     assert help_result.exit_code == 0
+#     assert '--help  Show this message and exit.' in help_result.output
 
-    See more at: http://doc.pytest.org/en/latest/fixture.html
-    """
-    # import requests
-    # return requests.get('https://github.com/audreyr/cookiecutter-pypackage')
+
+data = pd.read_csv("tests\mtsamples.csv")
+data = data.sort_values("medical_specialty")
+
+new_list = list(data[data["medical_specialty"] ==
+                " Dentistry"]["transcription"])
 
 
-def test_content(response):
-    """Sample pytest test function with the pytest fixture as an argument."""
-    # from bs4 import BeautifulSoup
-    # assert 'GitHub' in BeautifulSoup(response.content).title.string
+data["dentistry"] = data["transcription"].map(
+    lambda x: 1 if x in new_list else -1)
+data = data.drop_duplicates(
+    subset="transcription"
+)  # , 'medical_specialty'], keep="first")
 
 
-def test_command_line_interface():
-    """Test the CLI."""
-    runner = CliRunner()
-    result = runner.invoke(cli.main)
-    assert result.exit_code == 0
-    assert 'AuDoLab.cli.main' in result.output
-    help_result = runner.invoke(cli.main, ['--help'])
-    assert help_result.exit_code == 0
-    assert '--help  Show this message and exit.' in help_result.output
+data = data.drop(data[data["transcription"].isna()].index)
+
+data = data[["dentistry", "transcription", "medical_specialty"]]
+
+data=data[["transcription"]]
+
+
+
+papers = pd.read_csv(r"tests\dentistry_teeth.txt")
+papers.head()
+papers = papers.drop_duplicates(subset=["text"])
+mistake = papers["text"].iloc[77]
+papers = papers[papers["text"] != mistake]
 
 
 audo = AuDoLab.AuDoLab()
