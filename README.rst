@@ -8,7 +8,7 @@ AuDoLab
 .. image:: https://api.travis-ci.com/ArneTillmann/AuDoLab.svg?branch=main&status=passed
         :target: https://travis-ci.com/ArneTillmann/AuDoLab
 
-.. image:: https://readthedocs.org/projects/AuDoLab/badge/?version=latest
+.. image:: https://readthedocs.org/projects/audolab/badge/?version=abstract_scraper
         :target: https://AuDoLab.readthedocs.io/en/latest/?version=latest
 
 ..
