@@ -45,51 +45,22 @@ from AuDoLab import AuDoLab
 #     assert '--help  Show this message and exit.' in help_result.output
 
 
-data = pd.read_csv(r"tests\mtsamples.csv")
-data = data.sort_values("medical_specialty")
-
-new_list = list(data[data["medical_specialty"] ==
-                " Dentistry"]["transcription"])
-
-
-data["dentistry"] = data["transcription"].map(
-    lambda x: 1 if x in new_list else -1)
-data = data.drop_duplicates(
-    subset="transcription"
-)  # , 'medical_specialty'], keep="first")
-
-
-data = data.drop(data[data["transcription"].isna()].index)
-
-data = data[["dentistry", "transcription", "medical_specialty"]]
-
-data=data[["transcription"]]
-
-
-
-papers = pd.read_csv(r"tests\dentistry_teeth.txt")
-papers.head()
-papers = papers.drop_duplicates(subset=["text"])
-mistake = papers["text"].iloc[77]
-papers = papers[papers["text"] != mistake]
-
-
-audo = AuDoLab.AuDoLab()
-# papers = audo.scrape_abstracts(
-#     keywords=["dentistry", "teeth", "tooth"],
-#     in_data="all_meta",
-#     pages=12,
-#     operator="or"
-# )
-papers_processed = audo.preprocessing(papers, "text")
-data_processed = audo.preprocessing(data, "transcription")
-
-data_tfidf, papers_tfidf = audo.tf_idf(
-    data, papers,"transcription", "text")
-classifier = audo.one_class_svm(papers_tfidf, data_tfidf)
-df_data = audo.choose_classifier(data_processed, classifier, 0)
-if __name__ == '__main__':
-    # lda = audo.lda_modeling(papers_processed)
-    # audo.lda_visualize_topics()
-    lda2 = audo.lda_modeling(df_data, no_above=0.3)
-    audo.lda_visualize_topics()
+# audo = AuDoLab.AuDoLab()
+# # papers = audo.scrape_abstracts(
+# #     keywords=["dentistry", "teeth", "tooth"],
+# #     in_data="all_meta",
+# #     pages=12,
+# #     operator="or"
+# # )
+# papers_processed = audo.preprocessing(papers, "text")
+# data_processed = audo.preprocessing(data, "transcription")
+#
+# data_tfidf, papers_tfidf = audo.tf_idf(
+#     data, papers,"transcription", "text")
+# classifier = audo.one_class_svm(papers_tfidf, data_tfidf)
+# df_data = audo.choose_classifier(data_processed, classifier, 0)
+# if __name__ == '__main__':
+#     # lda = audo.lda_modeling(papers_processed)
+#     # audo.lda_visualize_topics()
+#     lda2 = audo.lda_modeling(df_data, no_above=0.3)
+#     audo.lda_visualize_topics()
