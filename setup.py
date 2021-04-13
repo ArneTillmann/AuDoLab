@@ -10,9 +10,12 @@ with open('README.rst') as readme_file:
 with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
-requirements = ['Click>=7.0', ]
+requirements = []
+with open('requirements.txt', 'r') as fh:
+    for line in fh:
+        requirements.append(line.strip())
 
-setup_requirements = ['pytest-runner', 'numpy==1.19.2', 'pandas==1.2.3', 'webbot==0.34', 'bs4==0.0.1', 'gensim==3.8.3', 'pyldavis==2.1.2', 'scikit-learn==0.24.1', 'keras==2.3.1', 'nltk==3.5', 'lime==0.2.0.1', 'matplotlib==3.3.4']
+setup_requirements = ['pytest-runner', ]
 
 test_requirements = ['pytest>=3', ]
 
@@ -25,10 +28,6 @@ setup(
         'Intended Audience :: Developers',
         'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
         'Natural Language :: English',
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.5',
-        'Programming Language :: Python :: 3.6',
-        'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
     ],
     description=" With AuDoLab you can perform Latend Direchlet Allocation on highly imbalanced datasets.",
@@ -48,6 +47,6 @@ setup(
     test_suite='tests',
     tests_require=test_requirements,
     url='https://github.com/ArneTillmann/AuDoLab',
-    version='0.0.36',
+    version='0.0.40',
     zip_safe=False,
 )
