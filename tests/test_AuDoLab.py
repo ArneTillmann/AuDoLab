@@ -10,12 +10,11 @@ import os
 import sys
 import numpy as np
 import pandas as pd
+
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/..")
 
 from AuDoLab import cli
 from AuDoLab import AuDoLab
-
-
 
 
 @pytest.fixture
@@ -39,10 +38,10 @@ def test_command_line_interface():
     runner = CliRunner()
     result = runner.invoke(cli.main)
     assert result.exit_code == 0
-    assert 'AuDoLab.cli.main' in result.output
-    help_result = runner.invoke(cli.main, ['--help'])
+    assert "AuDoLab.cli.main" in result.output
+    help_result = runner.invoke(cli.main, ["--help"])
     assert help_result.exit_code == 0
-    assert '--help  Show this message and exit.' in help_result.output
+    assert "--help  Show this message and exit." in help_result.output
 
 
 # audo = AuDoLab.AuDoLab()

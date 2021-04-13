@@ -35,8 +35,6 @@ class LDA:
 
     #####---- Should not be necessary anymore ----############
 
-
-
     @staticmethod
     def model(corpus, num_topics, id2word, random_state, passes):
         """LDA model

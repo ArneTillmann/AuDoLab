@@ -42,8 +42,7 @@ class AbstractScraper:
             time.sleep(self.wait)
             self.html_page.append(self.web.get_page_source())
 
-        print("The algorithm is iterating through",
-              len(self.html_page), "pages")
+        print("The algorithm is iterating through", len(self.html_page), "pages")
         return self.html_page
 
     def find_links(self):
@@ -112,7 +111,9 @@ class AbstractScraper:
 if __name__ == "__main__":
 
     # Execute the above code
-    ks = AbstractScraper("https://ieeexplore.ieee.org/search/searchresult.jsp?action=search&newsearch=true&matchBoolean=true&queryText=(%22Author%20Keywords%22:cotton)&highlight=true&returnFacets=ALL&returnType=SEARCH&matchPubs=true&rowsPerPage=100&pageNumber=1")
+    ks = AbstractScraper(
+        "https://ieeexplore.ieee.org/search/searchresult.jsp?action=search&newsearch=true&matchBoolean=true&queryText=(%22Author%20Keywords%22:cotton)&highlight=true&returnFacets=ALL&returnType=SEARCH&matchPubs=true&rowsPerPage=100&pageNumber=1"
+    )
 
     html_code = ks.open()
     links = ks.find_links()

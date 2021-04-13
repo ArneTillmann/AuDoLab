@@ -77,7 +77,6 @@ class AbstractScraper:
             self.web.go_to(self.url)
             time.sleep(self.wait)
 
-
         """goes through the number of defined pages on IEEE Xplore"""
         # go to web page
         self.web.click("Accept")
@@ -135,7 +134,9 @@ class AbstractScraper:
             except:
                 pass
 
-    def get_abstracts(self, url=None, keywords=None, operator="OR", pages=2, in_data="author"):
+    def get_abstracts(
+        self, url=None, keywords=None, operator="OR", pages=2, in_data="author"
+    ):
         """
         :param url: when the user specifies an own search query on IEEEXplore
         :type url: string
@@ -167,6 +168,6 @@ if __name__ == "__main__":
         keywords=["dentistry", "teeth", "tooth"],
         in_data="all_meta",
         pages=12,
-        operator="or"
+        operator="or",
     )
     print(data["text"])

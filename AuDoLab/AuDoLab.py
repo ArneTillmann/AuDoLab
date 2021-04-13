@@ -8,9 +8,8 @@ from AuDoLab.subclasses import tf_idf
 
 
 class AuDoLab:
-
     def __init__(self):
-        4+4
+        4 + 4
 
     def scrape_abstracts(self, url, file_name):
         """Function to scrap abstracts of scientific papers from the givin url.
@@ -45,7 +44,8 @@ class AuDoLab:
         - data (<class 'pandas.core.frame.DataFrame'>)
         """
         self.data_processed = preprocessing.Preprocessor.basic_preprocessing(
-            data, column)
+            data, column
+        )
         return self.data_processed
 
     # def tf_idf_features(self, data, papers, features=8000):
@@ -70,12 +70,20 @@ class AuDoLab:
         - papers (<class 'pandas.core.frame.DataFrame'>)
         """
         tfidf = tf_idf.Tf_idf()
-        self.data_tfidf, self.papers_tfidf = tfidf.tfidf(data, papers, data_column, papers_column, features)
+        self.data_tfidf, self.papers_tfidf = tfidf.tfidf(
+            data, papers, data_column, papers_column, features
+        )
         return self.data_tfidf, self.papers_tfidf
 
-    def one_class_svm(self, training, predicting,
-                      nus=np_round(np_arange(0.001, 0.5, 0.001), 5),
-                      quality_train=0.85, min_pred=0.01, max_pred=0.1):
+    def one_class_svm(
+        self,
+        training,
+        predicting,
+        nus=np_round(np_arange(0.001, 0.5, 0.001), 5),
+        quality_train=0.85,
+        min_pred=0.01,
+        max_pred=0.1,
+    ):
         """
         This is a one class classifier, that uses the training data (usually the
         papers we scraped earlier) to classify the predicting data. The
@@ -114,9 +122,15 @@ class AuDoLab:
         """
         return one_class_svm.One_Class_SVM.choose_classifier(df, classifier, i)
 
-
-
-    def lda_modeling(self, data, no_below=None, no_above=None, num_topics=5,  random_state=101, passes=20):
+    def lda_modeling(
+        self,
+        data,
+        no_below=None,
+        no_above=None,
+        num_topics=5,
+        random_state=101,
+        passes=20,
+    ):
         """The function performs lda modelling as described in this
         https://www.jmlr.org/papers/volume3/blei03a/blei03a.pdf paper.
 
@@ -128,8 +142,7 @@ class AuDoLab:
         - random_state (int)
         - passes (int)
         """
-        self.dictionary, self.bow_corpus = lda.LDA.preperation(
-            data, no_below, no_above)
+        self.dictionary, self.bow_corpus = lda.LDA.preperation(data, no_below, no_above)
         self.l = lda.LDA()
         self.lda_model = self.l.model(
             self.bow_corpus,
@@ -140,10 +153,8 @@ class AuDoLab:
         )
         return self.lda_model
 
-
     def lda_visualize_topics(self):
         """The lda model calculated with the function lda_modeling is visualized
         in an html frame and opened in the standard browser.
         """
-        lda.LDA.visualize_topics(
-            self.lda_model, self.bow_corpus, self.dictionary)
+        lda.LDA.visualize_topics(self.lda_model, self.bow_corpus, self.dictionary)
