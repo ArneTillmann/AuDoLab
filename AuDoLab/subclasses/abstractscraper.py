@@ -10,8 +10,8 @@ import json
 
 class AbstractScraper:
     """
-    Abstractscraper - scrapes through IEEE Xplore and, depending on the given search query,
-    scrapes the abstracts of scientific papers
+    Abstractscraper - scrapes through IEEE Xplore and, depending on the given
+    search query, scrapes the abstracts of scientific papers
     """
 
     def __init__(self):
@@ -20,7 +20,8 @@ class AbstractScraper:
         self.first = "https://ieeexplore.ieee.org/search/searchresult.jsp?action=search&newsearch=true&matchBoolean=true&"
         self.second = "&highlight=true&returnFacets=ALL&returnType=SEARCH&matchPubs=true&rowsPerPage=100&pageNumber=1"
 
-    def _open(self, url=None, keywords=None, operator="OR", in_data="author", pages=2):
+    def _open(self, url=None, keywords=None, operator="OR", in_data="author",
+              pages=2):
         """
         defines the users search query
 
@@ -32,7 +33,8 @@ class AbstractScraper:
         :type operator: string
         :param pages: number of pages that is iterated over
         :type pages: int
-        :param in_data: "author" or "all_meta" whether to search in author keywords or all metadata
+        :param in_data: "author" or "all_meta" whether to search in author
+                        keywords or all metadata
         :type in_data: string
         :return:
         """
@@ -87,11 +89,13 @@ class AbstractScraper:
             time.sleep(self.wait)
             self.html_page.append(self.web.get_page_source())
             time.sleep(self.wait)
-        print("The algorithm is iterating through", len(self.html_page), "pages")
+        print("The algorithm is iterating through", len(self.html_page),
+              "pages")
         self.web.quit()
 
     def _find_links(self):
-        """goes through every paper on every page and collects all links to the subpages of the papers"""
+        """goes through every paper on every page and collects all links to the
+         subpages of the papers"""
         document_links = []
         self.data = []
         for j in range(len(self.html_page)):
@@ -107,10 +111,12 @@ class AbstractScraper:
         self.data = np.array(self.data)
         # remove duplicates that are in there due to multiple occurrence in the
         self.data = np.unique(self.data)
-        print("Total number of abstracts that will be scraped:", len(self.data))
+        print("Total number of abstracts that will be scraped:",
+              len(self.data))
 
     def _find_abstracts(self):
-        """Opens all links for the webpages for each paper and scrapes the paper's abstract"""
+        """Opens all links for the webpages for each paper and scrapes the
+        paper's abstract"""
         # initialize empty lists to fill
         self.abstracts = []
         self.title = []
@@ -122,10 +128,12 @@ class AbstractScraper:
                 data = json.loads(
                     re.search(
                         r"\.metadata=(.*?);",
-                        requests.get("https://ieeexplore.ieee.org" + self.data[i]).text,
+                        requests.get("https://ieeexplore.ieee.org" +
+                                     self.data[i]).text,
                     ).group(1)
                 )
-                # only get title and abstracts -> we could also go for author etc.
+                # only get title and abstracts -> we could also go for
+                # author etc.
                 title = data["title"]
                 data = data["abstract"]
 
@@ -146,12 +154,14 @@ class AbstractScraper:
         :type operator: string
         :param pages: number of pages that is iterated over
         :type pages: int
-        :param in_data: "author" or "all_meta" whether to search in author keywords or all metadata
+        :param in_data: "author" or "all_meta" whether to search in author
+                keywords or all metadata
         :type in_data: string
         :return: pd.DataFrame
         """
         self._open(
-            url=url, keywords=keywords, operator=operator, pages=pages, in_data=in_data
+            url=url, keywords=keywords, operator=operator, pages=pages,
+            in_data=in_data
         )
         self._find_links()
         self._find_abstracts()

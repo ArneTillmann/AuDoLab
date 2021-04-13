@@ -16,9 +16,12 @@ class LDA:
         """Preprocessing for LDA
 
         Args:
-            df_processed ([DataFrame]): [DataFrame stat store tokenized text in col ["tokens"]]
-            no_below ([int]): [if word appears in less than no_below documents they are not considered]
-            no_above ([float]): [if e.g. 0.9, no words are taken into account that appear more often than 90%]
+            df_processed ([DataFrame]): [DataFrame stat store tokenized text in
+                                        col ["tokens"]]
+            no_below ([int]): [if word appears in less than
+                              no_below documents they are not considered]
+            no_above ([float]): [if e.g. 0.9, no words are taken into
+                                account that appear more often than 90%]
 
         Returns:
             [dictionary]: [returns the dictionary used for LDA]
@@ -30,23 +33,24 @@ class LDA:
             no_below = 0
         if no_above is None:
             no_above = 1
-        bow_corpus = [dictionary.doc2bow(doc) for doc in df_processed["tokens"]]
+        bow_corpus = [dictionary.doc2bow(doc) for doc
+                      in df_processed["tokens"]]
         return dictionary, bow_corpus
-
 
     @staticmethod
     def model(corpus, num_topics, id2word, random_state, passes):
         """LDA model
 
         Args:
-            corpus (iterable of list of (int, float), optional): [Stream of document vectors or sparse matrix of shape]
-            num_topics (int): [pre-defined number of topics]
-            id2word ({dict of (int, str): gensim.corpora.dictionary.Dictionary}) –
-                                            Mapping from word IDs to words. It is
-                                            used to determine the vocabulary size,
-                                            as well as for debugging and topic printing.
-            random_state (int): [for recreating exact identical output]
-            passes (int): [Number of passes through the corpus during training.]
+        corpus (iterable of list of (int, float), optional):
+        [Stream of document vectors or sparse matrix of shape]
+        num_topics (int): [pre-defined number of topics]
+        id2word ({dict of (int, str): gensim.corpora.dictionary.Dictionary})
+                                         –Mapping from word IDs to words. It is
+                                        used to determine the vocabulary size,
+                                as well as for debugging and topic printing.
+        random_state (int): [for recreating exact identical output]
+        passes (int): [Number of passes through the corpus during training.]
 
         Returns:
             [lda_model]: [returns lda_model output]
@@ -69,7 +73,8 @@ class LDA:
         Args:
             lda_model ([type]): Output of lda_model
             bow_corpus ([list of (int, int)]): BoW representation of document.
-            dictionary (gensim.corpora.dictionary.Dictionary): [Dict used for creating Corpus]
+            dictionary (gensim.corpora.dictionary.Dictionary): [Dict used for
+                                                               creating Corpus]
         """
 
         visualization = pyLDAvis.gensim.prepare(

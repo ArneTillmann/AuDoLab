@@ -8,8 +8,8 @@ class One_Class_SVM:
 
     @staticmethod
     def choose_classifier(df, classifier, i):
-        """returns dataframe where documents that are classified to target class
-           have 1, otherwise, 0
+        """returns dataframe where documents that are classified to target
+           class have 1, otherwise, 0
 
         Args:
             df (dataframe): [dataframe of target documents]
@@ -17,7 +17,8 @@ class One_Class_SVM:
             i (int): [index of which classifier is chosen/preferred]
 
         Returns:
-            [dataframe]: [documents that are classified as belonging to target class by o-svm]
+            [dataframe]: [documents that are classified as belonging to target
+                          class by o-svm]
         """
         return DataFrame(
             df["tokens"][classifier.index[classifier.iloc[:, i] == 1].tolist()]
@@ -25,7 +26,12 @@ class One_Class_SVM:
 
     @staticmethod
     def classification(
-        training, predicting, nus, quality_train=0.85, min_pred=0.05, max_pred=0.2
+        training,
+        predicting,
+        nus,
+        quality_train=0.85,
+        min_pred=0.05,
+        max_pred=0.2
     ):
         """trains a one-class SVM on the out-of-domain training data
 
@@ -34,14 +40,18 @@ class One_Class_SVM:
             predicting (DataFrame): [target dataset of preprccessed documents]
             nus (list of floats): [hyperparameters over which are looped.
             For each nu the classifiers is trained]
-            quality_train (float): [percentage of training data that seems to belong to target class. Default: 0.85]
-            min_pred (float): [percentage of target data that has to be at least classified as belonging to target class
+            quality_train (float): [percentage of training data that seems to
+                                    belong to target class. Default: 0.85]
+            min_pred (float): [percentage of target data that has to be at
+                               least classified as belonging to target class
             for classifier to be considered. Default: 0.05]
-            max_pred (float): [percentage of target class that is maximally allowed to be classified as belonging to
+            max_pred (float): [percentage of target class that is maximally
+                               allowed to be classified as belonging to
             target class for classifier to be considered. Default:0.2]
 
         Returns:
-            [DataFrame]: [DataFrame with stored classifiers that fulfill conditions]
+            [DataFrame]: [DataFrame with
+                          stored classifiers that fulfill conditions]
         """
         df = DataFrame()
         for i in nus:

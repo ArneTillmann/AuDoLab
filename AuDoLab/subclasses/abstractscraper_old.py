@@ -11,8 +11,8 @@ sub = " Abstract:\n"
 
 class AbstractScraper:
     """
-    Abstractscraper - scrapes through IEEE Xplore and, depending on the given search query,
-    scrapes the abstracts of scientific papers
+    Abstractscraper - scrapes through IEEE Xplore and, depending on the given
+    search query, scrapes the abstracts of scientific papers
     """
 
     def __init__(self, url):
@@ -42,11 +42,13 @@ class AbstractScraper:
             time.sleep(self.wait)
             self.html_page.append(self.web.get_page_source())
 
-        print("The algorithm is iterating through", len(self.html_page), "pages")
+        print("The algorithm is iterating through", len(self.html_page),
+              "pages")
         return self.html_page
 
     def find_links(self):
-        """goes through every paper on every page and collects all links to the subpages of the papers"""
+        """goes through every paper on every page and collects all links to the
+         subpages of the papers"""
         document_links = []
         self.data = []
         for j in range(len(self.html_page)):
@@ -71,15 +73,18 @@ class AbstractScraper:
         # remove duplicates that are in there due to multiple occurrence in the
         # href
         self.data = np.unique(self.data)
-        print("Total number of abstracts that will be scraped:", len(self.data))
+        print("Total number of abstracts that will be scraped:",
+              len(self.data))
         return self.data
 
     def get_abstracts(self):
-        """Opens all links for the webpages for each paper and scrapes the paper's abstract"""
+        """Opens all links for the webpages for each paper and scrapes
+         the paper's abstract"""
 
         self.abstracts = []
 
-        # go through every search result and do the following: open the keywords section,
+        # go through every search result and do the following: open the
+        # keywords section,
         # extract the keywords (+ unnecessary stuff) ,append the keywords to
         # self.keys
         for i in range(len(self.data)):

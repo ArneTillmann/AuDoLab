@@ -14,7 +14,8 @@ class Preprocessor:
 
         Args:
             text (numpy array): [column out of dataframe with documents]
-            language (string): [language for stopword removel, default: english]
+            language (string): [language for stopword removel,
+                                default: english]
 
         Returns:
             [numpy array]: [prepared documents]
@@ -56,28 +57,37 @@ class Preprocessor:
 
     def basic_preprocessing(df, column):
         """calls helper functions from above and preprocesses documents
-        removes all stopwords and unnecessary terms, e.g. symbols, numbers, double spaces
+        removes all stopwords and unnecessary terms, e.g. symbols, numbers,
+        double spaces
         and tokenizes documents
 
         Args:
-            df (DataFrame): [dataframe where documents are stored in one column]
+            df (DataFrame): [dataframe where documents are stored in one
+                             column]
             columns (String): [column name where documents are stored]
 
         Returns:
-            [DataFrame]: [dataframe with preprocessed documents. 2 new columns are appended. The completely preprocessed
-            documents are stored in column ['tokens'], the only lemmatized documents are stored in columns ['lemma']]
+            [DataFrame]: [dataframe with preprocessed documents. 2 new columns
+                          are appended. The completely preprocessed
+            documents are stored in column ['tokens'], the only lemmatized
+                                    documents are stored in columns ['lemma']]
         """
         df_temp = df.copy(deep=True)
 
         df_temp.loc[:, column] = [
-            Preprocessor._text_prepare(x, "english") for x in df_temp[column].values
+            Preprocessor._text_prepare(x, "english")
+            for x in df_temp[column].values
         ]
-        df_temp[column] = [item for item in df_temp[column] if not item.isdigit()]
+        df_temp[column] = [
+            item for item in df_temp[column] if not item.isdigit()
+        ]
 
         tokenizer = RegexpTokenizer(r"\w+")
 
         df_temp["tokens"] = df_temp[column].apply(tokenizer.tokenize)
-        df_temp["lemma"] = df_temp["tokens"].apply(Preprocessor._lemmatize_text)
+        df_temp["lemma"] = df_temp["tokens"].apply(
+            Preprocessor._lemmatize_text
+            )
         df_temp["tokens"] = df_temp["lemma"].apply(tokenizer.tokenize)
 
         return df_temp
