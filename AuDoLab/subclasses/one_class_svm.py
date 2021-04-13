@@ -1,4 +1,3 @@
-from sklearn.metrics import roc_auc_score
 from sklearn.svm import OneClassSVM
 from pandas import DataFrame
 

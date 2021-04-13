@@ -14,10 +14,10 @@ class AuDoLab:
     def scrape_abstracts(self, url, file_name):
         """Function to scrap abstracts of scientific papers from the givin url.
         We used https://ieeexplore.ieee.org/search/advanced to generate a
-        list like https://ieeexplore.ieee.org/search/searchresult.jsp?action=sea
-        rch&newsearch=true&matchBoolean=true&queryText=(%22Author%20Keywords%22:
-        cotton)&highlight=true&returnFacets=ALL&returnType=SEARCH&matchPubs=true
-        &rowsPerPage=100&pageNumber=1
+        list like https://ieeexplore.ieee.org/search/searchresult.jsp?action=se
+        arch&newsearch=true&matchBoolean=true&queryText=(%22Author%20Keywords%22
+        :cotton)&highlight=true&returnFacets=ALL&returnType=SEARCH&matchPubs=Tru
+        e&rowsPerPage=100&pageNumber=1
         with the search results.
         The abstracts of the papers listet on that list of search results will
         be stored in a .txt file with the givin file name.
@@ -29,8 +29,8 @@ class AuDoLab:
 
         ks = abstractscraper.AbstractScraper(url)
 
-        html_code = ks.open()
-        links = ks.find_links()
+        ks.open()
+        ks.find_links()
         self.abstracts = ks.get_abstracts()
         file_name = file_name + ".txt"
         self.abstracts.to_csv(file_name, header=True, index=False)
@@ -58,7 +58,8 @@ class AuDoLab:
     #     - papers (<class 'pandas.core.frame.DataFrame'>)
     #     """
     #     tfidf = tf_idf.Tf_idf()
-    #     self.data_tfidf_features, self.papers_tfidf_features = tfidf.tfidf_features(
+    #     self.data_tfidf_features, self.papers_tfidf_features =
+    #     tfidf.tfidf_features(
     #         data, papers, features=features)
     #     return self.data_tfidf_features, self.papers_tfidf_features
 
@@ -142,9 +143,11 @@ class AuDoLab:
         - random_state (int)
         - passes (int)
         """
-        self.dictionary, self.bow_corpus = lda.LDA.preperation(data, no_below, no_above)
-        self.l = lda.LDA()
-        self.lda_model = self.l.model(
+
+        self.dictionary, self.bow_corpus = lda.LDA.preperation(data, no_below,
+                                                               no_above)
+        self.lda = lda.LDA()
+        self.lda_model = self.lda.model(
             self.bow_corpus,
             num_topics=num_topics,
             id2word=self.dictionary,
@@ -157,4 +160,5 @@ class AuDoLab:
         """The lda model calculated with the function lda_modeling is visualized
         in an html frame and opened in the standard browser.
         """
-        lda.LDA.visualize_topics(self.lda_model, self.bow_corpus, self.dictionary)
+        lda.LDA.visualize_topics(self.lda_model, self.bow_corpus,
+                                 self.dictionary)

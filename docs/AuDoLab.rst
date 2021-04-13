@@ -10,7 +10,7 @@ Subpackages
    AuDoLab.subclasses
 
 AuDoLab.AuDoLab main module
-----------------------
+---------------------------
 
 .. automodule:: AuDoLab.AuDoLab
    :members:

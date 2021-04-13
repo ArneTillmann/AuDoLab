@@ -1,5 +1,5 @@
 from AuDoLab.subclasses.preprocessing import Preprocessor
-from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
+from sklearn.feature_extraction.text import TfidfVectorizer
 
 
 class Tf_idf:
@@ -35,7 +35,7 @@ class Tf_idf:
             [data and papers]: [tfidf object data for target data and ou-of-domain training data]
         """
 
-        preprocessing = Preprocessor()
+        Preprocessor()
         df_temp = data.copy(deep=True)
         df_temp = Preprocessor.basic_preprocessing(df_temp, data_column)
 

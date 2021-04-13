@@ -1,9 +1,5 @@
 # %load_ext nb_black
 import pandas as pd
-import numpy as np
-
-
-# %matplotlib inline
 
 
 data = pd.read_csv("tests\mtsamples.csv")

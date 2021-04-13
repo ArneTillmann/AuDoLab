@@ -50,7 +50,7 @@ class AbstractScraper:
         document_links = []
         self.data = []
         for j in range(len(self.html_page)):
-            soup = BeautifulSoup(self.html_page[j], features="html.parser")
+            BeautifulSoup(self.html_page[j], features="html.parser")
             time.sleep(self.wait)
 
             # get the hyperlinks for all the documents and temporarily save

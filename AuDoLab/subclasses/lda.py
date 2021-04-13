@@ -26,14 +26,13 @@ class LDA:
         """
 
         dictionary = corpora.Dictionary(df_processed["tokens"])
-        if no_below == None:
+        if no_below is None:
             no_below = 0
-        if no_above == None:
+        if no_above is None:
             no_above = 1
         bow_corpus = [dictionary.doc2bow(doc) for doc in df_processed["tokens"]]
         return dictionary, bow_corpus
 
-    #####---- Should not be necessary anymore ----############
 
     @staticmethod
     def model(corpus, num_topics, id2word, random_state, passes):
