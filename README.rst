@@ -5,7 +5,7 @@ AuDoLab
 .. image:: https://img.shields.io/pypi/v/AuDoLab.svg
         :target: https://pypi.python.org/pypi/AuDoLab
 
-.. image:: https://img.shields.io/travis/ArneTillmann/AuDoLab.svg
+.. image:: https://api.travis-ci.com/ArneTillmann/AuDoLab.svg?branch=main&status=passed
         :target: https://travis-ci.com/ArneTillmann/AuDoLab
 
 .. image:: https://readthedocs.org/projects/AuDoLab/badge/?version=latest
