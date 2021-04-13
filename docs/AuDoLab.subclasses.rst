@@ -1,9 +1,6 @@
 AuDoLab.subclasses package
 ==========================
 
-Submodules
-----------
-
 AuDoLab.subclasses.abstractscraper module
 -----------------------------------------
 
@@ -48,14 +45,6 @@ AuDoLab.subclasses.tf\_idf module
 ---------------------------------
 
 .. automodule:: AuDoLab.subclasses.tf_idf
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Module contents
----------------
-
-.. automodule:: AuDoLab.subclasses
    :members:
    :undoc-members:
    :show-inheritance:
