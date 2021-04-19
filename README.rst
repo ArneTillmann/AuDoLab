@@ -8,8 +8,7 @@ AuDoLab
 .. image:: https://api.travis-ci.com/ArneTillmann/AuDoLab.svg?branch=abstract_scraper&status=passed
         :target: https://travis-ci.com/ArneTillmann/AuDoLab
 
-.. image:: https://readthedocs.org/projects/audolab/badge/?version=latest
-    :target: https://audolab.readthedocs.io/en/latest/?badge=latest
+.. image:: https://readthedocs.org/projects/audolab/badge/?version=latest :target: https://audolab.readthedocs.io/en/latest/?badge=latest
     :alt: Documentation Status
 
  With AuDoLab you can perform Latend Direchlet Allocation on highly imbalanced datasets.
