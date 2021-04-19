@@ -9,10 +9,10 @@ AuDoLab
         :target: https://travis-ci.com/ArneTillmann/AuDoLab
 
 .. image:: https://readthedocs.org/projects/audolab/badge/?version=latest
-:target: https://audolab.readthedocs.io/en/latest/?badge=latest
+ :target: https://audolab.readthedocs.io/en/latest/?badge=latest
 
 
- With AuDoLab you can perform Latend Direchlet Allocation on highly imbalanced datasets.
+With AuDoLab you can perform Latend Direchlet Allocation on highly imbalanced datasets.
 
 
 * Free software: GNU General Public License v3
