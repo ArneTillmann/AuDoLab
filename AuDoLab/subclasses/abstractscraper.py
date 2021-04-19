@@ -6,6 +6,8 @@ import numpy as np
 import pandas as pd
 import requests
 import json
+import asyncio
+from pyppeteer import launch
 
 
 class AbstractScraper:
@@ -15,12 +17,12 @@ class AbstractScraper:
     """
 
     def __init__(self):
-        self.web = webbot.Browser()
-        self.wait = 5
+        #self.web = webbot.Browser()
+        #self.wait = 10
         self.first = "https://ieeexplore.ieee.org/search/searchresult.jsp?action=search&newsearch=true&matchBoolean=true&"
         self.second = "&highlight=true&returnFacets=ALL&returnType=SEARCH&matchPubs=true&rowsPerPage=100&pageNumber=1"
 
-    def _open(self, url=None, keywords=None, operator="OR", in_data="author",
+    async def _open(self, url=None, keywords=None, operator="OR", in_data="author",
               pages=2):
         """
         defines the users search query
@@ -38,6 +40,48 @@ class AbstractScraper:
         :type in_data: string
         :return:
         """
+        await self._open_pypeteer(url, keywords, operator, in_data, pages)
+
+    async def _open_pypeteer(self, url=None, keywords=None, operator="OR", in_data="author",
+    pages=2):
+        self._create_url(url, keywords, operator, in_data)
+        self.html_page = []
+        print("The algorithm is iterating through", pages,
+              "pages")
+        browser = await launch()
+        page = await browser.newPage()
+        await page.goto(self.url, {'waitUntil' : 'networkidle0'})
+
+        self.linkstorage = []
+
+        elements = await page.querySelectorAll('a')
+        for element in elements:
+            self.linkstorage.append(await page.evaluate('(element) => element.href', element))
+        for i in range(2, pages+1):
+            self._create_new_url(i)
+            await page.goto(self.url, {'waitUntil' : 'networkidle0'})
+            elements = await page.querySelectorAll('a')
+            for element in elements:
+                self.linkstorage.append(await page.evaluate('(element) => element.href', element))
+        await browser.close()
+
+    def _add_page_number(self, page, position):
+        self.url = self.url[:position+len("pageNumber=")] + str(page) + self.url[position+len("pageNumber=")+len(str(page-1)):]
+
+    def _add_str_plus_page_number(self, page):
+        if self.url[-1] =='?':
+            self.url = self.url + "pageNumber=" + str(page)
+        else:
+            self.url = self.url + "?pageNumber" + str(page)
+
+    def _create_new_url(self, page):
+
+        if "pageNumber=" in self.url:
+            self._add_page_number(page, self.url.find("pageNumber="))
+        else:
+            self._add_str_plus_page_number(page)
+
+    def _create_url(self, url, keywords, operator, in_data):
         operator = ")%20" + operator.upper() + "%20("
         if in_data == "all_meta":
             in_data = "%22All%20Metadata%22:"
@@ -45,7 +89,6 @@ class AbstractScraper:
             in_data = "%22Author%20Keywords%22:"
         if url:
             self.url = url
-            self.web.go_to(self.url)
 
         else:
             if len(keywords) > 3:
@@ -76,38 +119,18 @@ class AbstractScraper:
                     + "))"
                 )
             self.url = self.first + self.middle + self.second
-            self.web.go_to(self.url)
-            time.sleep(self.wait)
-
-        """goes through the number of defined pages on IEEE Xplore"""
-        # go to web page
-        self.web.click("Accept")
-        self.html_page = []
-
-        for i in range(1, pages + 1):
-            self.web.click(str(i))
-            time.sleep(self.wait)
-            self.html_page.append(self.web.get_page_source())
-            time.sleep(self.wait)
-        print("The algorithm is iterating through", len(self.html_page),
-              "pages")
-        self.web.quit()
 
     def _find_links(self):
         """goes through every paper on every page and collects all links to the
          subpages of the papers"""
         document_links = []
         self.data = []
-        for j in range(len(self.html_page)):
-            for link in BeautifulSoup(
-                self.html_page[j], features="html.parser"
-            ).findAll("a", attrs={"href": re.compile("^/document")}):
-                document_links.append(link.get("href"))
-
+        document = "/document/"
+        citation = "/citations"
+        for link in self.linkstorage:
+            if (document in link) & (citation not in link):
+                self.data.append(link)
         # remove unnecessary results of the href search
-        matching = [s for s in document_links if "citation" in s]
-        x = [i for i in document_links if i not in matching]
-        self.data = x
         self.data = np.array(self.data)
         # remove duplicates that are in there due to multiple occurrence in the
         self.data = np.unique(self.data)
@@ -128,8 +151,7 @@ class AbstractScraper:
                 data = json.loads(
                     re.search(
                         r"\.metadata=(.*?);",
-                        requests.get("https://ieeexplore.ieee.org" +
-                                     self.data[i]).text,
+                        requests.get(self.data[i]).text,
                     ).group(1)
                 )
                 # only get title and abstracts -> we could also go for
@@ -142,7 +164,13 @@ class AbstractScraper:
             except:
                 pass
 
-    def get_abstracts(
+    def get(self, url=None, keywords=None, operator="OR", pages=2, in_data="author"):
+        self._open(
+            url=url, keywords=keywords, operator=operator, pages=pages,
+            in_data=in_data
+        )
+
+    async def get_abstracts(
         self, url=None, keywords=None, operator="OR", pages=2, in_data="author"
     ):
         """
@@ -159,7 +187,7 @@ class AbstractScraper:
         :type in_data: string
         :return: pd.DataFrame
         """
-        self._open(
+        await self._open(
             url=url, keywords=keywords, operator=operator, pages=pages,
             in_data=in_data
         )
@@ -171,13 +199,15 @@ class AbstractScraper:
         return data
 
 
-if __name__ == "__main__":
-    # Execute the above code
+
+
+async def main():
     AS = AbstractScraper()
-    data = AS.get_abstracts(
-        keywords=["dentistry", "teeth", "tooth"],
-        in_data="all_meta",
-        pages=12,
-        operator="or",
-    )
-    print(data["text"])
+    data = await AS.get_abstracts(url=None, keywords=["dentistry", "teeth", "tooth"],
+            in_data="all_meta",
+            pages=3,
+            operator="or")
+    print(data)
+
+
+asyncio.get_event_loop().run_until_complete(main())

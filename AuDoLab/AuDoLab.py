@@ -22,7 +22,7 @@ class AuDoLab:
         The abstracts of the papers listet on that list of search results will
         be stored in a .txt file with the givin file name.
 
-        Arguments:
+        Args:
         - url ( string)
         - file_name (string)
         """
