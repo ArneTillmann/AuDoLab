@@ -2,7 +2,7 @@ import pytest
 import os
 import sys
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/..")
-from AuDoLab import AuDoLab
+# from AuDoLab import AuDoLab
 """Tests for `AuDoLab` package."""
 
 
@@ -22,7 +22,7 @@ def test_content(response):
     # assert 'GitHub' in BeautifulSoup(response.content).title.string
 
 
-audo = AuDoLab.AuDoLab()
+# audo = AuDoLab.AuDoLab()
 # # papers = audo.scrape_abstracts(
 # #     keywords=["dentistry", "teeth", "tooth"],
 # #     in_data="all_meta",

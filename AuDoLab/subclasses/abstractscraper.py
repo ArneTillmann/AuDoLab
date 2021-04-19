@@ -40,23 +40,46 @@ class AbstractScraper:
         :type in_data: string
         :return:
         """
-        await self._open_pypeteer(url, keywords, operator, in_data)
-        print("The algorithm is iterating through", len(self.html_page),
-              "pages")
+        await self._open_pypeteer(url, keywords, operator, in_data, pages)
 
     async def _open_pypeteer(self, url=None, keywords=None, operator="OR", in_data="author",
     pages=2):
         self._create_url(url, keywords, operator, in_data)
         self.html_page = []
+        print("The algorithm is iterating through", pages,
+              "pages")
         browser = await launch()
         page = await browser.newPage()
         await page.goto(self.url, {'waitUntil' : 'networkidle0'})
+
         self.linkstorage = []
+
         elements = await page.querySelectorAll('a')
         for element in elements:
             self.linkstorage.append(await page.evaluate('(element) => element.href', element))
-        self.html_page = self.linkstorage
+        for i in range(2, pages+1):
+            self._create_new_url(i)
+            await page.goto(self.url, {'waitUntil' : 'networkidle0'})
+            elements = await page.querySelectorAll('a')
+            for element in elements:
+                self.linkstorage.append(await page.evaluate('(element) => element.href', element))
         await browser.close()
+
+    def _add_page_number(self, page, position):
+        self.url = self.url[:position+len("pageNumber=")] + str(page) + self.url[position+len("pageNumber=")+len(str(page-1)):]
+
+    def _add_str_plus_page_number(self, page):
+        if self.url[-1] =='?':
+            self.url = self.url + "pageNumber=" + str(page)
+        else:
+            self.url = self.url + "?pageNumber" + str(page)
+
+    def _create_new_url(self, page):
+
+        if "pageNumber=" in self.url:
+            self._add_page_number(page, self.url.find("pageNumber="))
+        else:
+            self._add_str_plus_page_number(page)
 
     def _create_url(self, url, keywords, operator, in_data):
         operator = ")%20" + operator.upper() + "%20("
@@ -120,7 +143,6 @@ class AbstractScraper:
         # initialize empty lists to fill
         self.abstracts = []
         self.title = []
-        print(self.data)
 
         # loop through number of  "link"
         for i in range(len(self.data)):
@@ -183,7 +205,7 @@ async def main():
     AS = AbstractScraper()
     data = await AS.get_abstracts(url=None, keywords=["dentistry", "teeth", "tooth"],
             in_data="all_meta",
-            pages=2,
+            pages=3,
             operator="or")
     print(data)
 

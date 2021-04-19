@@ -5,11 +5,11 @@ AuDoLab
 .. image:: https://img.shields.io/pypi/v/AuDoLab.svg
         :target: https://pypi.python.org/pypi/AuDoLab
 
-.. image:: https://api.travis-ci.com/ArneTillmann/AuDoLab.svg?branch=main&status=passed
+.. image:: https://api.travis-ci.com/ArneTillmann/AuDoLab.svg?branch=abstract_scraper&status=passed
         :target: https://travis-ci.com/ArneTillmann/AuDoLab
 
 .. image:: https://readthedocs.org/projects/audolab/badge/?version=abstract_scraper
-        :target: https://AuDoLab.readthedocs.io/en/latest/?version=latest
+        :target: https://AuDoLab.readthedocs.io/en/latest/?version=abstract_scraper
 
 ..
   :alt: Documentation Status
