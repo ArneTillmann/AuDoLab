@@ -1,11 +1,9 @@
-import re
-import webbot
-import time
-from bs4 import BeautifulSoup
-import numpy as np
-import pandas as pd
-import requests
-import json
+from re import search
+from numpy import array as np_array
+from numpy import unique as np_unique
+from pandas import DataFrame as pd_DataFrame
+from requests import get as requests_get
+from json import loads as json_loads
 import asyncio
 from pyppeteer import launch
 
@@ -131,9 +129,9 @@ class AbstractScraper:
             if (document in link) & (citation not in link):
                 self.data.append(link)
         # remove unnecessary results of the href search
-        self.data = np.array(self.data)
+        self.data = np_array(self.data)
         # remove duplicates that are in there due to multiple occurrence in the
-        self.data = np.unique(self.data)
+        self.data = np_unique(self.data)
         print("Total number of abstracts that will be scraped:",
               len(self.data))
 
@@ -148,10 +146,10 @@ class AbstractScraper:
         for i in range(len(self.data)):
             # only "try" because sometimes the javascript is corrupted
             try:
-                data = json.loads(
-                    re.search(
+                data = json_loads(
+                    search(
                         r"\.metadata=(.*?);",
-                        requests.get(self.data[i]).text,
+                        requests_get(self.data[i]).text,
                     ).group(1)
                 )
                 # only get title and abstracts -> we could also go for
@@ -194,7 +192,7 @@ class AbstractScraper:
         self._find_links()
         self._find_abstracts()
 
-        data = pd.DataFrame({"text": self.abstracts, "titles": self.title})
+        data = pd_DataFrame({"text": self.abstracts, "titles": self.title})
         data = data.drop_duplicates()
         return data
         
