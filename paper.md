@@ -41,7 +41,7 @@ aas-journal: Astrophysical Journal <- The name of the AAS journal.
 
 In Natural Language Process-ing  (NLP)  Unsupervised Document Classification is mainly done on large and balanced datasets.
 AuDoLab tackles this problem and provides a noval approach to one-class document classification for heavily imbalanced datasets.
-AuDoLab enables the user to  create  user specific out-of-domain training data and classify a heavily underrepresented target class in a target dataset.
+AuDoLab enables the user to  create  user specific out-of-domain training data and classify a heavily underrepresented target class in a target dataset, using Web Scraping, Latent Dirichlet Allocation Topic Modelling and one-class Support Vector Machines.
 
 
 # Statement of need
