@@ -39,17 +39,10 @@ aas-journal: Astrophysical Journal <- The name of the AAS journal.
 
 # Summary
 
-test2 main
+In Natural Language Process-ing  (NLP)  Unsupervised Document Classification is mainly done on large and balanced datasets.
+AuDoLab tackles this problem and provides a noval approach to one-class document classification for heavily imbalanced datasets.
+AuDoLab enables the user to  create  user specific out-of-domain training data and classify a heavily underrepresented target class in a target dataset.
 
-The forces on stars, galaxies, and dark matter under external gravitational
-fields lead to the dynamical evolution of structures in the universe. The orbits
-of these bodies are therefore key to understanding the formation, history, and
-future state of galaxies. The field of "galactic dynamics," which aims to model
-the gravitating components of galaxies to study their structure and evolution,
-is now well-established, commonly taught, and frequently used in astronomy.
-Aside from toy problems and demonstrations, the majority of problems require
-efficient numerical tools, many of which require the same base code (e.g., for
-performing numerical orbit integration).
 
 # Statement of need
 
