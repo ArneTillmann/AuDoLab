@@ -11,7 +11,7 @@ class AuDoLab:
     def __init__(self):
         4 + 4
 
-    def scrape_abstracts(self, url, file_name):
+    async def scrape_abstracts(self, url=None, keywords=None, operator="OR", pages=2, in_data="author"):
         """Function to scrap abstracts of scientific papers from the givin url.
         We used https://ieeexplore.ieee.org/search/advanced to generate a
         list like https://ieeexplore.ieee.org/search/searchresult.jsp?action=se
@@ -27,13 +27,12 @@ class AuDoLab:
         - file_name (string)
         """
 
-        ks = abstractscraper.AbstractScraper(url)
+        ks = abstractscraper.AbstractScraper()
 
-        ks.open()
-        ks.find_links()
-        self.abstracts = ks.get_abstracts()
-        file_name = file_name + ".txt"
-        self.abstracts.to_csv(file_name, header=True, index=False)
+        self.abstracts = await ks.get_abstracts(url, keywords, operator, pages, in_data)
+        print(self.abstracts)
+        #file_name = file_name + ".txt"
+        #self.abstracts.to_csv(self.abstracts, header=True, index=False)
         return self.abstracts
 
     def preprocessing(self, data, column):
@@ -43,7 +42,8 @@ class AuDoLab:
         Arguments:
         - data (<class 'pandas.core.frame.DataFrame'>)
         """
-        self.data_processed = preprocessing.Preprocessor.basic_preprocessing(
+        prepro = preprocessing.Preprocessor()
+        self.data_processed = prepro.basic_preprocessing(
             data, column
         )
         return self.data_processed

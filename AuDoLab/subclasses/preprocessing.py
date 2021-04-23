@@ -1,34 +1,32 @@
-from re import compile as re_compile
+import re
+import nltk
 from nltk.tokenize import RegexpTokenizer
 from nltk.corpus import stopwords
-from nltk.stem import WordNetLemmatizer
+from nltk.stem.porter import PorterStemmer
 
-
+# Text preparation
 class Preprocessor:
     def __init__(self):
-        4 + 5
+        4+5 
 
-    def _text_prepare(text, language="english"):
-        """prepares text for lda and o-svm.
-        Removes stopwords, symbols, double spaces and numbers
+    def text_prepare(self, text, language="english"):
+        """text preparation function for text preprocessing
 
         Args:
-            text (numpy array): [column out of dataframe with documents]
-            language (string): [language for stopword removel,
-                                default: english]
-
-        Returns:
-            [numpy array]: [prepared documents]
+            text (helper variable): None
+            language (str, optional): [description]. Defaults to "english". Sets language of stopwords to be removed
         """
 
-        REPLACE_BY_SPACE_RE = re_compile("[/(){}\[\]\|@,;]")
-        BAD_SYMBOLS_RE = re_compile("[^0-9a-z #+_]")
-        NUMBERS = re_compile(r"\d+")
+        REPLACE_BY_SPACE_RE = re.compile("[/(){}\[\]\|@,;]")
+        BAD_SYMBOLS_RE = re.compile("[^0-9a-z #+_]")
+        NUMBERS = re.compile("\d+")
         STOPWORDS = set(stopwords.words(language))
 
         text = text.lower()
-        # replace REPLACE_BY_SPACE_RE symbols by space in text
-        text = REPLACE_BY_SPACE_RE.sub("", text)
+        text = REPLACE_BY_SPACE_RE.sub(
+            "", text
+        )  # replace REPLACE_BY_SPACE_RE symbols by space in text
+        
         text = BAD_SYMBOLS_RE.sub("", text)
         text = NUMBERS.sub("", text)
         # delete symbols which are in BAD_SYMBOLS_RE from text
@@ -43,51 +41,41 @@ class Preprocessor:
 
         return text
 
-    def _lemmatize_text(text):
-        """helper function
-
-        Args:
-            text (numpy array): [dataframe column where documents are stored]
-
-        Returns:
-            [numpy array]: [lemmatized documents]
+    def _lemmatize_text(self, text):
+        """helper function that lemmatizes already tokenized text
         """
-        lemmatizer = WordNetLemmatizer()
+
+        lemmatizer = nltk.stem.WordNetLemmatizer()
         return " ".join([lemmatizer.lemmatize(w, "v") for w in text])
 
-    def basic_preprocessing(df, column):
-        """calls helper functions from above and preprocesses documents
-        removes all stopwords and unnecessary terms, e.g. symbols, numbers,
-        double spaces
-        and tokenizes documents
+    def basic_preprocessing(self, df, column):
+        """Preprocessing function that calls the helper functions
 
         Args:
-            df (DataFrame): [dataframe where documents are stored in one
-                             column]
-            columns (String): [column name where documents are stored]
+            df (DataFrame): DataFrame that has the text data stored
+            column (str): column name where raw text is stored
 
         Returns:
-            [DataFrame]: [dataframe with preprocessed documents. 2 new columns
-                          are appended. The completely preprocessed
-            documents are stored in column ['tokens'], the only lemmatized
-                                    documents are stored in columns ['lemma']]
+            DataFrame: DataFrame with preprocessed text
         """
+        
         df_temp = df.copy(deep=True)
+        df_temp[column] = df_temp[column].astype(str)
 
-        df_temp.loc[:, column] = [
-            Preprocessor._text_prepare(x, "english")
-            for x in df_temp[column].values
-        ]
-        df_temp[column] = [
-            item for item in df_temp[column] if not item.isdigit()
-        ]
+        df_temp.loc[:, column] = [self.text_prepare(x) for x in df_temp[column].values]
+        df_temp[column] = [item for item in df_temp[column] if not item.isdigit()]
 
         tokenizer = RegexpTokenizer(r"\w+")
 
         df_temp["tokens"] = df_temp[column].apply(tokenizer.tokenize)
-        df_temp["lemma"] = df_temp["tokens"].apply(
-            Preprocessor._lemmatize_text
-            )
+        df_temp["lemma"] = df_temp["tokens"].apply(self._lemmatize_text)
         df_temp["tokens"] = df_temp["lemma"].apply(tokenizer.tokenize)
 
         return df_temp
+
+
+if __name__ == "__main__":
+    import pandas as pd
+    data = pd.read_csv("mtsamples.csv")
+    prepro = Preprocessor()
+    test = prepro.basic_preprocessing(df=data, column="transcription")

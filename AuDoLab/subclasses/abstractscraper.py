@@ -197,17 +197,18 @@ class AbstractScraper:
         data = pd.DataFrame({"text": self.abstracts, "titles": self.title})
         data = data.drop_duplicates()
         return data
+        
 
 
 
-
-async def main():
-    AS = AbstractScraper()
-    data = await AS.get_abstracts(url=None, keywords=["dentistry", "teeth", "tooth"],
-            in_data="all_meta",
-            pages=3,
-            operator="or")
-    print(data)
-
-
-asyncio.get_event_loop().run_until_complete(main())
+if __name__ == "__main__":
+    async def main():
+        AS = AbstractScraper()
+        data = await AS.get_abstracts(url=None, keywords=["dentistry", "teeth", "tooth"],
+                in_data="all_meta",
+                pages=3,
+                operator="or")
+        print(data)
+    
+    
+    asyncio.get_event_loop().run_until_complete(main())
