@@ -59,25 +59,13 @@ theoretical models behind AuDoLab advance existing methods and software solution
 
 # Statement of need
 
-`Gala` is an Astropy-affiliated Python package for galactic dynamics. Python
-enables wrapping low-level languages (e.g., C) for speed without losing
-flexibility or ease-of-use in the user-interface. The API for `Gala` was
-designed to provide a class-based and user-friendly interface to fast (C or
-Cython-optimized) implementations of common operations such as gravitational
-potential and force evaluation, orbit integration, dynamical transformations,
-and chaos indicators for nonlinear dynamics. `Gala` also relies heavily on and
-interfaces well with the implementations of physical units and astronomical
-coordinate systems in the `Astropy` package [@astropy] (`astropy.units` and
-`astropy.coordinates`).
+Unsupervised document classification is mainly performed to gain insight into the underlying topics of large text corpora.
+In this process, highly underrepresented topics are often overlooked and consequently assigned to the wrong topics. Thus, labeling underrepresented topics in large text corpora is often done manually and can therefore be very time-consuming. 
 
-`Gala` was designed to be used by both astronomical researchers and by
-students in courses on gravitational dynamics or astronomy. It has already been
-used in a number of scientific publications [@Pearson:2017] and has also been
-used in graduate courses on Galactic dynamics to, e.g., provide interactive
-visualizations of textbook material [@Binney:2008]. The combination of speed,
-design, and support for Astropy functionality in `Gala` will enable exciting
-scientific explorations of forthcoming data releases from the *Gaia* mission
-[@gaia] by students and experts alike.
+AuDoLab enables the user to tackle this problem and perform unsupervised one-class document classification for heavily underrepresented document classes. 
+Firstly, the package enables the user to web scrape training documents (scientific papers) from IEEEXplore. The user can search for multiple search terms and specify an individual search query. Subsequently, the text data is preprocessed for the classification part. The text preprocessing includes common NLP text preprocessing techniques as stopword removal and lemmatization.  As  document  representations  the  term  frequency-inverse  document  frequency  (tf-idf) representations are chosen. The tf-idf scores are computed on a joint corpus from the web-scraped out-of-domain training data and the target text data. 
+
+The actual document classification is performed using one-class Support vector machines, trained on the tf-idf representations from the out-of-domain training data, that are computed on the joint corpus. 
 
 # Comparison with existing tools
 
