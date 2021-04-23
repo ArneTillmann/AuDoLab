@@ -15,11 +15,11 @@ authors:
     affiliation: 2
   - name: Christoph Weisser
     affiliation: 3
-   - name: Benjamin Säfken
+  - name: Benjamin Säfken
     affiliation: 3
-   - name: Thomas Kneib
+  - name: Thomas Kneib
     affiliation: 3
-   - name: Alexander Silbersdorff
+  - name: Alexander Silbersdorff
     affiliation: 3
 affiliations:
  - name: Lyman Spitzer, Jr. Fellow, Princeton University
