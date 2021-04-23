@@ -1,5 +1,5 @@
 ---
-title: 'Gala: A Python package for galactic dynamics'
+title: 'AuDoLab Automatic document labelling and classfication for extremely unbalanced data'
 tags:
   - Python
   - astronomy
