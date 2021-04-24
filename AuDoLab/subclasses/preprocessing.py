@@ -11,12 +11,13 @@ class Preprocessor:
     def __init__(self):
         4 + 5
 
-    def text_prepare(self, text, language="english"):
+    def _text_prepare(self, text, language="english"):
         """text preparation function for text preprocessing
 
         Args:
             text (helper variable): None
-            language (str, optional): [description]. Defaults to "english". Sets language of stopwords to be removed
+            language (str, optional): [description]. Defaults to "english". Sets
+            language of stopwords to be removed
         """
 
         REPLACE_BY_SPACE_RE = re.compile("[/(){}\\[\\]\\|@,;]")
@@ -53,18 +54,19 @@ class Preprocessor:
     def basic_preprocessing(self, df, column):
         """Preprocessing function that calls the helper functions
 
-        Args:
-            df (DataFrame): DataFrame that has the text data stored
-            column (str): column name where raw text is stored
+        :param df: DataFrame that has the text data stored
+        :type df: pd.DataFrame
+        :param column: column name where raw text is stored
+        :type column: str
 
-        Returns:
-            DataFrame: DataFrame with preprocessed text
+        :return: DataFrame with preprocessed text
+        :rtype:  DataFrame
         """
 
         df_temp = df.copy(deep=True)
         df_temp[column] = df_temp[column].astype(str)
 
-        df_temp.loc[:, column] = [self.text_prepare(
+        df_temp.loc[:, column] = [self._text_prepare(
             x) for x in df_temp[column].values]
         df_temp[column] = [
             item for item in df_temp[column] if not item.isdigit()]

@@ -9,7 +9,7 @@ class One_Class_SVM:
     @staticmethod
     def choose_classifier(df, classifier, i):
         """
-        returns dataframe where documents that are classified to target class 
+        returns dataframe where documents that are classified to target class
         have 1, otherwise, 0
 
         :param df: dataframe of target documents
@@ -48,19 +48,17 @@ class One_Class_SVM:
             the classifiers is trained
         :type nus: list of floats
         :param quality_train: percentage of training data that seems to
-            belong to target class.
-        :Default quality_train: 0.85
+            belong to target class, defaults to 0.85
         :type quality_train: float
         :param min_pred: percentage of target data that has to be at
             least classified as belonging to target class
-            for classifier to be considered.
+            for classifier to be considered ,defaults to 0.05
         :type min_pred: float
-        :Default min_pred: 0.05
         :param max_pred: percentage of target class that is maximally
             allowed to be classified as belonging to
-            target class for classifier to be considered.
-            :type max_pred: float
-        :Default max_pred: 0.2
+            target class for classifier to be considered, defaults to 0.2
+        :type max_pred: float
+
 
 
         :return: DataFrame with stored classifiers that
