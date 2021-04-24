@@ -77,18 +77,3 @@ To use AuDoLab in a project::
 
 * Free software: GNU General Public License v3
 * Documentation: https://AuDoLab.readthedocs.io.
-
-
-Documentation
--------------
-
-See our `Documentation <https://audolab.readthedocs.io/en/latest/?badge=latest>`_
-for further information.
-
-Credits
--------
-
-This package was created with Cookiecutter_ and the `audreyr/cookiecutter-pypackage`_ project template.
-
-.. _Cookiecutter: https://github.com/audreyr/cookiecutter
-.. _`audreyr/cookiecutter-pypackage`: https://github.com/audreyr/cookiecutter-pypackage
