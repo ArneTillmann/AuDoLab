@@ -9,14 +9,6 @@ AuDoLab.subclasses.abstractscraper
    :undoc-members:
    :show-inheritance:
 
-AuDoLab.subclasses.abstractscraper\_old
-----------------------------------------------
-
-.. automodule:: AuDoLab.subclasses.abstractscraper_old
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 AuDoLab.subclasses.lda
 -----------------------------
 
@@ -41,7 +33,7 @@ AuDoLab.subclasses.preprocessing
    :undoc-members:
    :show-inheritance:
 
-AuDoLab.subclasses.tf\_idf 
+AuDoLab.subclasses.tf\_idf
 ---------------------------------
 
 .. automodule:: AuDoLab.subclasses.tf_idf
