@@ -38,10 +38,9 @@ aas-journal: Astrophysical Journal <- The name of the AAS journal.
 # Summary
 
 AuDoLab provides a novel approach to one-class document classification for heavily imbalanced datasets, even if labelled training data is not available. 
-AuDoLab enables the user to create user specific out-of-domain training data and classify a heavily underrepresented target class
-in a target dataset using a recently developed integration of Web Scraping, Latent Dirichlet Allocation Topic Modelling and one-class Support Vector Machines [@Thielmann]. The user can achieve high quality results even on higly specific classification problems without the need to invest in the time and cost intensive 
-labelling of training documents by humans. Hence, AuDoLab has a broad range of scientific research or business application. The following section provides an overview of AuDoLab. AuDoLab can be installed conveniently via pip. A detailed description of the package and installation and can be found in the packages repository or on the documentation website (link). 
-
+Our package enables the user to create specific out-of-domain training data to classify a heavily underrepresented target class
+in a target dataset using a recently developed integration of Web Scraping, Latent Dirichlet Allocation Topic Modelling and One-class Support Vector Machines [@Thielmann]. AuDoLab can achieve high quality results even on higly specific classification problems without the need to invest in the time and cost intensive 
+labelling of training documents by humans. Hence, AuDoLab has a broad range of scientific research or business applications. The following section provides an overview of AuDoLab. AuDoLab can be installed conveniently via pip. A detailed description of the package and installation and can be found in the packages repository or on the documentation website (link). 
 
 # Statement of need
 
@@ -53,7 +52,6 @@ This leverages the results of one-class document classification using one-class 
 This adaptation and extension is achieved by implementing a multi-level classification rule as visualised in the graph below.
 
 ![Classification Procedure.\label{fig:test2}](figures/tree.PNG){ width=100% }
-
 
 Firstly, the package enables the user to web scrape training documents (scientific papers) from IEEEXplore. The user can search for multiple search terms and specify an individual search query. Thus, the user can create its own, individually labelled (e.g. via author-keywords) training data set. Through the integration of pre-labelled out-of-domain training data, the problem of the heavily underrepresented target class can be circumvented, as large enough training corpora can be automatically generated.
 Subsequently, the text data is preprocessed for the classification part. The text preprocessing includes common NLP text preprocessing techniques such as stopword removal and lemmatization.  As  document  representations  the  term  frequency-inverse  document  frequency  (tf-idf) representations are chosen. The tf-idf scores are computed on a joint corpus from the web-scraped out-of-domain training data and the target text data.
