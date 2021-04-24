@@ -14,11 +14,8 @@ AuDoLab
 
 With AuDoLab you can perform Latend Direchlet Allocation on highly imbalanced datasets.
 
-.. toctree::
-    :maxdepth: 2
-
-    docs/installation.rst
-    docs/usage.rst
+.. include:: /docs/installation.rst
+.. include:: /docs/usage.rst
 
 * Free software: GNU General Public License v3
 * Documentation: https://AuDoLab.readthedocs.io.
