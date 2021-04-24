@@ -5,9 +5,11 @@ from nltk.corpus import stopwords
 from nltk.stem.porter import PorterStemmer
 
 # Text preparation
+
+
 class Preprocessor:
     def __init__(self):
-        4+5 
+        4 + 5
 
     def text_prepare(self, text, language="english"):
         """text preparation function for text preprocessing
@@ -17,16 +19,16 @@ class Preprocessor:
             language (str, optional): [description]. Defaults to "english". Sets language of stopwords to be removed
         """
 
-        REPLACE_BY_SPACE_RE = re.compile("[/(){}\[\]\|@,;]")
+        REPLACE_BY_SPACE_RE = re.compile("[/(){}\\[\\]\\|@,;]")
         BAD_SYMBOLS_RE = re.compile("[^0-9a-z #+_]")
-        NUMBERS = re.compile("\d+")
+        NUMBERS = re.compile("\\d+")
         STOPWORDS = set(stopwords.words(language))
 
         text = text.lower()
         text = REPLACE_BY_SPACE_RE.sub(
             "", text
         )  # replace REPLACE_BY_SPACE_RE symbols by space in text
-        
+
         text = BAD_SYMBOLS_RE.sub("", text)
         text = NUMBERS.sub("", text)
         # delete symbols which are in BAD_SYMBOLS_RE from text
@@ -58,12 +60,14 @@ class Preprocessor:
         Returns:
             DataFrame: DataFrame with preprocessed text
         """
-        
+
         df_temp = df.copy(deep=True)
         df_temp[column] = df_temp[column].astype(str)
 
-        df_temp.loc[:, column] = [self.text_prepare(x) for x in df_temp[column].values]
-        df_temp[column] = [item for item in df_temp[column] if not item.isdigit()]
+        df_temp.loc[:, column] = [self.text_prepare(
+            x) for x in df_temp[column].values]
+        df_temp[column] = [
+            item for item in df_temp[column] if not item.isdigit()]
 
         tokenizer = RegexpTokenizer(r"\w+")
 

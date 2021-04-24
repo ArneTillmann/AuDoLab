@@ -21,7 +21,7 @@ class AbstractScraper:
         self.second = "&highlight=true&returnFacets=ALL&returnType=SEARCH&matchPubs=true&rowsPerPage=100&pageNumber=1"
 
     async def _open(self, url=None, keywords=None, operator="OR", in_data="author",
-              pages=2):
+                    pages=2):
         """
         defines the users search query
 
@@ -34,40 +34,41 @@ class AbstractScraper:
         :param pages: number of pages that is iterated over
         :type pages: int
         :param in_data: "author" or "all_meta" whether to search in author
-                        keywords or all metadata
+                         keywords or all metadata
         :type in_data: string
         :return:
         """
         await self._open_pypeteer(url, keywords, operator, in_data, pages)
 
     async def _open_pypeteer(self, url=None, keywords=None, operator="OR", in_data="author",
-    pages=2):
+                             pages=2):
         self._create_url(url, keywords, operator, in_data)
         self.html_page = []
         print("The algorithm is iterating through", pages,
               "pages")
         browser = await launch()
         page = await browser.newPage()
-        await page.goto(self.url, {'waitUntil' : 'networkidle0'})
+        await page.goto(self.url, {'waitUntil': 'networkidle0'})
 
         self.linkstorage = []
 
         elements = await page.querySelectorAll('a')
         for element in elements:
             self.linkstorage.append(await page.evaluate('(element) => element.href', element))
-        for i in range(2, pages+1):
+        for i in range(2, pages + 1):
             self._create_new_url(i)
-            await page.goto(self.url, {'waitUntil' : 'networkidle0'})
+            await page.goto(self.url, {'waitUntil': 'networkidle0'})
             elements = await page.querySelectorAll('a')
             for element in elements:
                 self.linkstorage.append(await page.evaluate('(element) => element.href', element))
         await browser.close()
 
     def _add_page_number(self, page, position):
-        self.url = self.url[:position+len("pageNumber=")] + str(page) + self.url[position+len("pageNumber=")+len(str(page-1)):]
+        self.url = self.url[:position + len("pageNumber=")] + str(
+            page) + self.url[position + len("pageNumber=") + len(str(page - 1)):]
 
     def _add_str_plus_page_number(self, page):
-        if self.url[-1] =='?':
+        if self.url[-1] == '?':
             self.url = self.url + "pageNumber=" + str(page)
         else:
             self.url = self.url + "?pageNumber" + str(page)
@@ -159,10 +160,16 @@ class AbstractScraper:
 
                 self.title.append(title)
                 self.abstracts.append(data)
-            except:
+            except BaseException:
                 pass
 
-    def get(self, url=None, keywords=None, operator="OR", pages=2, in_data="author"):
+    def get(
+            self,
+            url=None,
+            keywords=None,
+            operator="OR",
+            pages=2,
+            in_data="author"):
         self._open(
             url=url, keywords=keywords, operator=operator, pages=pages,
             in_data=in_data
@@ -195,18 +202,15 @@ class AbstractScraper:
         data = pd_DataFrame({"text": self.abstracts, "titles": self.title})
         data = data.drop_duplicates()
         return data
-        
-
 
 
 if __name__ == "__main__":
     async def main():
         AS = AbstractScraper()
         data = await AS.get_abstracts(url=None, keywords=["dentistry", "teeth", "tooth"],
-                in_data="all_meta",
-                pages=3,
-                operator="or")
+                                      in_data="all_meta",
+                                      pages=3,
+                                      operator="or")
         print(data)
-    
-    
+
     asyncio.get_event_loop().run_until_complete(main())
