@@ -49,7 +49,7 @@ Unsupervised document classification is mainly performed to gain insight into th
 In this process, highly underrepresented topics are often overlooked and consequently assigned to the wrong topics.
 Thus, labeling underrepresented topics in large text corpora is often done manually and can therefore be very time-consuming.
 AuDoLab enables the user to tackle this problem and perform unsupervised one-class document classification for heavily underrepresented document classes.
-This leverages the results of one-class document classification using one-class support vector machines (SVM) [@Scholkopf][@Manevitz] and extends them to the use case of severely imbalanced datasets.
+This leverages the results of one-class document classification using one-class support vector machines (SVM) [@Scholkopf, @Manevitz] and extends them to the use case of severely imbalanced datasets.
 This adaptation and extension is achieved by implementing a multi-level classification rule as visualised in the graph below.
 
 ![Classification Procedure.\label{fig:test2}](figures/tree.PNG){ width=100% }
@@ -62,32 +62,8 @@ The main part of the classification rule lies in the training of the one-class S
 
 The second step can be reiteraded, depending on the users perceived quality of the classification results.
 
-# Citations
-
-Citations to entries in paper.bib should be in
-[rMarkdown](http://rmarkdown.rstudio.com/authoring_bibliographies_and_citations.html)
-format.
-
-If you want to cite a software repository URL (e.g. something on GitHub without a preferred
-citation) then you can do it with the example BibTeX entry below for @fidgit.
-
-For a quick reference, the following citation commands can be used:
-- `@author:2001`  ->  "Author et al. (2001)"
-- `[@author:2001]` -> "(Author et al., 2001)"
-- `[@author1:2001; @author2:2001]` -> "(Author1 et al., 2001; Author2 et al., 2002)"
-
-# Figures
-
-Figures can be included like this:
-![Caption for example figure.\label{fig:example}](figure.png)
-and referenced from text using \autoref{fig:example}.
-
-Figure sizes can be customized by adding an optional second parameter:
-![Caption for example figure.](figure.png){ width=20% }
-
 # Acknowledgements
 
-We acknowledge contributions from Brigitta Sipocz, Syrtis Major, and Semyeong
-Oh, and support from Kathryn Johnston during the genesis of this project.
+We thank the Campus-Institut Data Science (CIDAS), Göttingen, Germany for funding this project.
 
 # References
