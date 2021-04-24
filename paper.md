@@ -52,7 +52,7 @@ theoretical models behind AuDoLab advance existing methods and software solution
 
 
 
- installation and the package can be found in the packages repository or on the documentation website of TTLocVis
+ installation and the package can be found in the packages repository or on the documentation website of TTLocVis test
 
 
 # Statement of need
