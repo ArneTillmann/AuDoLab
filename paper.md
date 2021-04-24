@@ -37,22 +37,17 @@ aas-journal: Astrophysical Journal <- The name of the AAS journal.
 
 # Summary
 
-In Natural Language Processing (NLP) Unsupervised Document Classification is mainly done on large and balanced datasets.
-AuDoLab tackles this problem and provides a novel approach to one-class document classification for heavily imbalanced datasets.
-
-Furthermore, AuDoLab enables the user to  create  user specific out-of-domain training data and classify a heavily underrepresented target class
-in a target dataset, using Web Scraping, Latent Dirichlet Allocation Topic Modelling and one-class Support Vector Machines.
-
+AuDoLab provides a novel approach to one-class document classification for heavily imbalanced datasets, even if labelled training data is not available. 
+AuDoLab enables the user to create user specific out-of-domain training data and classify a heavily underrepresented target class
+in a target dataset using a recently developed integration of Web Scraping, Latent Dirichlet Allocation Topic Modelling and one-class Support Vector Machines [@Thielmann]. The user can achieve high quality results even on higly specific classification problems without the need to invest in the time and cost intensive 
+labelling of training documents by humans. Hence, AuDoLab has a broad range of scientific research or business application.
 
 
-
-AuDoLab can be used for various applications for scientific research and also has various business applications.
 The following section provides an detailed overview of AuDoLab. Subsequently, it will be discussed how the
 theoretical models behind AuDoLab advance existing methods and software solutions. AuDoLab can be installed conveniently via pip.
 
 
-
- installation and the package can be found in the packages repository or on the documentation website of TTLocVis test
+installation and the package can be found in the packages repository or on the documentation website of TTLocVis test
 
 
 # Statement of need
