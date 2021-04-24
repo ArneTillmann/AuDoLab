@@ -49,7 +49,7 @@ Unsupervised document classification is mainly performed to gain insight into th
 In this process, highly underrepresented topics are often overlooked and consequently assigned to the wrong topics.
 Thus, labeling underrepresented topics in large text corpora is often done manually and can therefore be very time-consuming.
 AuDoLab enables the user to tackle this problem and perform unsupervised one-class document classification for heavily underrepresented document classes.
-This leverages the results of one-class document classification using one-class support vector machines (SVM) [@Scholkopf, @Manevitz] and extends them to the use case of severely imbalanced datasets.
+This leverages the results of one-class document classification using one-class support vector machines (SVM) [@Scholkopf] [@Manevitz] and extends them to the use case of severely imbalanced datasets.
 This adaptation and extension is achieved by implementing a multi-level classification rule as visualised in the graph below.
 
 ![Classification Procedure.\label{fig:test2}](figures/tree.PNG){ width=100% }
