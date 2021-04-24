@@ -6,8 +6,6 @@ Welcome to AuDoLab's documentation!
    :caption: Contents:
 
    readme
-   installation
-   usage
    modules
    contributing
    authors
