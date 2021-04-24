@@ -1,5 +1,5 @@
 AuDoLab.subclasses
-==========================
+==================
 
 AuDoLab.subclasses.abstractscraper
 -----------------------------------------
@@ -10,7 +10,7 @@ AuDoLab.subclasses.abstractscraper
    :show-inheritance:
 
 AuDoLab.subclasses.lda
------------------------------
+----------------------
 
 .. automodule:: AuDoLab.subclasses.lda
    :members:
