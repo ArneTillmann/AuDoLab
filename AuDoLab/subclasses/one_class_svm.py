@@ -12,7 +12,7 @@ class One_Class_SVM:
         returns dataframe where documents that are classified to target class 
         have 1, otherwise, 0
 
-        :param df:dataframe of target documents
+        :param df: dataframe of target documents
         :type df: pd.Dataframe
         :param classifier: list of all possible o-svm classifiers
         :type classifier: list
@@ -63,8 +63,9 @@ class One_Class_SVM:
         :Default max_pred: 0.2
 
 
-        :return: pd.DataFrame: DataFrame with stored classifiers that
+        :return: DataFrame with stored classifiers that
             fulfill conditions
+        :rtype: pd.DataFrame
         """
         df = DataFrame()
         for i in nus:
