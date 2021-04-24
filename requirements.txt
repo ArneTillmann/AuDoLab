@@ -8,3 +8,4 @@ asyncio
 pyppeteer
 requests
 json
+sphinx_rtd_theme
