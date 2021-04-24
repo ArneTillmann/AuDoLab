@@ -62,12 +62,6 @@ The main part of the classification rule lies in the training of the one-class S
 
 The second step can be reiteraded, depending on the users perceived quality of the classification results.
 
-# Comparison with existing tools
-
-
-
-
-
 # Citations
 
 Citations to entries in paper.bib should be in
