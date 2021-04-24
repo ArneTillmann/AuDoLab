@@ -65,10 +65,10 @@ In this process, highly underrepresented topics are often overlooked and consequ
 ![Classification Procedure.\label{fig:test2}](figures/tree.PNG){ width=100% }
 
  
-Firstly, the package enables the user to web scrape training documents (scientific papers) from IEEEXplore. The user can search for multiple search terms and specify an individual search query. Thus, one can create its own, individually labelled (e.g. via author-keywords) training dataset. Through the integration of pre-labelled out-of-domain training data, the problem of the heavily underrepresented target class can be circumvented, as large enough training corpora can be automatically generated.
+Firstly, the package enables the user to web scrape training documents (scientific papers) from IEEEXplore. The user can search for multiple search terms and specify an individual search query. Thus, one can create its own, individually labelled (e.g. via author-keywords) training data set. Through the integration of pre-labelled out-of-domain training data, the problem of the heavily underrepresented target class can be circumvented, as large enough training corpora can be automatically generated.
 Subsequently, the text data is preprocessed for the classification part. The text preprocessing includes common NLP text preprocessing techniques as stopword removal and lemmatization.  As  document  representations  the  term  frequency-inverse  document  frequency  (tf-idf) representations are chosen. The tf-idf scores are computed on a joint corpus from the web-scraped out-of-domain training data and the target text data. 
 
-The actual document classification is performed using one-class Support vector machines, trained on the tf-idf representations from the out-of-domain training data, that are computed on the joint corpus. 
+The main part of the classification rule lies in the training of the one-class Support Vector Machine (SVM) [@Scholkopf]. Aa a training corpus, only the out-of-domain training data is used. With setting the right hyperparameters, the user can create a strict or relaxed classification rule, based on the users belief of the prevalence of the target class inside the target data set and the quality of the scraped out-of-domain training data. The last part of the classification rule enables the user to visualize the classifiers results with the help of LDA topic models [@Blei] (and e.g. wordclouds). The second step can thus be reiterade a desirable number of times.
 
 # Comparison with existing tools
 
