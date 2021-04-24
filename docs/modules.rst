@@ -19,4 +19,8 @@ Subpackages
 .. toctree::
   :maxdepth: 4
 
-  AuDoLab.subclasses
+  AuDoLab.abstractscraper
+  AuDoLab.preprocessing
+  AuDoLab.tf_idf
+  AuDoLab.one_class_svm
+  AuDoLab.lda
