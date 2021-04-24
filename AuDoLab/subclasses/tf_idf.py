@@ -3,9 +3,6 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 
 
 class Tf_idf:
-    """
-    Beschreibung
-    """
 
     def __init__(self):
         4 + 5
