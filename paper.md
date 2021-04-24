@@ -26,9 +26,7 @@ affiliations:
    index: 1
  - name: Campus-Institut Data Science (CIDAS), Göttingen, Germany
    index: 2
- - name: Independent Researcher
-   index: 3
-date: 13 August 2017
+date: 24 April 2021
 bibliography: paper.bib
 
 # Optional fields if submitting to a AAS journal too, see this blog post:
