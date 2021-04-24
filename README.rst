@@ -24,7 +24,7 @@ With AuDoLab you can perform Latend Direchlet Allocation on highly imbalanced da
 Documentation
 -------------
 
-See our `Documentation <https://audolab.readthedocs.io/en/latest/?badge=latest>`
+See our `Documentation <https://audolab.readthedocs.io/en/latest/?badge=latest>`_
 for further information.
 
 Credits
