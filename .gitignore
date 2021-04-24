@@ -87,6 +87,7 @@ celerybeat-schedule
 .venv
 venv/
 ENV/
+audolab_env/
 
 # Spyder project settings
 .spyderproject
