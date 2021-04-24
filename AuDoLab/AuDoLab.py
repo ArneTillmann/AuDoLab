@@ -145,7 +145,7 @@ class AuDoLab:
         - passes (int)
         """
 
-        self.dictionary, self.bow_corpus = lda.LDA.preperation(data, no_below,
+        self.dictionary, self.bow_corpus = lda.LDA._preperation(data, no_below,
                                                                no_above)
         self.lda = lda.LDA()
         self.lda_model = self.lda.model(
