@@ -10,7 +10,7 @@ class One_Class_SVM:
     def choose_classifier(df, classifier, i):
         """
         returns dataframe where documents that are classified to target class 
-            have 1, otherwise, 0
+        have 1, otherwise, 0
 
         :param df:dataframe of target documents
         :type df: pd.Dataframe
