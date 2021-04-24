@@ -10,21 +10,21 @@ tags:
 authors:
   - name: Arne Tillmann^[Custom footnotes for e.g. denoting who the corresponding author is can be included like this.]
     orcid: 0000-0003-0872-7098
-    affiliation: "1, 2" # (Multiple affiliations must be quoted)
+    affiliation: 1
   - name: Anton Thielmann
-    affiliation: 2
+    affiliation: 1
   - name: Christoph Weisser
-    affiliation: 3
+    affiliation: 1,2
   - name: Benjamin Säfken
-    affiliation: 3
+    affiliation: 1,2
   - name: Thomas Kneib
-    affiliation: 3
+    affiliation: 1,2
   - name: Alexander Silbersdorff
-    affiliation: 3
+    affiliation: 1
 affiliations:
- - name: Lyman Spitzer, Jr. Fellow, Princeton University
+ - name: Georg-August-Universität Göttingen, Göttingen, Germany
    index: 1
- - name: Institution Name
+ - name: Campus-Institut Data Science (CIDAS), Göttingen, Germany
    index: 2
  - name: Independent Researcher
    index: 3
@@ -60,7 +60,7 @@ theoretical models behind AuDoLab advance existing methods and software solution
 # Statement of need
 
 Unsupervised document classification is mainly performed to gain insight into the underlying topics of large text corpora.
-In this process, highly underrepresented topics are often overlooked and consequently assigned to the wrong topics. Thus, labeling underrepresented topics in large text corpora is often done manually and can therefore be very time-consuming. AuDoLab enables the user to tackle this problem and perform unsupervised one-class document classification for heavily underrepresented document classes. This leverages the results of one-class document classification using one-class support vector machines (SVM) [@Scholkopf, @manevitz] and extends them to the use case of severely imbalanced datasets. This adaptation and extension is achieved by implementing a multi-level classification rule as shown below.
+In this process, highly underrepresented topics are often overlooked and consequently assigned to the wrong topics. Thus, labeling underrepresented topics in large text corpora is often done manually and can therefore be very time-consuming. AuDoLab enables the user to tackle this problem and perform unsupervised one-class document classification for heavily underrepresented document classes. This leverages the results of one-class document classification using one-class support vector machines (SVM) [@Scholkopf][@Manevitz] and extends them to the use case of severely imbalanced datasets. This adaptation and extension is achieved by implementing a multi-level classification rule as shown below.
 
 ![Classification Procedure.\label{fig:test2}](figures/tree.PNG){ width=100% }
 
