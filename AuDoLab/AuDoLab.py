@@ -12,7 +12,8 @@ class AuDoLab:
         4 + 4
 
     async def scrape_abstracts(self, url=None, keywords=None, operator="OR", pages=2, in_data="author"):
-        """Function to scrap abstracts of scientific papers from the givin url.
+        """
+        Function to scrap abstracts of scientific papers from the givin url.
         We used https://ieeexplore.ieee.org/search/advanced to generate a
         list like https://ieeexplore.ieee.org/search/searchresult.jsp?action=se
         arch&newsearch=true&matchBoolean=true&queryText=(%22Author%20Keywords%22

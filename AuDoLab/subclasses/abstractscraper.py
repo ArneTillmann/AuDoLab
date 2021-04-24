@@ -163,18 +163,6 @@ class AbstractScraper:
             except BaseException:
                 pass
 
-    def get(
-            self,
-            url=None,
-            keywords=None,
-            operator="OR",
-            pages=2,
-            in_data="author"):
-        self._open(
-            url=url, keywords=keywords, operator=operator, pages=pages,
-            in_data=in_data
-        )
-
     async def get_abstracts(
         self, url=None, keywords=None, operator="OR", pages=2, in_data="author"
     ):

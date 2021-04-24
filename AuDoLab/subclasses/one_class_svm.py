@@ -8,17 +8,18 @@ class One_Class_SVM:
 
     @staticmethod
     def choose_classifier(df, classifier, i):
-        """returns dataframe where documents that are classified to target
-           class have 1, otherwise, 0
+        """
+        returns dataframe where documents that are classified to target class have 1, otherwise, 0
 
-        Args:
-            df (dataframe): [dataframe of target documents]
-            classifier (list): [list of all possible o-svm classifiers]
-            i (int): [index of which classifier is chosen/preferred]
+        :param df:dataframe of target documents
+        :type df: pd.Dataframe
+        :param classifier: list of all possible o-svm classifiers
+        :type classifier: list
+        :param i: index of which classifier is chosen/preferred
+        :type i: int
 
-        Returns:
-            [dataframe]: [documents that are classified as belonging to target
-                          class by o-svm]
+        :return: pd.dataframe documents that are classified as belonging to target
+                      class by o-svm
         """
         return DataFrame(
             df["tokens"][classifier.index[classifier.iloc[:, i] == 1].tolist()]
@@ -33,25 +34,34 @@ class One_Class_SVM:
         min_pred=0.05,
         max_pred=0.2
     ):
-        """trains a one-class SVM on the out-of-domain training data
+        """
+        trains a one-class SVM on the out-of-domain training data
 
-        Args:
-            training (DataFrame): [training dataset of preprocessed documents]
-            predicting (DataFrame): [target dataset of preprccessed documents]
-            nus (list of floats): [hyperparameters over which are looped.
-            For each nu the classifiers is trained]
-            quality_train (float): [percentage of training data that seems to
-                                    belong to target class. Default: 0.85]
-            min_pred (float): [percentage of target data that has to be at
-                               least classified as belonging to target class
-            for classifier to be considered. Default: 0.05]
-            max_pred (float): [percentage of target class that is maximally
-                               allowed to be classified as belonging to
-            target class for classifier to be considered. Default:0.2]
 
-        Returns:
-            [DataFrame]: [DataFrame with
-                          stored classifiers that fulfill conditions]
+        :param training: training dataset of preprocessed documents
+        :type training: pd.DataFrame
+        :param predicting: target dataset of preprccessed documents
+        :type predicting: pd.DataFrame
+        :param nus: hyperparameters over which are looped. For each nu the
+        classifiers is trained
+        :type nus: list of floats
+        :param quality_train: percentage of training data that seems to
+                                belong to target class.
+        :Default quality_train: 0.85
+        :type quality_train: float
+        :param min_pred: percentage of target data that has to be at
+                           least classified as belonging to target class
+                           for classifier to be considered.
+        :type min_pred: float
+        :Default min_pred: 0.05
+        :param max_pred: percentage of target class that is maximally
+                           allowed to be classified as belonging to
+                           target class for classifier to be considered.
+                           :type max_pred: float
+        :Default max_pred: 0.2
+
+
+        :return: pd.DataFrame: DataFrame with stored classifiers that fulfill conditions
         """
         df = DataFrame()
         for i in nus:
