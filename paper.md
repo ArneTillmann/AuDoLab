@@ -60,12 +60,13 @@ theoretical models behind AuDoLab advance existing methods and software solution
 # Statement of need
 
 Unsupervised document classification is mainly performed to gain insight into the underlying topics of large text corpora.
-In this process, highly underrepresented topics are often overlooked and consequently assigned to the wrong topics. Thus, labeling underrepresented topics in large text corpora is often done manually and can therefore be very time-consuming. 
+In this process, highly underrepresented topics are often overlooked and consequently assigned to the wrong topics. Thus, labeling underrepresented topics in large text corpora is often done manually and can therefore be very time-consuming. AuDoLab enables the user to tackle this problem and perform unsupervised one-class document classification for heavily underrepresented document classes. This is achieved by implementing a multi-step classification rule as depicted below.
 
 ![Classification Procedure.\label{fig:test2}](figures/tree.PNG){ width=100% }
 
-AuDoLab enables the user to tackle this problem and perform unsupervised one-class document classification for heavily underrepresented document classes. 
-Firstly, the package enables the user to web scrape training documents (scientific papers) from IEEEXplore. The user can search for multiple search terms and specify an individual search query. Subsequently, the text data is preprocessed for the classification part. The text preprocessing includes common NLP text preprocessing techniques as stopword removal and lemmatization.  As  document  representations  the  term  frequency-inverse  document  frequency  (tf-idf) representations are chosen. The tf-idf scores are computed on a joint corpus from the web-scraped out-of-domain training data and the target text data. 
+ 
+Firstly, the package enables the user to web scrape training documents (scientific papers) from IEEEXplore. The user can search for multiple search terms and specify an individual search query. Thus, one can create its own, individually labelled (e.g. via author-keywords) training dataset. Through the integration of pre-labelled out-of-domain training data, the problem of the heavily underrepresented target class can be circumvented, as large enough training corpora can be automatically generated.
+Subsequently, the text data is preprocessed for the classification part. The text preprocessing includes common NLP text preprocessing techniques as stopword removal and lemmatization.  As  document  representations  the  term  frequency-inverse  document  frequency  (tf-idf) representations are chosen. The tf-idf scores are computed on a joint corpus from the web-scraped out-of-domain training data and the target text data. 
 
 The actual document classification is performed using one-class Support vector machines, trained on the tf-idf representations from the out-of-domain training data, that are computed on the joint corpus. 
 
