@@ -1,5 +1,4 @@
 from AuDoLab import AuDoLab
-import pandas as pd
 import asyncio
 
 audo = AuDoLab.AuDoLab()
@@ -9,6 +8,7 @@ if __name__ == "__main__":
     # Load target data
     from nltk.corpus import reuters
     import numpy as np
+    import pandas as pd
 
     data = []
 
@@ -20,6 +20,8 @@ if __name__ == "__main__":
 
     data = pd.DataFrame(data, columns=["filename", "categories", "text"])
 
+
+####### ----------------------------------------------------------------------------- #######
     preprocessed_target = audo.preprocessing(data=data, column="text")
 
     async def scrape():
