@@ -9,8 +9,11 @@ Development Lead
 
 Contributors
 ------------
-
-None yet. Why not be the first?
+* Anton Thielmann <anton.thielmann@stud.uni-goettingen.de>
+* Christoph Weisser <c.weisser@stud.uni-goettingen.de>
+* Benjamin Säfken <benjamin.saefken@uni-goettingen.de>
+* Alexander Silbersdorff <asilbersdorff@uni-goettingen.de>
+* Thomas Kneib <Thomas.Kneib@wiwi.uni-goettingen.de>
 
 Special thanks
 --------------
