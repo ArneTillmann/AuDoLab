@@ -61,6 +61,15 @@ The second and main part of the classification rule lies in the training of the 
 
 The second step can be reiteraded, depending on the users perceived quality of the classification results.
 
+## Comparison with existing tools
+
+At the moment no Python Package with a comparable functionality of AuDoLab is available, since AuDoLab is partly based on a novel and recently published classification prodcedure [@Thielmann]. Thereby, AuDoLab uses in particular Web Scraping, Latent Dirichlet Allocation Topic Modelling and One-class Support Vector Machines.
+
+
+A web tool that is most related to TTLocVis is TweetViz [@stojanovski2014]. TweetViz provides word clouds and topic distributions for Twitter data. However, TTLocVis improves on TweetViz by optimizing the LDA input with tweet pooling and
+options for geo-spatial and temporal analysis. Further, a major limitation of TweetViz is that the number of topics for the LDA estimation is always fixed at 20. TTLocVis gives the option to define a range of potential topic numbers and also includes an algorithm to select the optimal topic number according to coherence scoring.
+
+
 # Acknowledgements
 
 We thank the Campus-Institut Data Science (CIDAS), Göttingen, Germany for funding this project.
