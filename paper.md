@@ -64,7 +64,7 @@ The second step can be reiteraded, depending on the users perceived quality of t
 ## Comparison with existing tools
 
 At the moment no Python Package with a comparable functionality of AuDoLab is available, since AuDoLab is based on a novel and recently published classification prodcedure [@Thielmann].
-Thereby, AuDoLab uses and integrates in particular a combination of Web Scraping, Topic Modelling and One-class Classifcation for which various individual packages are available. For Topic Modelling available packages are the LDA algorithm as implemented in the package Gensim [@rehurek_lrec] or the package TTLocVis [@Kant2020] for short and sparce texts. Visual representations of the topics can be implemented with [@sievert2014ldavis] or [@chaney2012visualizing]. The One-class SVM classification package is availabe in Scikit-learn [@scikit-learn]. 
+Thereby, AuDoLab uses and integrates in particular a combination of Web Scraping, Topic Modelling and One-class Classifcation for which various individual packages are available. For Topic Modelling available packages are the LDA algorithm as implemented in the package Gensim [@rehurek_lrec] or the package TTLocVis [@Kant2020] for short and sparse text. Visual representations of the topics can be implemented with [@sievert2014ldavis] or [@chaney2012visualizing]. The One-class SVM classification package is availabe in Scikit-learn [@scikit-learn]. 
 
 
 # Acknowledgements
