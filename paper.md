@@ -63,11 +63,7 @@ The second step can be reiteraded, depending on the users perceived quality of t
 
 ## Comparison with existing tools
 
-At the moment no Python Package with a comparable functionality of AuDoLab is available, since AuDoLab is partly based on a novel and recently published classification prodcedure [@Thielmann]. Thereby, AuDoLab uses and integrates in particular a combination of Web Scraping, Topic Modelling and One-class Classifcation for which various individual packages are available. 
-
-
-A web tool that is most related to TTLocVis is TweetViz [@stojanovski2014]. TweetViz provides word clouds and topic distributions for Twitter data. However, TTLocVis improves on TweetViz by optimizing the LDA input with tweet pooling and
-options for geo-spatial and temporal analysis. Further, a major limitation of TweetViz is that the number of topics for the LDA estimation is always fixed at 20. TTLocVis gives the option to define a range of potential topic numbers and also includes an algorithm to select the optimal topic number according to coherence scoring.
+At the moment no Python Package with a comparable functionality of AuDoLab is available, since AuDoLab is based on a novel and recently published classification prodcedure [@Thielmann]. Thereby, AuDoLab uses and integrates in particular a combination of Web Scraping, Topic Modelling and One-class Classifcation for which various individual packages are available. For Topic Modelling available packages are ..... TTLocVis . One-class classification packes are .... 
 
 
 # Acknowledgements
