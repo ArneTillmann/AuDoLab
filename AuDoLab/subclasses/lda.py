@@ -1,4 +1,4 @@
-import pyLDAvis.gensim
+import pyLDAvis.gensim_models
 import pyLDAvis
 from gensim import corpora, models
 
@@ -77,7 +77,7 @@ class LDA:
                                                                creating Corpus]
         """
 
-        visualization = pyLDAvis.gensim.prepare(
+        visualization = pyLDAvis.gensim_models.prepare(
             lda_model, bow_corpus, dictionary, sort_topics=False
         )
 

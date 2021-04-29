@@ -8,7 +8,7 @@ class One_Class_SVM:
 
     @staticmethod
     def choose_classifier(df, classifier, i):
-        """returns dataframe where documents that are classified to target
+        """returns a dataframe where documents that are classified to target
            class have 1, otherwise, 0
 
         Args:

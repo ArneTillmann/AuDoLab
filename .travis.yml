@@ -11,4 +11,4 @@ deploy:
   password: 2AQeUe5iHHEe0MrEv7
   on:
     tag: true
-    all_branches: true
+    branch: main
