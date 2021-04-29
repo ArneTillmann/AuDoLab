@@ -42,16 +42,15 @@ class Tf_idf:
              ou-of-domain training data]
         """
 
-
         df_temp = data.copy(deep=True)
         papers_temp = papers.copy(deep=True)
-
 
         tfidf_vectorizer = TfidfVectorizer(
             ngram_range=(1, ngrams), max_features=features
         )
 
-        corpus = df_temp[data_column].tolist() + papers_temp[papers_column].tolist()
+        corpus = df_temp[data_column].tolist(
+        ) + papers_temp[papers_column].tolist()
         tfidf_vectorizer.fit(corpus)
 
         data_corpus = df_temp[data_column].tolist()

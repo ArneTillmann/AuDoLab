@@ -1,5 +1,8 @@
 from AuDoLab import AuDoLab
 import asyncio
+from numpy import round as np_round
+from numpy import arange as np_arange
+
 
 audo = AuDoLab.AuDoLab()
 
@@ -15,8 +18,10 @@ if __name__ == "__main__":
     for fileid in reuters.fileids():
         tag, filename = fileid.split("/")
         data.append(
-            (filename, ", ".join(reuters.categories(fileid)), reuters.raw(fileid))
-        )
+            (filename,
+             ", ".join(
+                 reuters.categories(fileid)),
+                reuters.raw(fileid)))
 
     data = pd.DataFrame(data, columns=["filename", "categories", "text"])
 
@@ -31,7 +36,8 @@ if __name__ == "__main__":
 
     scraped_documents = asyncio.get_event_loop().run_until_complete(scrape())
 
-    preprocessed_paper = audo.preprocessing(data=scraped_documents, column="text")
+    preprocessed_paper = audo.preprocessing(
+        data=scraped_documents, column="text")
 
     target_tfidf, training_tfidf = audo.tf_idf(
         data=preprocessed_target,
@@ -49,3 +55,4 @@ if __name__ == "__main__":
         min_pred=0.001,
         max_pred=0.05,
     )
+
