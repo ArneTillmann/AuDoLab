@@ -1,27 +1,33 @@
+
 ---
-title: 'Gala: A Python package for galactic dynamics'
+title: 'AuDoLab: Automatic document labelling and classfication for extremely unbalanced data'
 tags:
   - Python
-  - astronomy
-  - dynamics
-  - galactic dynamics
-  - milky way
+  - One-class SVM
+  - Unsupervised Document Classification
+  - One-class Document Classification
+  - LDA Topic Modelling
+  - Out-of-domain Training Data
 authors:
-  - name: Adrian M. Price-Whelan^[Custom footnotes for e.g. denoting who the corresponding author is can be included like this.]
+  - name: Arne Tillmann^[Custom footnotes for e.g. denoting who the corresponding author is can be included like this.]
     orcid: 0000-0003-0872-7098
-    affiliation: "1, 2" # (Multiple affiliations must be quoted)
-  - name: Author Without ORCID
-    affiliation: 2
-  - name: Author with no affiliation
-    affiliation: 3
+    affiliation: 1
+  - name: Anton Thielmann
+    affiliation: 1
+  - name: Christoph Weisser
+    affiliation: 1,2
+  - name: Benjamin Säfken
+    affiliation: 1,2
+  - name: Alexander Silbersdorff
+    affiliation: 1, 2
+  - name: Thomas Kneib
+    affiliation: 1,2
 affiliations:
- - name: Lyman Spitzer, Jr. Fellow, Princeton University
+ - name: Georg-August-Universität Göttingen, Göttingen, Germany
    index: 1
- - name: Institution Name
+ - name: Campus-Institut Data Science (CIDAS), Göttingen, Germany
    index: 2
- - name: Independent Researcher
-   index: 3
-date: 13 August 2017
+date: 24 April 2021
 bibliography: paper.bib
 
 # Optional fields if submitting to a AAS journal too, see this blog post:
@@ -32,83 +38,36 @@ aas-journal: Astrophysical Journal <- The name of the AAS journal.
 
 # Summary
 
-test2 main
-
-The forces on stars, galaxies, and dark matter under external gravitational
-fields lead to the dynamical evolution of structures in the universe. The orbits
-of these bodies are therefore key to understanding the formation, history, and
-future state of galaxies. The field of "galactic dynamics," which aims to model
-the gravitating components of galaxies to study their structure and evolution,
-is now well-established, commonly taught, and frequently used in astronomy.
-Aside from toy problems and demonstrations, the majority of problems require
-efficient numerical tools, many of which require the same base code (e.g., for
-performing numerical orbit integration).
+AuDoLab provides a novel approach to one-class document classification for heavily imbalanced datasets, even if labelled training data is not available.
+Our package enables the user to create specific out-of-domain training data to classify a heavily underrepresented target class
+in a document dataset using a recently developed integration of Web Scraping, Latent Dirichlet Allocation Topic Modelling and One-class Support Vector Machines [@Thielmann]. AuDoLab can achieve high quality results even on higly specific classification problems without the need to invest in the time and cost intensive
+labelling of training documents by humans. Hence, AuDoLab has a broad range of scientific research or business applications. The following section provides an overview of AuDoLab. AuDoLab can be installed conveniently via pip. A detailed description of the package and installation and can be found in the packages repository or on the documentation website.^[https://AuDoLab.readthedocs.io] 
 
 # Statement of need
 
-`Gala` is an Astropy-affiliated Python package for galactic dynamics. Python
-enables wrapping low-level languages (e.g., C) for speed without losing
-flexibility or ease-of-use in the user-interface. The API for `Gala` was
-designed to provide a class-based and user-friendly interface to fast (C or
-Cython-optimized) implementations of common operations such as gravitational
-potential and force evaluation, orbit integration, dynamical transformations,
-and chaos indicators for nonlinear dynamics. `Gala` also relies heavily on and
-interfaces well with the implementations of physical units and astronomical
-coordinate systems in the `Astropy` package [@astropy] (`astropy.units` and
-`astropy.coordinates`).
+Unsupervised document classification is mainly performed to gain insight into the underlying topics of large text corpora.
+In this process, documents covering highly underrepresented topics have only a minor impact on the algorithm's topic definitions. As a result, underrepresented topics can sometimes be "overlooked" and documents are assigned topic prevalences that do not reflect the underlying content.
+Thus, labeling underrepresented topics in large text corpora is often done manually and can therefore be very labour-intensive and time-consuming.
+AuDoLab enables the user to tackle this problem and perform unsupervised one-class document classification for heavily underrepresented document classes.
+This leverages the results of one-class document classification using One-class Support Vector Machines (SVM) [@Scholkopf; @Manevitz] and extends them to the use case of severely imbalanced datasets.
+This adaptation and extension is achieved by implementing a multi-level classification rule as visualised in the graph below.
 
-`Gala` was designed to be used by both astronomical researchers and by
-students in courses on gravitational dynamics or astronomy. It has already been
-used in a number of scientific publications [@Pearson:2017] and has also been
-used in graduate courses on Galactic dynamics to, e.g., provide interactive
-visualizations of textbook material [@Binney:2008]. The combination of speed,
-design, and support for Astropy functionality in `Gala` will enable exciting
-scientific explorations of forthcoming data releases from the *Gaia* mission
-[@gaia] by students and experts alike.
+![Classification Procedure.\label{fig:test2}](figures/tree.PNG){ width=100% }
 
-# Mathematics
+The first part of the package allows the user to scrape training documents (scientific papers), ideally covering the target topic in which the user is interested, from IEEEXplore [@IEEE]. The user can search for multiple search terms and specify an individual search query. Thus, an individually labelled (e.g. via author-keywords) training data set is created. Through the integration of pre-labelled out-of-domain training data, the problem of the heavily underrepresented target class can be circumvented, as large enough training corpora can be automatically generated.
+Subsequently, the text data is preprocessed for the classification part. The text preprocessing includes common Natural Language Processing (NLP) text preprocessing techniques such as stopword removal and lemmatization.  As  document  representations  the  term  frequency-inverse  document  frequency  (tf-idf) representations are chosen. The tf-idf scores are computed on a joint corpus from the web-scraped out-of-domain training data and the target text data.
 
-Single dollars ($) are required for inline mathematics e.g. $f(x) = e^{\pi/x}$
+The second and main part of the classification rule lies in the training of the one-class SVM [@Scholkopf]. As a training corpus, only the out-of-domain training data is used.  By adjusting hyperparameters, the user can create a strict or relaxed classification rule, that reflects the users belief about the prevalence of the target class inside the target data set and the quality of the scraped out-of-domain training data. The last part of the classification rule enables the user to control the classifiers results with the help of Latent Dirichlet Allocation (LDA) topic models [@Blei] (and e.g. wordclouds). Additionally, the user can generate interactive plots depicicting the identified topics during the LDA topic modelling [@ldavis].
 
-Double dollars make self-standing equations:
+The second step can be reiteraded, depending on the users perceived quality of the classification results.
 
-$$\Theta(x) = \left\{\begin{array}{l}
-0\textrm{ if } x < 0\cr
-1\textrm{ else}
-\end{array}\right.$$
+## Comparison with existing tools
 
-You can also use plain \LaTeX for equations
-\begin{equation}\label{eq:fourier}
-\hat f(\omega) = \int_{-\infty}^{\infty} f(x) e^{i\omega x} dx
-\end{equation}
-and refer to \autoref{eq:fourier} from text.
-
-# Citations
-
-Citations to entries in paper.bib should be in
-[rMarkdown](http://rmarkdown.rstudio.com/authoring_bibliographies_and_citations.html)
-format.
-
-If you want to cite a software repository URL (e.g. something on GitHub without a preferred
-citation) then you can do it with the example BibTeX entry below for @fidgit.
-
-For a quick reference, the following citation commands can be used:
-- `@author:2001`  ->  "Author et al. (2001)"
-- `[@author:2001]` -> "(Author et al., 2001)"
-- `[@author1:2001; @author2:2001]` -> "(Author1 et al., 2001; Author2 et al., 2002)"
-
-# Figures
-
-Figures can be included like this:
-![Caption for example figure.\label{fig:example}](figure.png)
-and referenced from text using \autoref{fig:example}.
-
-Figure sizes can be customized by adding an optional second parameter:
-![Caption for example figure.](figure.png){ width=20% }
+At the moment no Python Package with a comparable functionality of AuDoLab is available, since AuDoLab is based on a novel and recently published classification prodcedure [@Thielmann].
+Thereby, AuDoLab uses and integrates in particular a combination of Web Scraping, Topic Modelling and One-class Classifcation for which various individual packages are available. For Topic Modelling available packages are the LDA algorithm as implemented in the package Gensim [@rehurek_lrec] or the package TTLocVis [@Kant2020] for short and sparse text. Visual representations of the topics can be implemented with LDAvis [@ldavis]. The One-class SVM classification package is availabe in Scikit-learn [@scikit-learn]. Further research could explore Deep Learning Algorithms as well [@Saefken2020].
 
 # Acknowledgements
 
-We acknowledge contributions from Brigitta Sipocz, Syrtis Major, and Semyeong
-Oh, and support from Kathryn Johnston during the genesis of this project.
+We thank the Campus-Institut Data Science (CIDAS), Göttingen, Germany for funding this project.
 
 # References
