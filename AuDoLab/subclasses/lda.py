@@ -12,7 +12,7 @@ class LDA:
         3 + 4
 
     @staticmethod
-    def preperation(df_processed, no_below=None, no_above=None):
+    def _preperation(df_processed, no_below=None, no_above=None):
         """Preprocessing for LDA
 
         Args:
@@ -41,19 +41,21 @@ class LDA:
     def model(corpus, num_topics, id2word, random_state, passes):
         """LDA model
 
-        Args:
-        corpus (iterable of list of (int, float), optional):
-        [Stream of document vectors or sparse matrix of shape]
-        num_topics (int): [pre-defined number of topics]
-        id2word ({dict of (int, str): gensim.corpora.dictionary.Dictionary})
-                                         –Mapping from word IDs to words. It is
-                                        used to determine the vocabulary size,
-                                as well as for debugging and topic printing.
-        random_state (int): [for recreating exact identical output]
-        passes (int): [Number of passes through the corpus during training.]
+        :param corpus: Stream of document vectors or sparse matrix of shape
+        :type corpus: iterable of list of (int, float), optional
+        :param num_topics: pre-defined number of topics
+        :type num_topics: int
+        :param id2word: Mapping from word IDs to words. It is
+            used to determine the vocabulary size, as well as
+            for debugging and topic printing.
+        :type id2word: dict of (int, str): gensim.corpora.dictionary.Dictionary
+        :param random_state: for recreating exact identical output
+        :type random_state: int
+        :param passes: Number of passes through the corpus during training.
+        :type passes: int
 
-        Returns:
-            [lda_model]: [returns lda_model output]
+        :return: returns lda_model output
+        :rtype: lda_model
         """
 
         lda_model = models.LdaMulticore(
@@ -70,11 +72,13 @@ class LDA:
     def visualize_topics(lda_model, bow_corpus, dictionary):
         """Create pyLDAvis plots for LDA model output
 
-        Args:
-            lda_model ([type]): Output of lda_model
-            bow_corpus ([list of (int, int)]): BoW representation of document.
-            dictionary (gensim.corpora.dictionary.Dictionary): [Dict used for
-                                                               creating Corpus]
+
+        :param lda_model: Output of lda_model
+        :type lda_model: lda_model
+        :param bow_corpus: BoW representation of document.
+        :type bow_corpus: list of (int, int)
+        :param dictionary: Dict used for creating Corpus
+        :type dictionary: gensim.corpora.dictionary.Dictionary
         """
 
         visualization = pyLDAvis.gensim_models.prepare(
