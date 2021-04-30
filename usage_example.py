@@ -47,7 +47,7 @@ if __name__ == "__main__":
         features=100000,
     )
 
-    test = audo.one_class_svm(
+    classifier = audo.one_class_svm(
         training=training_tfidf,
         predicting=target_tfidf,
         nus=np.round(np.arange(0.01, 0.5, 0.01), 7),
@@ -56,3 +56,11 @@ if __name__ == "__main__":
         max_pred=0.05,
     )
 
+    df_data = audo.choose_classifier(preprocessed_target, classifier, 2)
+
+    audo.lda_modeling(df_data, num_topics=2)
+    
+    a = audo.lda_visualize_topics()
+    html = a.data
+    with open('html_file.html', 'w') as f:
+        f.write(html)

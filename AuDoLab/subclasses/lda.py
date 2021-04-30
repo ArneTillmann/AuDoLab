@@ -33,6 +33,7 @@ class LDA:
             no_below = 0
         if no_above is None:
             no_above = 1
+        dictionary.filter_extremes(no_below=no_below, no_above=no_above)
         bow_corpus = [dictionary.doc2bow(doc) for doc
                       in df_processed["tokens"]]
         return dictionary, bow_corpus
@@ -79,10 +80,13 @@ class LDA:
         :type bow_corpus: list of (int, int)
         :param dictionary: Dict used for creating Corpus
         :type dictionary: gensim.corpora.dictionary.Dictionary
+
+        :return: Html code of the visualization
+        :rtype: IPython.Html object
         """
 
         visualization = pyLDAvis.gensim_models.prepare(
             lda_model, bow_corpus, dictionary, sort_topics=False
         )
 
-        pyLDAvis.show(visualization)
+        return pyLDAvis.display(visualization)

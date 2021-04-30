@@ -1,5 +1,5 @@
-from numpy import round as np_round
 from numpy import arange as np_arange
+from numpy import round as np_round
 from AuDoLab.subclasses import abstractscraper
 from AuDoLab.subclasses import lda
 from AuDoLab.subclasses import one_class_svm
@@ -151,7 +151,7 @@ class AuDoLab:
         :rtype: pd.DataFrame
         """
         one_Class_SVM = one_class_svm.One_Class_SVM()
-        self.df = one_Class_SVM.classification(
+        self.classifier = one_Class_SVM.classification(
             training=training,
             predicting=predicting,
             nus=nus,
@@ -159,7 +159,7 @@ class AuDoLab:
             min_pred=min_pred,
             max_pred=max_pred,
         )
-        return self.df
+        return self.classifier
 
     def choose_classifier(self, df, classifier, i):
         """
@@ -225,5 +225,5 @@ class AuDoLab:
         """The lda model calculated with the function lda_modeling is visualized
         in an html frame and opened in the standard browser.
         """
-        lda.LDA.visualize_topics(self.lda_model, self.bow_corpus,
+        return lda.LDA.visualize_topics(self.lda_model, self.bow_corpus,
                                  self.dictionary)

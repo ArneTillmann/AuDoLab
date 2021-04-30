@@ -17,25 +17,25 @@ class Tf_idf:
         ngrams=2,
     ):
         """creates tf-idf objects for one-class SVM classification. The tf-idf
-        scores are calculated over a joint corpus,
-        however, the target data and the out-of-domain training data are stored
-        in seperate, as the one-class SVM is only trained on
-        the tf-idf scores of the out-of-domain training data
+            scores are calculated over a joint corpus,
+            however, the target data and the out-of-domain training data are
+            stored in seperate, as the one-class SVM is only trained on
+            the tf-idf scores of the out-of-domain training data
 
         :param data: preprocessed target documents
-        :type : DataFrame
+        :type data: DataFrame
         :param papers: preprocessed out-of-domain training data
-        :type : DataFrame
+        :type papers: DataFrame
         :param data_colum: name of columnin target dataframe where
             lemmatized documents are stored, defaults to 'lemma'
-        :type : String
+        :type data_colum: String
         :param papers_colum: name of column in out-of-domain training
             dataframe where lemmatized documents are stored, defaults to 'lemma'
-        :type : String
+        :type papers_colum: String
         :param ngrams: whether ngram are formed, defaults to 2
-        :type : int
+        :type ngrams: int
         :param features: number of max features, defaults to 8000.
-        :type : int
+        :type features: int
 
         :return: tfidf object data for target data and ou-of-domain training
             data
