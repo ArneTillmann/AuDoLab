@@ -1,5 +1,7 @@
 from AuDoLab import AuDoLab
 import asyncio
+import nest_asyncio
+nest_asyncio.apply()
 from numpy import round as np_round
 from numpy import arange as np_arange
 
@@ -59,7 +61,7 @@ if __name__ == "__main__":
     df_data = audo.choose_classifier(preprocessed_target, classifier, 2)
 
     audo.lda_modeling(df_data, num_topics=2)
-    
+
     a = audo.lda_visualize_topics()
     html = a.data
     with open('html_file.html', 'w') as f:

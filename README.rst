@@ -67,11 +67,20 @@ Once you have a copy of the source, you can install it with:
 =====
 Usage
 =====
+Before the actuall usage you want to download the stopwords for nltk by running::
 
+    import nltk
+    nltk.download('stopwords')
+
+inside a python console.
 To use AuDoLab in a project::
 
     from AuDoLab import AuDoLab
     import asyncio
+    import nest_asyncio
+    nest_asyncio.apply()
+    from numpy import round as np_round
+    from numpy import arange as np_arange
 
 Then you want to create an instance of the AuDoLab class
 
