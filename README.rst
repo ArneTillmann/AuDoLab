@@ -14,8 +14,6 @@ AuDoLab
 
 With AuDoLab you can perform Latend Direchlet Allocation on highly imbalanced datasets.
 
-.. highlight:: shell
-
 ============
 Installation
 ============

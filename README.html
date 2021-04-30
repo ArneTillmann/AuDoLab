@@ -1,0 +1,108 @@
+<div id="audolab">
+<h2>AuDoLab</h2>
+<a href="https://pypi.python.org/pypi/AuDoLab" rel="nofollow"><img alt="https://img.shields.io/pypi/v/AuDoLab.svg" src="https://img.shields.io/pypi/v/AuDoLab.svg"></a>
+<a href="https://travis-ci.com/ArneTillmann/AuDoLab" rel="nofollow"><img alt="https://api.travis-ci.com/ArneTillmann/AuDoLab.svg?branch=main&amp;status=passed" src="https://api.travis-ci.com/ArneTillmann/AuDoLab.svg?branch=main&amp;status=passed"></a>
+<a href="https://audolab.readthedocs.io/en/latest/?badge=latest" rel="nofollow"><img alt="Documentation Status" src="https://readthedocs.org/projects/audolab/badge/?version=latest"></a>
+<p>With AuDoLab you can perform Latend Direchlet Allocation on highly imbalanced datasets.</p>
+</div>
+<div id="installation">
+<h2>Installation</h2>
+<div id="stable-release">
+<h3>Stable release</h3>
+<p>To install AuDoLab, run this command in your terminal:</p>
+<pre><span class="gp">$ </span>pip install AuDoLab
+</pre>
+<p>This is the preferred method to install AuDoLab, as it will always install the most recent stable release.</p>
+<p>If you don’t have <a href="https://pip.pypa.io" rel="nofollow">pip</a> installed, this <a href="http://docs.python-guide.org/en/latest/starting/installation/" rel="nofollow">Python installation guide</a> can guide
+you through the process.</p>
+</div>
+<div id="from-sources">
+<h3>From sources</h3>
+<p>The sources for AuDoLab can be downloaded from the <a href="https://github.com/ArneTillmann/AuDoLab" rel="nofollow">Github repo</a>.</p>
+<p>You can either clone the public repository:</p>
+<pre><span class="gp">$ </span>git clone git://github.com/ArneTillmann/AuDoLab
+</pre>
+<p>Or download the <a href="https://github.com/ArneTillmann/AuDoLab/tarball/master" rel="nofollow">tarball</a>:</p>
+<pre><span class="gp">$ </span>curl -OJL https://github.com/ArneTillmann/AuDoLab/tarball/master
+</pre>
+<p>Once you have a copy of the source, you can install it with:</p>
+<pre><span class="gp">$ </span>python setup.py install
+</pre>
+</div>
+</div>
+<div id="usage">
+<h2>Usage</h2>
+<p>To use AuDoLab in a project:</p>
+<pre>from AuDoLab import AuDoLab
+import asyncio
+</pre>
+<p>Then you want to create an instance of the AuDoLab class</p>
+<blockquote>
+audo = AuDoLab.AuDoLab()</blockquote>
+<p>In this example we used publicly available data from the nltk package:</p>
+<pre>from nltk.corpus import reuters
+import numpy as np
+import pandas as pd
+
+data = []
+
+for fileid in reuters.fileids():
+    tag, filename = fileid.split(&quot;/&quot;)
+    data.append(
+        (filename,
+         &quot;, &quot;.join(
+             reuters.categories(fileid)),
+            reuters.raw(fileid)))
+
+data = pd.DataFrame(data, columns=[&quot;filename&quot;, &quot;categories&quot;, &quot;text&quot;])
+</pre>
+<p>Then you want to scrape abstracts, e.g. from IEEE with the abstract scraper:</p>
+<pre>async def scrape():
+    return await audo.scrape_abstracts(
+        url=None, keywords=[&quot;cotton&quot;], in_data=&quot;all_meta&quot;, pages=5
+    )
+
+scraped_documents = asyncio.get_event_loop().run_until_complete(scrape())
+</pre>
+<p>The data as well as the scraped papers need to be preprocessed before use in the
+classifier:</p>
+<pre>preprocessed_target = audo.preprocessing(data=data, column=&quot;text&quot;)
+
+preprocessed_paper = audo.preprocessing(
+    data=scraped_documents, column=&quot;text&quot;)
+
+target_tfidf, training_tfidf = audo.tf_idf(
+    data=preprocessed_target,
+    papers=preprocessed_paper,
+    data_column=&quot;lemma&quot;,
+    papers_column=&quot;lemma&quot;,
+    features=100000,
+)
+</pre>
+<p>Afterwards we can train and use the classifiers and choose the desired
+one:</p>
+<pre>classifier = audo.one_class_svm(
+    training=training_tfidf,
+    predicting=target_tfidf,
+    nus=np.round(np.arange(0.01, 0.5, 0.01), 7),
+    quality_train=0.9,
+    min_pred=0.001,
+    max_pred=0.05,
+)
+
+df_data = audo.choose_classifier(preprocessed_target, classifier, 2)
+</pre>
+<p>And finally you can estimate the topics of the data:</p>
+<pre>audo.lda_modeling(df_data, num_topics=2)
+
+a = audo.lda_visualize_topics()
+html = a.data
+with open('html_file.html', 'w') as f:
+    f.write(html)
+</pre>
+<ul>
+<li>Free software: GNU General Public License v3</li>
+<li>Documentation: <a href="https://AuDoLab.readthedocs.io" rel="nofollow">https://AuDoLab.readthedocs.io</a>.</li>
+</ul>
+</div>
+
