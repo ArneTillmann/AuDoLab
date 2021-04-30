@@ -7,7 +7,6 @@ from load_papers import papers
 from load_data import data
 import numpy as np
 from IPython.core.display import HTML
-import pandas as pd
 """Tests for `AuDoLab` package."""
 
 
