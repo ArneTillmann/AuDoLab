@@ -15,13 +15,13 @@ authors:
   - name: Anton Thielmann
     affiliation: 1
   - name: Christoph Weisser
-    affiliation: 1,2
+    affiliation: "1, 2"
   - name: Benjamin Säfken
-    affiliation: 1,2
+    affiliation: "1, 2"
   - name: Alexander Silbersdorff
-    affiliation: 1, 2
+    affiliation: "1, 2"
   - name: Thomas Kneib
-    affiliation: 1,2
+    affiliation: "1, 2"
 affiliations:
  - name: Georg-August-Universität Göttingen, Göttingen, Germany
    index: 1
