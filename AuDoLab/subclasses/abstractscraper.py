@@ -1,6 +1,4 @@
 import re
-import webbot
-import time
 from bs4 import BeautifulSoup
 import numpy as np
 import pandas as pd
@@ -8,6 +6,7 @@ import requests
 import json
 import asyncio
 from pyppeteer import launch
+from tqdm import tqdm
 
 
 class AbstractScraper:
@@ -17,13 +16,12 @@ class AbstractScraper:
     """
 
     def __init__(self):
-        #self.web = webbot.Browser()
-        #self.wait = 10
         self.first = "https://ieeexplore.ieee.org/search/searchresult.jsp?action=search&newsearch=true&matchBoolean=true&"
         self.second = "&highlight=true&returnFacets=ALL&returnType=SEARCH&matchPubs=true&rowsPerPage=100&pageNumber=1"
 
-    async def _open(self, url=None, keywords=None, operator="OR", in_data="author",
-              pages=2):
+    async def _open(
+        self, url=None, keywords=None, operator="OR", in_data="author", pages=2
+    ):
         """
         defines the users search query
 
@@ -38,43 +36,77 @@ class AbstractScraper:
         :param in_data: "author" or "all_meta" whether to search in author
                         keywords or all metadata
         :type in_data: string
-        :return:
         """
+
         await self._open_pypeteer(url, keywords, operator, in_data, pages)
 
-    async def _open_pypeteer(self, url=None, keywords=None, operator="OR", in_data="author",
-    pages=2):
+    async def _open_pypeteer(
+        self, url=None, keywords=None, operator="OR", in_data="author", pages=2
+    ):
+        """[summary]
+
+        Args:
+            url ([type], optional): [description]. Defaults to None.
+            keywords ([type], optional): [description]. Defaults to None.
+            operator (str, optional): [description]. Defaults to "OR".
+            in_data (str, optional): [description]. Defaults to "author".
+            pages (int, optional): [description]. Defaults to 2.
+        """
+
         self._create_url(url, keywords, operator, in_data)
         self.html_page = []
-        print("The algorithm is iterating through", pages,
-              "pages")
+        print("The algorithm is iterating through", pages, "pages")
         browser = await launch()
         page = await browser.newPage()
-        await page.goto(self.url, {'waitUntil' : 'networkidle0'})
+        await page.goto(self.url, {"waitUntil": "networkidle0"})
 
         self.linkstorage = []
 
-        elements = await page.querySelectorAll('a')
+        elements = await page.querySelectorAll("a")
         for element in elements:
-            self.linkstorage.append(await page.evaluate('(element) => element.href', element))
-        for i in range(2, pages+1):
+            self.linkstorage.append(
+                await page.evaluate("(element) => element.href", element)
+            )
+        for i in range(2, pages + 1):
             self._create_new_url(i)
-            await page.goto(self.url, {'waitUntil' : 'networkidle0'})
-            elements = await page.querySelectorAll('a')
+            await page.goto(self.url, {"waitUntil": "networkidle0"})
+            elements = await page.querySelectorAll("a")
             for element in elements:
-                self.linkstorage.append(await page.evaluate('(element) => element.href', element))
+                self.linkstorage.append(
+                    await page.evaluate("(element) => element.href", element)
+                )
         await browser.close()
 
     def _add_page_number(self, page, position):
-        self.url = self.url[:position+len("pageNumber=")] + str(page) + self.url[position+len("pageNumber=")+len(str(page-1)):]
+        """[summary]
+
+        Args:
+            page ([type]): [description]
+            position ([type]): [description]
+        """
+        self.url = (
+            self.url[: position + len("pageNumber=")]
+            + str(page)
+            + self.url[position + len("pageNumber=") + len(str(page - 1)) :]
+        )
 
     def _add_str_plus_page_number(self, page):
-        if self.url[-1] =='?':
+        """[summary]
+
+        Args:
+            page ([type]): [description]
+        """
+        if self.url[-1] == "?":
             self.url = self.url + "pageNumber=" + str(page)
         else:
             self.url = self.url + "?pageNumber" + str(page)
 
     def _create_new_url(self, page):
+        """[summary]
+
+        Args:
+            page ([type]): [description]
+        """
 
         if "pageNumber=" in self.url:
             self._add_page_number(page, self.url.find("pageNumber="))
@@ -82,6 +114,15 @@ class AbstractScraper:
             self._add_str_plus_page_number(page)
 
     def _create_url(self, url, keywords, operator, in_data):
+        """[summary]
+
+        Args:
+            url ([type]): [description]
+            keywords ([type]): [description]
+            operator ([type]): [description]
+            in_data ([type]): [description]
+        """
+        
         operator = ")%20" + operator.upper() + "%20("
         if in_data == "all_meta":
             in_data = "%22All%20Metadata%22:"
@@ -120,10 +161,11 @@ class AbstractScraper:
                 )
             self.url = self.first + self.middle + self.second
 
+
     def _find_links(self):
         """goes through every paper on every page and collects all links to the
-         subpages of the papers"""
-        document_links = []
+        subpages of the papers"""
+
         self.data = []
         document = "/document/"
         citation = "/citations"
@@ -134,19 +176,33 @@ class AbstractScraper:
         self.data = np.array(self.data)
         # remove duplicates that are in there due to multiple occurrence in the
         self.data = np.unique(self.data)
-        print("Total number of abstracts that will be scraped:",
-              len(self.data))
+        print("Total number of abstracts that will be scraped:", len(self.data))
 
-    def _find_abstracts(self):
+
+    def _find_abstracts(
+        self, features=["abstract", "title", "citationCount", "doi", "totalDownloads", "keywords"]
+    ):
         """Opens all links for the webpages for each paper and scrapes the
-        paper's abstract"""
-        # initialize empty lists to fill
-        self.abstracts = []
-        self.title = []
+        paper's abstract
+
+        Args:
+            features (list, optional): [specify which information you want to have scraped].
+            Defaults to ["abstract", "title", "citationCount", "doi", "totalDownloads"].
+        """
+
+        # initialize emtpy dict to create attributes and set dict keys as features input and values as empty lists
+        att_creator = {}
+        for i in range(len(features)):
+            att_creator[features[i]] = []
+
+        # cretae the object attributes based on the input in list (features)
+        for i, j in att_creator.items():
+            setattr(self, i, j)
 
         # loop through number of  "link"
-        for i in range(len(self.data)):
+        for i in tqdm(range(len(self.data))):
             # only "try" because sometimes the javascript is corrupted
+            # get the html data of the webpage with metadata such as abstracts titles etc.
             try:
                 data = json.loads(
                     re.search(
@@ -154,24 +210,55 @@ class AbstractScraper:
                         requests.get(self.data[i]).text,
                     ).group(1)
                 )
-                # only get title and abstracts -> we could also go for
-                # author etc.
-                title = data["title"]
-                data = data["abstract"]
-
-                self.title.append(title)
-                self.abstracts.append(data)
             except:
                 pass
 
+            # loop through list of desired features and extract information
+            for i in features:
+                # if the data is not available, e.g. the paper has no citations, use None
+                try:
+                    temp = data[i]
+                except:
+                    temp = None
+
+                # for views the data is differently extracted
+                if i == "totalDownloads":
+                    try:
+                        temp = data["metrics"][i]
+                    except:
+                        temp = None
+                if i == "keywords":
+                    try:
+                        temp = data[i][0]["kwd"]
+                    except:
+                        temp = None
+                # append to obj attribute
+                getattr(self, i).append(temp)
+
+
     def get(self, url=None, keywords=None, operator="OR", pages=2, in_data="author"):
+        """simply runs the self._open function that open ieeeXplore and seraches for paper urls
+
+        Args:
+            url (str, optional): [description]. Defaults to None.
+            keywords ([type], optional): [description]. Defaults to None.
+            operator (str, optional): [description]. Defaults to "OR".
+            pages (int, optional): [description]. Defaults to 2.
+            in_data (str, optional): [description]. Defaults to "author".
+        """
         self._open(
-            url=url, keywords=keywords, operator=operator, pages=pages,
-            in_data=in_data
+            url=url, keywords=keywords, operator=operator, pages=pages, in_data=in_data
         )
 
+
     async def get_abstracts(
-        self, url=None, keywords=None, operator="OR", pages=2, in_data="author"
+        self,
+        url=None,
+        keywords=None,
+        operator="OR",
+        pages=2,
+        in_data="author",
+        features=["abstract", "title", "citationCount", "doi", "totalDownloads", "keywords"],
     ):
         """
         :param url: when the user specifies an own search query on IEEEXplore
@@ -187,28 +274,33 @@ class AbstractScraper:
         :type in_data: string
         :return: pd.DataFrame
         """
+        
         await self._open(
-            url=url, keywords=keywords, operator=operator, pages=pages,
-            in_data=in_data
+            url=url, keywords=keywords, operator=operator, pages=pages, in_data=in_data
         )
         self._find_links()
-        self._find_abstracts()
+        self._find_abstracts(features=features)
 
-        data = pd.DataFrame({"text": self.abstracts, "titles": self.title})
-        data = data.drop_duplicates()
+        data = pd.DataFrame()
+        for i in features:
+            data[i] = getattr(self, i)
+
+        data = data.drop_duplicates(subset=["abstract", "title"])
         return data
-        
+
 
 
 
 if __name__ == "__main__":
+
     async def main():
         AS = AbstractScraper()
-        data = await AS.get_abstracts(url=None, keywords=["dentistry", "teeth", "tooth"],
-                in_data="all_meta",
-                pages=3,
-                operator="or")
-        print(data)
-    
-    
-    asyncio.get_event_loop().run_until_complete(main())
+        data = await AS.get_abstracts(
+            url="https://ieeexplore.ieee.org/search/searchresult.jsp?action=search&newsearch=true&matchBoolean=true&queryText=(%22All%20Metadata%22:e)&highlight=true&returnFacets=ALL&returnType=SEARCH&matchPubs=true&rowsPerPage=100&pageNumber=1",
+            pages=150
+
+        )
+
+        return data
+
+    data = asyncio.get_event_loop().run_until_complete(main())
