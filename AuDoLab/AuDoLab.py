@@ -196,7 +196,7 @@ class AuDoLab:
         topic=0,
         words=100,
         save=False,
-        all=False,
+        n_clouds=1,
     ):
         """The lda model calculated with the function lda_modeling is visualized
         in an html frame and opened in the standard browser.
@@ -224,5 +224,5 @@ class AuDoLab:
             topic=topic,
             words=words,
             save=save,
-            all=all,
+            n_clouds=n_clouds,
         )
