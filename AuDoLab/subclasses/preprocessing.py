@@ -9,7 +9,7 @@ class Preprocessor:
     def __init__(self):
         4+5 
 
-    def text_prepare(self, text, language="english"):
+    def text_prepare(self, text, language="english", stop_words=True):
         """text preparation function for text preprocessing
 
         Args:
@@ -20,7 +20,7 @@ class Preprocessor:
         REPLACE_BY_SPACE_RE = re.compile("[/(){}\[\]\|@,;]")
         BAD_SYMBOLS_RE = re.compile("[^0-9a-z #+_]")
         NUMBERS = re.compile("\d+")
-        STOPWORDS = set(stopwords.words(language))
+        
 
         text = text.lower()
         text = REPLACE_BY_SPACE_RE.sub(
@@ -31,12 +31,15 @@ class Preprocessor:
         text = NUMBERS.sub("", text)
         # delete symbols which are in BAD_SYMBOLS_RE from text
         words = text.split()
-        i = 0
-        while i < len(words):
-            if words[i] in STOPWORDS:
-                words.pop(i)
-            else:
-                i += 1
+        
+        if stop_words:
+            i = 0
+            STOPWORDS = set(stopwords.words(language))
+            while i < len(words):
+                if words[i] in STOPWORDS:
+                    words.pop(i)
+                else:
+                    i += 1
         text = " ".join(map(str, words))  # delete stopwords from text
 
         return text
