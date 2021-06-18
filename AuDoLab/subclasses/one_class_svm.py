@@ -31,7 +31,9 @@ class One_Class_SVM:
         nus,
         quality_train=0.85,
         min_pred=0.05,
-        max_pred=0.2
+        max_pred=0.2,
+        gamma="auto",
+        kernel="rbf"
     ):
         """trains a one-class SVM on the out-of-domain training data
 
@@ -56,7 +58,7 @@ class One_Class_SVM:
         df = DataFrame()
         for i in nus:
 
-            svm = OneClassSVM(nu=i, gamma="auto", kernel="rbf")
+            svm = OneClassSVM(nu=i, gamma=gamma, kernel=kernel)
             # fit the model for each kernel
             clf = svm.fit(training)
 

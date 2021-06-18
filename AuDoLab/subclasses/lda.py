@@ -107,10 +107,10 @@ class LDA:
         dictionary,
         save_name="audolab_model.png",
         type="pyldavis",
-        figsize=(20, 10),
+        figsize=(50, 30),
         facecolor="k",
-        width=1600,
-        height=800,
+        width=2000,
+        height=1000,
         background_color="white",
         topic=0,
         words=100,
@@ -147,25 +147,46 @@ class LDA:
             plt.show()
 
         def _display_wordclouds(n_components):
-            plt.figure()
-            j = np.ceil(n_components/4)
+            fig=plt.figure(figsize=(2,2),facecolor='w', edgecolor='k')
+            
             for t in range(n_components):
-                i=t+1
-                plt.subplots(int(j), i)
-                plt.plot()
-                plt.imshow(WordCloud(width=width, height=height, background_color=background_color
+                temp = 251+t  # this is to index the position of the subplot
+                ax=plt.subplot(temp)
+
+                ax.imshow(WordCloud(width=width, height=height, background_color=background_color
                     ).fit_words(dict(lda_model.show_topic(t, words))))
                 plt.axis("off")
             plt.show()
 
+        def _wordclouds(topic):
+            wordcloud = WordCloud(width=width, height=height, background_color=background_color
+                    ).fit_words(dict(lda_model.show_topic(topic, words)))
+            return wordcloud
+
+
+
         if type == "clouds" and n_clouds >= 1:
-            _display_wordclouds(n_clouds)
+            fig = plt.figure()
+            if n_clouds >= 10:
+                for i in range(n_clouds):
+                    ax = fig.add_subplot(int(n_clouds/3),int(n_clouds/3),i+1)
+                    wordcloud = _wordclouds(i)
+                    ax.imshow(wordcloud)
+                    ax.axis('off')
+            else:
+                for i in range(n_clouds):
+                    ax = fig.add_subplot(2,int(n_clouds/2),i+1)
+                    wordcloud = _wordclouds(i)
+                    ax.imshow(wordcloud)
+                    ax.axis('off')
+            
+            plt.show()
 
 
         if save:
             if type(save_name) != str:
                 raise ValueError(
-                    "Please specify a string as the ame under which the plots needs to be saved"
+                    "Please specify a string as the name under which the plots needs to be saved"
                 )
 
             plt.savefig(save_name)
