@@ -1,6 +1,6 @@
 from numpy import round as np_round
 from numpy import arange as np_arange
-from pandas import concat as pd_concat
+import pandas as pd
 from AuDoLab.subclasses import abstractscraper
 from AuDoLab.subclasses import lda
 from AuDoLab.subclasses import one_class_svm
@@ -8,21 +8,22 @@ from AuDoLab.subclasses import preprocessing
 from AuDoLab.subclasses import tf_idf
 from AuDoLab.subclasses import abstractscraper_arxiv
 from AuDoLab.subclasses import abstractscraper_pubmed
+import sys
 
 
 class AuDoLab:
     def __init__(self):
         4 + 4
 
-    async def scrape_abstracts(
+    async def ieee_scraper(
         self,
-        type="arxiv",
         url=None,
         keywords=None,
         operator="OR",
         pages=2,
         in_data="author",
-        prepro=False
+        prepro=False,
+        ngram_type=2,
     ):
         """Function to scrape abstracts of scientific papers from the givin url.
         We used https://ieeexplore.ieee.org/search/advanced to generate a
@@ -38,28 +39,53 @@ class AuDoLab:
         - url ( string)
         - file_name (string)
         """
-        if type == "ieee":
-            ks = abstractscraper.AbstractScraper()
-            self.abstracts = await ks.get_abstracts(
-                url, keywords, operator, pages, in_data
-            )
-            
 
-        elif type == "arxiv":
+        ks = abstractscraper.AbstractScraper()
+        self.abstracts = await ks.get_abstracts(url, keywords, operator, pages, in_data)
+
+        if prepro == True:
+            self.abstracts = self.text_cleaning(
+                self.abstracts, "abstract", ngram_type=ngram_type
+            )
+
+        self.abstracts = self.abstracts.reset_index(drop=True)
+
+        if type(self.abstracts) != pd.DataFrame:
+            print(
+                "if using the ieee abstractscraper, please use the following code: \n \n"
+                + "async def scrape():"
+                + "\n     return await audo.ieee_scraper(keywords=[keywords], prepro=False, pages=1, ngram_type=2)"
+                + "\n\nscraped_documents = asyncio.get_event_loop().run_until_complete(scrape())"
+            )
+
+            sys.exit(
+                "please specify the code as indicated above, or use the function abstract_scraper to scrape from different websites"
+            )
+
+        return self.abstracts
+
+    def abstract_scraper(
+        self, type="arxiv", url=None, pages=2, prepro=False, ngram_type=2
+    ):
+
+        if type == "arxiv":
             ks = abstractscraper_arxiv.AbstractScraper_Arxiv()
             self.abstracts = ks.scrape_arxiv(url, pages)
-            
 
         elif type == "pubmed":
             ks = abstractscraper_pubmed.AbstractScraper_Pubmed()
             self.abstracts = ks.scrape_pubmed(url, pages)
 
         if prepro == True:
-            self.abstracts = self.text_cleaning(self.abstracts, "abstract")
-        
+            self.abstracts = self.text_cleaning(
+                self.abstracts, "abstract", ngram_type=ngram_type
+            )
+
+        self.abstracts = self.abstracts.reset_index(drop=True)
+
         return self.abstracts
 
-    def text_cleaning(self, data, column):
+    def text_cleaning(self, data, column, ngram_type=2):
         """The data will be lemmatized, tokenized and the stopwords will be
         deleted.
 
@@ -67,7 +93,9 @@ class AuDoLab:
         - data (<class 'pandas.core.frame.DataFrame'>)
         """
         prepro = preprocessing.Preprocessor()
-        self.data_processed = prepro.basic_preprocessing(data, column)
+        self.data_processed = prepro.basic_preprocessing(
+            data, column, ngram_type=ngram_type
+        )
         return self.data_processed
 
     def tf_idf(self, data, papers, data_column, papers_column, features=None):
@@ -145,6 +173,7 @@ class AuDoLab:
         eval_every=None,
         multi=True,
         alpha="asymmetric",
+        column="preprocessed",
     ):
         """The function performs lda modelling as described in this
         https://www.jmlr.org/papers/volume3/blei03a/blei03a.pdf paper.
@@ -159,7 +188,7 @@ class AuDoLab:
         """
         if corpus == None:
             self.dictionary, self.bow_corpus = lda.LDA.preperation(
-                data, no_below, no_above
+                data, no_below, no_above, column=column
             )
 
         else:
