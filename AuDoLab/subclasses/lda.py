@@ -16,7 +16,7 @@ class LDA:
         3 + 4
 
     @staticmethod
-    def preperation(df_processed, no_below=None, no_above=None):
+    def preperation(df_processed, no_below=None, no_above=None, column="preprocessed"):
         """Preprocessing for LDA
 
         Args:
@@ -32,12 +32,12 @@ class LDA:
             [bow_corpus]: [Corpus used for LDA]
         """
 
-        dictionary = corpora.Dictionary(df_processed["tokens"])
+        dictionary = corpora.Dictionary(df_processed[column])
         if no_below is None:
             no_below = 0
         if no_above is None:
             no_above = 1
-        bow_corpus = [dictionary.doc2bow(doc) for doc in df_processed["tokens"]]
+        bow_corpus = [dictionary.doc2bow(doc) for doc in df_processed[column]]
         return dictionary, bow_corpus
 
     @staticmethod
@@ -147,41 +147,42 @@ class LDA:
             plt.show()
 
         def _display_wordclouds(n_components):
-            fig=plt.figure(figsize=(2,2),facecolor='w', edgecolor='k')
-            
-            for t in range(n_components):
-                temp = 251+t  # this is to index the position of the subplot
-                ax=plt.subplot(temp)
+            fig = plt.figure(figsize=(2, 2), facecolor="w", edgecolor="k")
 
-                ax.imshow(WordCloud(width=width, height=height, background_color=background_color
-                    ).fit_words(dict(lda_model.show_topic(t, words))))
+            for t in range(n_components):
+                temp = 251 + t  # this is to index the position of the subplot
+                ax = plt.subplot(temp)
+
+                ax.imshow(
+                    WordCloud(
+                        width=width, height=height, background_color=background_color
+                    ).fit_words(dict(lda_model.show_topic(t, words)))
+                )
                 plt.axis("off")
             plt.show()
 
         def _wordclouds(topic):
-            wordcloud = WordCloud(width=width, height=height, background_color=background_color
-                    ).fit_words(dict(lda_model.show_topic(topic, words)))
+            wordcloud = WordCloud(
+                width=width, height=height, background_color=background_color
+            ).fit_words(dict(lda_model.show_topic(topic, words)))
             return wordcloud
-
-
 
         if type == "clouds" and n_clouds >= 1:
             fig = plt.figure()
             if n_clouds >= 10:
                 for i in range(n_clouds):
-                    ax = fig.add_subplot(int(n_clouds/3),int(n_clouds/3),i+1)
+                    ax = fig.add_subplot(int(n_clouds / 3), int(n_clouds / 3), i + 1)
                     wordcloud = _wordclouds(i)
                     ax.imshow(wordcloud)
-                    ax.axis('off')
+                    ax.axis("off")
             else:
                 for i in range(n_clouds):
-                    ax = fig.add_subplot(2,int(n_clouds/2),i+1)
+                    ax = fig.add_subplot(2, int(n_clouds / 2), i + 1)
                     wordcloud = _wordclouds(i)
                     ax.imshow(wordcloud)
-                    ax.axis('off')
-            
-            plt.show()
+                    ax.axis("off")
 
+            plt.show()
 
         if save:
             if type(save_name) != str:
@@ -190,5 +191,3 @@ class LDA:
                 )
 
             plt.savefig(save_name)
-
-      

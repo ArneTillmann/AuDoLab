@@ -3,11 +3,13 @@ import nltk
 from nltk.tokenize import RegexpTokenizer
 from nltk.corpus import stopwords
 from nltk.stem.porter import PorterStemmer
+from gensim.models import Phrases
+from tqdm import tqdm
 
 # Text preparation
 class Preprocessor:
     def __init__(self):
-        4+5 
+        4 + 5
 
     def text_prepare(self, text, language="english", stop_words=True):
         """text preparation function for text preprocessing
@@ -17,21 +19,20 @@ class Preprocessor:
             language (str, optional): [description]. Defaults to "english". Sets language of stopwords to be removed
         """
 
-        REPLACE_BY_SPACE_RE = re.compile("[/(){}\[\]\|@,;]")
+        REPLACE_BY_SPACE_RE = re.compile(r"[/(){}\[\]\|@,;]")
         BAD_SYMBOLS_RE = re.compile("[^0-9a-z #+_]")
-        NUMBERS = re.compile("\d+")
-        
+        NUMBERS = re.compile(r"\d+")
 
         text = text.lower()
         text = REPLACE_BY_SPACE_RE.sub(
             "", text
         )  # replace REPLACE_BY_SPACE_RE symbols by space in text
-        
+
         text = BAD_SYMBOLS_RE.sub("", text)
         text = NUMBERS.sub("", text)
         # delete symbols which are in BAD_SYMBOLS_RE from text
         words = text.split()
-        
+
         if stop_words:
             i = 0
             STOPWORDS = set(stopwords.words(language))
@@ -45,13 +46,12 @@ class Preprocessor:
         return text
 
     def _lemmatize_text(self, text):
-        """helper function that lemmatizes already tokenized text
-        """
+        """helper function that lemmatizes already tokenized text"""
 
         lemmatizer = nltk.stem.WordNetLemmatizer()
         return " ".join([lemmatizer.lemmatize(w, "v") for w in text])
 
-    def basic_preprocessing(self, df, column):
+    def _preprocessing(self, df, column):
         """Preprocessing function that calls the helper functions
 
         Args:
@@ -61,7 +61,7 @@ class Preprocessor:
         Returns:
             DataFrame: DataFrame with preprocessed text
         """
-        
+
         df_temp = df.copy(deep=True)
         df_temp[column] = df_temp[column].astype(str)
 
@@ -74,11 +74,63 @@ class Preprocessor:
         df_temp["lemma"] = df_temp["tokens"].apply(self._lemmatize_text)
         df_temp["tokens"] = df_temp["lemma"].apply(tokenizer.tokenize)
 
-        return df_temp
+        return df_temp, df_temp["tokens"]
+
+        # apply prepro func
+
+    def basic_preprocessing(self, df, column, ngram_type=2):
+        df, df_txt = self._preprocessing(df=df, column=column)
+
+        if ngram_type == 2:
+            bigram = Phrases(df_txt, min_count=10)
+
+            for idx in tqdm(range(len(df_txt))):
+                for token in bigram[df_txt[idx]]:
+                    if "_" in token:
+                        df_txt[idx].append(token)
+
+        if ngram_type == 3:
+            bigram = Phrases(df_txt, min_count=10)
+            trigram = Phrases(bigram[df_txt])
+
+            for idx in tqdm(range(len(df_txt))):
+                for token in bigram[df_txt[idx]]:
+                    if "_" in token:
+                        df_txt[idx].append(token)
+                for token in trigram[df_txt[idx]]:
+                    if "_" in token:
+                        df_txt[idx].append(token)
+
+        if ngram_type == 4:
+            bigram = Phrases(df_txt, min_count=10)
+            trigram = Phrases(bigram[df_txt])
+            fourgram = Phrases(trigram[df_txt])
+
+            for idx in tqdm(range(len(df_txt))):
+                for token in bigram[df_txt[idx]]:
+                    if "_" in token:
+                        df_txt[idx].append(token)
+                for token in trigram[df_txt[idx]]:
+                    if "_" in token:
+                        df_txt[idx].append(token)
+                for token in fourgram[df_txt[idx]]:
+                    if "_" in token:
+                        df_txt[idx].append(token)
+
+        if ngram_type >= 4:
+            print("please specify a ngram_type <= 4")
+
+        df["preprocessed"] = df_txt
+        df["lemma"] = [" ".join(map(str, j)) for j in df["preprocessed"]]
+
+        df = df.drop(["tokens"], axis=1)
+
+        return df
 
 
 if __name__ == "__main__":
     import pandas as pd
+
     data = pd.read_csv("mtsamples.csv")
     prepro = Preprocessor()
-    test = prepro.basic_preprocessing(df=data, column="transcription")
+    test = prepro.basic_preprocessing(df=data, column="transcription", ngram_type=3)
