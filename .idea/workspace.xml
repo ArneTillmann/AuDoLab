@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="cdf98eb6-54c4-43fb-a8ac-0465f021223e" name="Default Changelist" comment="new" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="Paper" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1qslb2m1FvYGhbHMMHqb80sFxhk" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="settings.editor.selected.configurable" value="configurable.group.project" />
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="cdf98eb6-54c4-43fb-a8ac-0465f021223e" name="Default Changelist" comment="" />
+      <created>1617876246959</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1617876246959</updated>
+      <workItem from="1617876256931" duration="671000" />
+      <workItem from="1618393348370" duration="1562000" />
+      <workItem from="1618907576603" duration="652000" />
+      <workItem from="1619183333373" duration="6634000" />
+      <workItem from="1619271401259" duration="61000" />
+      <workItem from="1619271577146" duration="1365000" />
+      <workItem from="1619438041656" duration="2773000" />
+    </task>
+    <task id="LOCAL-00001" summary="test">
+      <created>1618393856622</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1618393856623</updated>
+    </task>
+    <task id="LOCAL-00002" summary="test3">
+      <created>1618394320260</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1618394320261</updated>
+    </task>
+    <task id="LOCAL-00003" summary="test3">
+      <created>1619184339835</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1619184339835</updated>
+    </task>
+    <task id="LOCAL-00004" summary="t4">
+      <created>1619187485405</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1619187485406</updated>
+    </task>
+    <task id="LOCAL-00005" summary="t4">
+      <created>1619272677290</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1619272677290</updated>
+    </task>
+    <task id="LOCAL-00006" summary="t4">
+      <created>1619272755895</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1619272755895</updated>
+    </task>
+    <task id="LOCAL-00007" summary="t4">
+      <created>1619442091668</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1619442091668</updated>
+    </task>
+    <task id="LOCAL-00008" summary="new">
+      <created>1619442657191</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1619442657192</updated>
+    </task>
+    <task id="LOCAL-00009" summary="new">
+      <created>1619516496587</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1619516496587</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="2" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="test" />
+    <MESSAGE value="test2" />
+    <MESSAGE value="test3" />
+    <MESSAGE value="t4" />
+    <MESSAGE value="new" />
+    <option name="LAST_COMMIT_MESSAGE" value="new" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="664" y="335" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1618907687599">
+      <screen x="0" y="25" width="2560" height="1415" />
+    </state>
+    <state x="664" y="335" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.25.2560.1415@0.25.2560.1415" timestamp="1618907687599" />
+    <state x="306" y="90" key="MergeDialog" timestamp="1619442219482">
+      <screen x="0" y="25" width="2560" height="1415" />
+    </state>
+    <state x="306" y="90" key="MergeDialog/0.25.2560.1415@0.25.2560.1415" timestamp="1619442219482" />
+    <state x="1566" y="273" key="MultipleFileMergeDialog" timestamp="1619442219543">
+      <screen x="0" y="25" width="2560" height="1415" />
+    </state>
+    <state x="1566" y="273" key="MultipleFileMergeDialog/0.25.2560.1415@0.25.2560.1415" timestamp="1619442219543" />
+    <state x="708" y="312" key="SettingsEditor" timestamp="1618907936849">
+      <screen x="0" y="25" width="2560" height="1415" />
+    </state>
+    <state x="708" y="312" key="SettingsEditor/0.25.2560.1415@0.25.2560.1415" timestamp="1618907936849" />
+    <state x="895" y="418" key="Vcs.Push.Dialog.v2" timestamp="1619516501819">
+      <screen x="0" y="25" width="2560" height="1415" />
+    </state>
+    <state x="269" y="210" key="Vcs.Push.Dialog.v2/0.25.1440.875@0.25.1440.875" timestamp="1619187491221" />
+    <state x="895" y="418" key="Vcs.Push.Dialog.v2/0.25.2560.1415@0.25.2560.1415" timestamp="1619516501819" />
+    <state x="1017" y="375" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1619516468500">
+      <screen x="0" y="25" width="2560" height="1415" />
+    </state>
+    <state x="809" y="399" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.25.1440.875@0.25.1440.875" timestamp="1619251754897" />
+    <state x="1017" y="375" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.25.2560.1415@0.25.2560.1415" timestamp="1619516468500" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/AuDoLab/subclasses/lda.py</url>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>
