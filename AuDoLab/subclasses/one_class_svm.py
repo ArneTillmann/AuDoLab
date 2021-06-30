@@ -2,6 +2,7 @@ from sklearn.svm import OneClassSVM
 from pandas import DataFrame
 
 
+
 class One_Class_SVM:
     def __init__(self):
         3 + 4
