@@ -1,0 +1,56 @@
+Index: paper.md
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>---\ntitle: 'AuDoLab: Automatic document labelling and classfication for extremely unbalanced data'\ntags:\n  - Python\n  - One-class SVM\n  - Unsupervised Document Classification\n  - One-class Document Classification\n  - LDA Topic Modelling\n  - Out-of-domain Training Data\nauthors:\n  - name: Arne Tillmann^[Custom footnotes for e.g. denoting who the corresponding author is can be included like this.]\n    orcid: 0000-0003-0872-7098\n    affiliation: \"1, 2\" # (Multiple affiliations must be quoted)\n  - name: Anton Thielmann\n    affiliation: 2\n  - name: Christoph Weisser\n    affiliation: 3\n  - name: Benjamin Säfken\n    affiliation: 3\n  - name: Thomas Kneib\n    affiliation: 3\n  - name: Alexander Silbersdorff\n    affiliation: 3\naffiliations:\n - name: Lyman Spitzer, Jr. Fellow, Princeton University\n   index: 1\n - name: Institution Name\n   index: 2\n - name: Independent Researcher\n   index: 3\ndate: 13 August 2017\nbibliography: paper.bib\n\n# Optional fields if submitting to a AAS journal too, see this blog post:\n# https://blog.joss.theoj.org/2018/12/a-new-collaboration-with-aas-publishing\naas-doi: 10.3847/xxxxx <- update this with the DOI from AAS once you know it.\naas-journal: Astrophysical Journal <- The name of the AAS journal.\n---\n\n# Summary\n\nIn Natural Language Processing (NLP) Unsupervised Document Classification is mainly done on large and balanced datasets.\nAuDoLab tackles this problem and provides a novel approach to one-class document classification for heavily imbalanced datasets.\n\nFurthermore, AuDoLab enables the user to  create  user specific out-of-domain training data and classify a heavily underrepresented target class\nin a target dataset, using Web Scraping, Latent Dirichlet Allocation Topic Modelling and one-class Support Vector Machines.\n\n\n\n\nAuDoLab can be used for various applications for scientific research and also has various business applications.\nThe following section provides an detailed overview of AuDoLab. Subsequently, it will be discussed how the\ntheoretical models behind AuDoLab advance existing methods and software solutions. AuDoLab can be installed conveniently via pip.\n\n\n\n installation and the package can be found in the packages repository or on the documentation website of TTLocVis\n\n\n# Statement of need\n\nUnsupervised document classification is mainly performed to gain insight into the underlying topics of large text corpora.\nIn this process, highly underrepresented topics are often overlooked and consequently assigned to the wrong topics. Thus, labeling underrepresented topics in large text corpora is often done manually and can therefore be very time-consuming. \n\n![Classification Procedure.\\label{fig:test2}](figures/tree.PNG){ width=100% }\n\nAuDoLab enables the user to tackle this problem and perform unsupervised one-class document classification for heavily underrepresented document classes. \nFirstly, the package enables the user to web scrape training documents (scientific papers) from IEEEXplore. The user can search for multiple search terms and specify an individual search query. Subsequently, the text data is preprocessed for the classification part. The text preprocessing includes common NLP text preprocessing techniques as stopword removal and lemmatization.  As  document  representations  the  term  frequency-inverse  document  frequency  (tf-idf) representations are chosen. The tf-idf scores are computed on a joint corpus from the web-scraped out-of-domain training data and the target text data. \n\nThe actual document classification is performed using one-class Support vector machines, trained on the tf-idf representations from the out-of-domain training data, that are computed on the joint corpus. \n\n# Comparison with existing tools\n\n\n\n\n\n# Citations\n\nCitations to entries in paper.bib should be in\n[rMarkdown](http://rmarkdown.rstudio.com/authoring_bibliographies_and_citations.html)\nformat.\n\nIf you want to cite a software repository URL (e.g. something on GitHub without a preferred\ncitation) then you can do it with the example BibTeX entry below for @fidgit.\n\nFor a quick reference, the following citation commands can be used:\n- `@author:2001`  ->  \"Author et al. (2001)\"\n- `[@author:2001]` -> \"(Author et al., 2001)\"\n- `[@author1:2001; @author2:2001]` -> \"(Author1 et al., 2001; Author2 et al., 2002)\"\n\n# Figures\n\nFigures can be included like this:\n![Caption for example figure.\\label{fig:example}](figure.png)\nand referenced from text using \\autoref{fig:example}.\n\nFigure sizes can be customized by adding an optional second parameter:\n![Caption for example figure.](figure.png){ width=20% }\n\n# Acknowledgements\n\nWe acknowledge contributions from Brigitta Sipocz, Syrtis Major, and Semyeong\nOh, and support from Kathryn Johnston during the genesis of this project.\n\n# References\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- paper.md	(revision 39585f2e97edb30d134bdab3c8ebddc4188dfb90)
++++ paper.md	(date 1619187926321)
+@@ -40,34 +40,33 @@
+ # Summary
+ 
+ In Natural Language Processing (NLP) Unsupervised Document Classification is mainly done on large and balanced datasets.
+-AuDoLab tackles this problem and provides a novel approach to one-class document classification for heavily imbalanced datasets.
+-
+-Furthermore, AuDoLab enables the user to  create  user specific out-of-domain training data and classify a heavily underrepresented target class
+-in a target dataset, using Web Scraping, Latent Dirichlet Allocation Topic Modelling and one-class Support Vector Machines.
++AuDoLab tackles this problem and provides a novel approach to one-class document classification for heavily imbalanced
++datasets.
+ 
+-
++Furthermore, AuDoLab enables the user to  create  user specific out-of-domain training data and classify a heavily
++underrepresented target class in a target dataset, using Web Scraping, Latent Dirichlet Allocation Topic Modelling and
++one-class Support Vector Machines.
+ 
+ 
+ AuDoLab can be used for various applications for scientific research and also has various business applications.
+ The following section provides an detailed overview of AuDoLab. Subsequently, it will be discussed how the
+-theoretical models behind AuDoLab advance existing methods and software solutions. AuDoLab can be installed conveniently via pip.
+-
++theoretical models behind AuDoLab advance existing methods and software solutions.
++AuDoLab can be installed conveniently via pip. A detailed guideline for the installation and use of AuDoLab is provided
++in the on the documentation website (provide the link).
+ 
+-
+- installation and the package can be found in the packages repository or on the documentation website of TTLocVis
+ 
+ 
+ # Statement of need
+ 
+ Unsupervised document classification is mainly performed to gain insight into the underlying topics of large text corpora.
+-In this process, highly underrepresented topics are often overlooked and consequently assigned to the wrong topics. Thus, labeling underrepresented topics in large text corpora is often done manually and can therefore be very time-consuming. 
++In this process, highly underrepresented topics are often overlooked and consequently assigned to the wrong topics. Thus, labeling underrepresented topics in large text corpora is often done manually and can therefore be very time-consuming.
+ 
+ ![Classification Procedure.\label{fig:test2}](figures/tree.PNG){ width=100% }
+ 
+-AuDoLab enables the user to tackle this problem and perform unsupervised one-class document classification for heavily underrepresented document classes. 
+-Firstly, the package enables the user to web scrape training documents (scientific papers) from IEEEXplore. The user can search for multiple search terms and specify an individual search query. Subsequently, the text data is preprocessed for the classification part. The text preprocessing includes common NLP text preprocessing techniques as stopword removal and lemmatization.  As  document  representations  the  term  frequency-inverse  document  frequency  (tf-idf) representations are chosen. The tf-idf scores are computed on a joint corpus from the web-scraped out-of-domain training data and the target text data. 
++AuDoLab enables the user to tackle this problem and perform unsupervised one-class document classification for heavily underrepresented document classes.
++Firstly, the package enables the user to web scrape training documents (scientific papers) from IEEEXplore. The user can search for multiple search terms and specify an individual search query. Subsequently, the text data is preprocessed for the classification part. The text preprocessing includes common NLP text preprocessing techniques as stopword removal and lemmatization.  As  document  representations  the  term  frequency-inverse  document  frequency  (tf-idf) representations are chosen. The tf-idf scores are computed on a joint corpus from the web-scraped out-of-domain training data and the target text data.
+ 
+-The actual document classification is performed using one-class Support vector machines, trained on the tf-idf representations from the out-of-domain training data, that are computed on the joint corpus. 
++The actual document classification is performed using one-class Support vector machines, trained on the tf-idf representations from the out-of-domain training data, that are computed on the joint corpus.
+ 
+ # Comparison with existing tools
+ 
