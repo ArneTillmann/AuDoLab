@@ -14,7 +14,7 @@ class AbstractScraper_Pubmed:
 
         Args:
             url (str): Link from arxiv.org with search query
-            number_of_pages (int): number of pages that should be scraped
+            number_of_pages (int): number of pages that should be scraped.
         """
 
         html = requests.get(url).text

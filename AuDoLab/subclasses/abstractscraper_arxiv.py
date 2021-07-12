@@ -57,7 +57,6 @@ class AbstractScraper_Arxiv:
         self.titles = []
         self.authors = []
 
-
         # loop through links and extract abstracts, titles and authors
         for url in tqdm(self.document_links):
             # for every link get underlying html code
@@ -65,7 +64,7 @@ class AbstractScraper_Arxiv:
             soup = BeautifulSoup(html, "html.parser")
 
             # use try (without specifiyng exception) for adapting to changes in source data
-            # extract all abstracts with beautifulSoup 
+            # extract all abstracts with beautifulSoup
             try:
                 abstract = soup.find("blockquote", class_="abstract")
                 # extract the text between <span>
@@ -103,11 +102,11 @@ class AbstractScraper_Arxiv:
 
     def scrape_arxiv(self, url, pages=8):
         """Scrapes arxiv.org and returns a pd.DataFrame containing abstracts, titles and author names.
-        Returns these informations based on the users given url (search query), e.g. 
+        Returns these informations based on the users given url (search query), e.g.
         url="https://arxiv.org/search/?query=deep+learning&searchtype=all&source=header&order=&size=100&abstracts=show&date-date_type=submitted_date&start=0"
 
         Args:
-            url (string): link of searchquery from arxiv.org
+            url (str): link of searchquery from arxiv.org
             pages (int, optional): number of pages the algorithm iterates through and searches for abstracts. Defaults to 8.
 
         Returns:

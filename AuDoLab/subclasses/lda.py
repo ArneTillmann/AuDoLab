@@ -20,11 +20,11 @@ class LDA:
         """Preprocessing for LDA
 
         Args:
-            df_processed ([DataFrame]): [DataFrame stat store tokenized text in
+            df_processed (pd.DataFrame): [DataFrame stat store tokenized text in
                                         col ["tokens"]]
-            no_below ([int]): [if word appears in less than
+            no_below (int): [if word appears in less than
                               no_below documents they are not considered]
-            no_above ([float]): [if e.g. 0.9, no words are taken into
+            no_above (float): [if e.g. 0.9, no words are taken into
                                 account that appear more often than 90%]
 
         Returns:
@@ -56,15 +56,16 @@ class LDA:
         """LDA model
 
         Args:
-        corpus (iterable of list of (int, float), optional):
-        [Stream of document vectors or sparse matrix of shape]
-        num_topics (int): [pre-defined number of topics]
-        id2word ({dict of (int, str): gensim.corpora.dictionary.Dictionary})
-                                         –Mapping from word IDs to words. It is
-                                        used to determine the vocabulary size,
-                                as well as for debugging and topic printing.
-        random_state (int): [for recreating exact identical output]
-        passes (int): [Number of passes through the corpus during training.]
+            corpus (iterable of list of (int, float), optional): Stream of document vectors or sparse matrix of shape
+            num_topics (int): pre-defined number of topics]
+            id2word ({dict of (int, str): gensim.corpora.dictionary.Dictionary}) –Mapping from word IDs to words. It is used to determine the vocabulary size, as well as for debugging and topic printing.
+            random_state (int): for recreating exact identical output. Defaults to 101.
+            passes (int): Number of passes through the corpus during training.Defaults to 20.
+            chunksize (int, optional): chunksize in lda passes. Defaults to 500.
+            eta (str, optional): [description]. Defaults to "auto".
+            eval_every ([type], optional): Hyperparameter in LDA used to initiliaze the Dirichlet distribution. Defaults to None.
+            multi (bool, optional): If true, the in gensim incorporated multicore variant is used. Defaults to True.
+            alpha (str, optional): OTher Dirichlet Prior. Defaults to "asymmetric".
 
         Returns:
             [lda_model]: [returns lda_model output]
@@ -96,8 +97,6 @@ class LDA:
                 eval_every=eval_every,
             )
 
-        pprint(lda_model.top_topics(corpus))
-
         return lda_model
 
     @staticmethod
@@ -106,7 +105,7 @@ class LDA:
         bow_corpus,
         dictionary,
         save_name="audolab_model.png",
-        type="pyldavis",
+        type="clouds",
         figsize=(50, 30),
         facecolor="k",
         width=2000,
@@ -117,13 +116,31 @@ class LDA:
         save=False,
         n_clouds=1,
     ):
-        """Create pyLDAvis plots for LDA model output
+        """Visualizes the topic models output in wordclouds or pyldavis
+
+        TODO: pyldavis not yet working, especially not in jupyter notebooks. MAybe take out all together
 
         Args:
-            lda_model ([type]): Output of lda_model
-            bow_corpus ([list of (int, int)]): BoW representation of document.
-            dictionary (gensim.corpora.dictionary.Dictionary): [Dict used for
-                                                               creating Corpus]
+            lda_model (gensim.models.ldamodel.LdaModel): the created LDA model
+            bow_corpus (gensim.corpora.dictionary.Dictionary): Bag of words corpus of used documents
+            dictionary (gensim.corpora.dictionary.Dictionary): Dictionary of all words
+            save_name (str, optional): name under which the plots should be save. Defaults to "audolab_model.png".
+            type (str, optional): type of visualisation- either "clouds" or "pyldavis". Defaults to "clouds".
+            figsize (tuple, optional): Size of wordclouds. Defaults to (50, 30).
+            facecolor (str, optional): Colour of wordcloud Defaults to "k".
+            width (int, optional): width of plots. Defaults to 2000.
+            height (int, optional): height of plots. Defaults to 1000.
+            background_color (str, optional): Background colour of wordcloud. Defaults to "white".
+            topic (int, optional): IF only one wordcloud is plotted, index of topic that is plotted. Defaults to 0.
+            words (int, optional): Number of words per cloud. Defaults to 100.
+            save (bool, optional): whether the plots should be saved or not. Defaults to False.
+            n_clouds (int, optional): Number of word clouds that are plotted. Defaults to 1.
+
+        Raises:
+            ValueError: If save_name is not a string: no "Please specify a string as the name under which the plots should be saved"
+
+        Returns:
+            None:
         """
 
         if type == "pyldavis":
@@ -131,7 +148,7 @@ class LDA:
                 lda_model, bow_corpus, dictionary, sort_topics=False
             )
 
-            pyLDAvis.show(visualization)
+            pyLDAvis.display(visualization)
 
         if type == "clouds" and n_clouds <= 1:
             plt.figure(figsize=figsize, facecolor=facecolor)
@@ -144,21 +161,6 @@ class LDA:
             plt.title("Lda Model " + "topic #" + str(topic))
             plt.tight_layout(pad=0)
 
-            plt.show()
-
-        def _display_wordclouds(n_components):
-            fig = plt.figure(figsize=(2, 2), facecolor="w", edgecolor="k")
-
-            for t in range(n_components):
-                temp = 251 + t  # this is to index the position of the subplot
-                ax = plt.subplot(temp)
-
-                ax.imshow(
-                    WordCloud(
-                        width=width, height=height, background_color=background_color
-                    ).fit_words(dict(lda_model.show_topic(t, words)))
-                )
-                plt.axis("off")
             plt.show()
 
         def _wordclouds(topic):
@@ -187,7 +189,7 @@ class LDA:
         if save:
             if type(save_name) != str:
                 raise ValueError(
-                    "Please specify a string as the name under which the plots needs to be saved"
+                    "Please specify a string as the name under which the plots should be saved"
                 )
 
             plt.savefig(save_name)

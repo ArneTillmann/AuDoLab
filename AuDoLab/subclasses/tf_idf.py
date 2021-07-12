@@ -42,10 +42,8 @@ class Tf_idf:
              ou-of-domain training data]
         """
 
-
         df_temp = data.copy(deep=True)
         papers_temp = papers.copy(deep=True)
-
 
         tfidf_vectorizer = TfidfVectorizer(
             ngram_range=(1, ngrams), max_features=features

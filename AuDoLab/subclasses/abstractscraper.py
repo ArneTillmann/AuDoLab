@@ -46,11 +46,11 @@ class AbstractScraper:
         """[summary]
 
         Args:
-            url ([type], optional): [description]. Defaults to None.
-            keywords ([type], optional): [description]. Defaults to None.
-            operator (str, optional): [description]. Defaults to "OR".
-            in_data (str, optional): [description]. Defaults to "author".
-            pages (int, optional): [description]. Defaults to 2.
+            url (string, optional): if given than the search defined in this url ist scraped. Defaults to None.
+            keywords (list, optional): f no url is given but a keyword list, a search after these keywords is performed and the results are scraped. Defaults to None.
+            operator (str, optional): Operator between the keywords. If "AND" the search results must include all specified keywords. Defaults to "OR".
+            in_data (str, optional): "author" or "all_meta" -> whether the keywords are only searched in the author keywords or in all metadata. Defaults to "author".
+            pages (int, optional): number of pages that are iterated over. Defaults to 2.
         """
 
         self._create_url(url, keywords, operator, in_data)
@@ -122,7 +122,7 @@ class AbstractScraper:
             operator ([type]): [description]
             in_data ([type]): [description]
         """
-        
+
         operator = ")%20" + operator.upper() + "%20("
         if in_data == "all_meta":
             in_data = "%22All%20Metadata%22:"
@@ -161,7 +161,6 @@ class AbstractScraper:
                 )
             self.url = self.first + self.middle + self.second
 
-
     def _find_links(self):
         """goes through every paper on every page and collects all links to the
         subpages of the papers"""
@@ -178,9 +177,17 @@ class AbstractScraper:
         self.data = np.unique(self.data)
         print("Total number of abstracts that will be scraped:", len(self.data))
 
-
     def _find_abstracts(
-        self, features=["abstract", "title", "citationCount", "doi", "totalDownloads", "keywords"]
+        self,
+        features=[
+            "abstract",
+            "title",
+            "citationCount",
+            "doi",
+            "totalDownloads",
+            "keywords",
+            "publicationYear",
+        ],
     ):
         """Opens all links for the webpages for each paper and scrapes the
         paper's abstract
@@ -235,8 +242,9 @@ class AbstractScraper:
                 # append to obj attribute
                 getattr(self, i).append(temp)
 
-
-    async def get(self, url=None, keywords=None, operator="OR", pages=2, in_data="author"):
+    async def get(
+        self, url=None, keywords=None, operator="OR", pages=2, in_data="author"
+    ):
         """simply runs the self._open function that open ieeeXplore and seraches for paper urls
 
         Args:
@@ -250,7 +258,6 @@ class AbstractScraper:
             url=url, keywords=keywords, operator=operator, pages=pages, in_data=in_data
         )
 
-
     async def get_abstracts(
         self,
         url=None,
@@ -258,28 +265,35 @@ class AbstractScraper:
         operator="OR",
         pages=2,
         in_data="author",
-        features=["abstract", "title", "citationCount", "doi", "totalDownloads", "keywords"],
+        features=[
+            "abstract",
+            "title",
+            "citationCount",
+            "doi",
+            "totalDownloads",
+            "keywords",
+            "publicationYear",
+        ],
     ):
+        """[summary]
+
+        Args:
+            url (str, optional): when the user specifies an own search query on IEEEXplore. Defaults to None.
+            keywords (iist, optional): keywords that are searched for. Defaults to None.
+            operator (str, optional): [description]. Defaults to "OR".
+            pages (int, optional): Number of pages the algorithm iterates over. Defaults to 2.
+            in_data (str, optional): "author" or "all_meta" whether to search in author keywords or all metadata. Defaults to "author".
+            features (list, optional): which features should be scraped. Defaults to ["abstract", "title", "citationCount", "doi", "totalDownloads", "keywords", "publicationYear"].
+
+        Returns:
+            [pd.DataFrame]: DataFrame containing the paper abstracts and the selected features
         """
-        :param url: when the user specifies an own search query on IEEEXplore
-        :type url: string
-        :param keywords: keywords that are searched for
-        :type keywords: list
-        :param operator: "and" / "or" operator between keywords
-        :type operator: string
-        :param pages: number of pages that is iterated over
-        :type pages: int
-        :param in_data: "author" or "all_meta" whether to search in author
-                keywords or all metadata
-        :type in_data: string
-        :return: pd.DataFrame
-        """
-        
+
         await self._open(
             url=url, keywords=keywords, operator=operator, pages=pages, in_data=in_data
         )
-        await self._find_links()
-        await self._find_abstracts(features=features)
+        self._find_links()
+        self._find_abstracts(features=features)
 
         data = pd.DataFrame()
         for i in features:
@@ -289,20 +303,13 @@ class AbstractScraper:
         return data
 
 
-
-    scraped_documents = asyncio.get_event_loop().run_until_complete(scrape())
-
-
-
-
 if __name__ == "__main__":
 
     async def main():
         AS = AbstractScraper()
         data = await AS.get_abstracts(
-            url="https://ieeexplore.ieee.org/search/searchresult.jsp?highlight=true&returnType=SEARCH&matchPubs=true&rowsPerPage=100&returnFacets=ALL&sortType=patent-citations&pageNumber=1",
-            pages=40
-
+            url="https://ieeexplore.ieee.org/search/searchresult.jsp?highlight=true&returnType=SEARCH&matchPubs=true&rowsPerPage=100&sortType=paper-citations&returnFacets=ALL&pageNumber=1",
+            pages=100,
         )
 
         return data

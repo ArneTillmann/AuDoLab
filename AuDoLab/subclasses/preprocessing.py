@@ -11,12 +11,16 @@ class Preprocessor:
     def __init__(self):
         4 + 5
 
-    def text_prepare(self, text, language="english", stop_words=True):
+    def _text_prepare(self, text, language="english", stop_words=True):
         """text preparation function for text preprocessing
 
         Args:
             text (helper variable): None
-            language (str, optional): [description]. Defaults to "english". Sets language of stopwords to be removed
+            language (str, optional): Sets language of stopwords to be removed. Defaults to "english".
+            stop_words (bool, optional): If true, the stopwords are removed, if not, stopwords are left as they are. Defaults to True.
+
+        Returns:
+            [type]: [description]
         """
 
         REPLACE_BY_SPACE_RE = re.compile(r"[/(){}\[\]\|@,;]")
@@ -65,7 +69,7 @@ class Preprocessor:
         df_temp = df.copy(deep=True)
         df_temp[column] = df_temp[column].astype(str)
 
-        df_temp.loc[:, column] = [self.text_prepare(x) for x in df_temp[column].values]
+        df_temp.loc[:, column] = [self._text_prepare(x) for x in df_temp[column].values]
         df_temp[column] = [item for item in df_temp[column] if not item.isdigit()]
 
         tokenizer = RegexpTokenizer(r"\w+")
