@@ -1,5 +1,3 @@
-from numpy import round as np_round
-from numpy import arange as np_arange
 import pandas as pd
 from AuDoLab.subclasses import abstractscraper
 from AuDoLab.subclasses import lda
@@ -12,7 +10,7 @@ import sys
 
 
 class AuDoLab:
-    """TODO 
+    """TODO
         1) call asyncio func directly in class such that the user does not need to call advanced loop
         2) Remove depreciationwarnings (scipy.sparse and imp)
         3) include pyldavis function (or remove completely depending on utility for users)

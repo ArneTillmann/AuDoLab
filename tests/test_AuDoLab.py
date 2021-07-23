@@ -1,6 +1,8 @@
 import pytest
 import os
 import sys
+from numpy import round as np_round
+from numpy import arange as np_arange
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/..")
 from AuDoLab import AuDoLab
 """Tests for `AuDoLab` package."""
@@ -36,7 +38,7 @@ data_processed = audo.text_cleaning(data, "transcription")
 #
 data_tfidf, papers_tfidf = audo.tf_idf(
     data, papers,"transcription", "text")
-classifier = audo.one_class_svm(papers_tfidf, data_tfidf)
+classifier = audo.one_class_svm(papers_tfidf, data_tfidf, nus=np_round(np_arange(0.1, 0.5, 0.01), 5))
 # df_data = audo.choose_classifier(data_processed, classifier, 0)
 # if __name__ == '__main__':
 #     # lda = audo.lda_modeling(papers_processed)
