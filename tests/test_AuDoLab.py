@@ -2,7 +2,7 @@ import pytest
 import os
 import sys
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/..")
-# from AuDoLab import AuDoLab
+from AuDoLab import AuDoLab
 """Tests for `AuDoLab` package."""
 
 
@@ -22,19 +22,21 @@ def test_content(response):
     # assert 'GitHub' in BeautifulSoup(response.content).title.string
 
 
-# audo = AuDoLab.AuDoLab()
+audo = AuDoLab.AuDoLab()
 # # papers = audo.scrape_abstracts(
 # #     keywords=["dentistry", "teeth", "tooth"],
 # #     in_data="all_meta",
 # #     pages=12,
 # #     operator="or"
 # # )
-# papers_processed = audo.preprocessing(papers, "text")
-# data_processed = audo.preprocessing(data, "transcription")
+from load_data import data
+from load_papers import papers
+papers_processed = audo.text_cleaning(papers, "text")
+data_processed = audo.text_cleaning(data, "transcription")
 #
-# data_tfidf, papers_tfidf = audo.tf_idf(
-#     data, papers,"transcription", "text")
-# classifier = audo.one_class_svm(papers_tfidf, data_tfidf)
+data_tfidf, papers_tfidf = audo.tf_idf(
+    data, papers,"transcription", "text")
+classifier = audo.one_class_svm(papers_tfidf, data_tfidf)
 # df_data = audo.choose_classifier(data_processed, classifier, 0)
 # if __name__ == '__main__':
 #     # lda = audo.lda_modeling(papers_processed)

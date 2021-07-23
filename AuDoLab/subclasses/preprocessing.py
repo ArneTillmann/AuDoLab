@@ -84,11 +84,22 @@ class Preprocessor:
 
     def basic_preprocessing(self, df, column, ngram_type=2):
         df, df_txt = self._preprocessing(df=df, column=column)
+        index = list(range(len(df_txt)))
+        df_txt = df_txt.reset_index()
+        df_txt = df_txt.drop("index", axis=1)
+        df_txt = df_txt["tokens"]
+
+        df = df.reset_index()
+        df = df.drop("index", axis=1)
+
+
+
 
         if ngram_type == 2:
             bigram = Phrases(df_txt, min_count=10)
 
             for idx in tqdm(range(len(df_txt))):
+
                 for token in bigram[df_txt[idx]]:
                     if "_" in token:
                         df_txt[idx].append(token)
