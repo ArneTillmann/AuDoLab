@@ -1,11 +1,11 @@
 import pytest
-# import os
-# import sys
-# sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/..")
-# from AuDoLab import AuDoLab
-# from load_papers import papers
-# from load_data import data
-# import numpy as np
+import os
+import sys
+sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/..")
+from AuDoLab import AuDoLab
+from load_papers import papers
+from load_data import data
+import numpy as np
 # from IPython.core.display import HTML
 """Tests for `AuDoLab` package."""
 
@@ -26,29 +26,29 @@ def test_content(response):
     # assert 'GitHub' in BeautifulSoup(response.content).title.string
 
 
-# audo = AuDoLab.AuDoLab()
+audo = AuDoLab.AuDoLab()
 # # papers = audo.scrape_abstracts(
 # #     keywords=["dentistry", "teeth", "tooth"],
 # #     in_data="all_meta",
 # #     pages=12,
 # #     operator="or"
 # # )
-# papers_processed = audo.preprocessing(papers, "text")
-# data_processed = audo.preprocessing(data, "transcription")
+papers_processed = audo.preprocessing(papers, "text")
+data_processed = audo.preprocessing(data, "transcription")
+
+data_tfidf, papers_tfidf = audo.tf_idf( data_processed, papers_processed, data_column="lemma", papers_column="lemma")
+
+# nus = np.arange(0.001, 0.5, 0.001)
+# nus = np.round(nus, 5)
 #
-# data_tfidf, papers_tfidf = audo.tf_idf( data_processed, papers_processed, data_column="lemma", papers_column="lemma")
-#
-# # nus = np.arange(0.001, 0.5, 0.001)
-# # nus = np.round(nus, 5)
-# #
-# classifier = audo.one_class_svm(
-#     training=papers_tfidf,
-#     predicting=data_tfidf,
-#     nus=[0.166,0.3],
-#     quality_train=0.85,
-#     min_pred=0.01,
-#     max_pred=0.1,
-# )
+classifier = audo.one_class_svm(
+    training=papers_tfidf,
+    predicting=data_tfidf,
+    nus=[0.166,0.3],
+    quality_train=0.85,
+    min_pred=0.01,
+    max_pred=0.1,
+)
 #
 # df_data = audo.choose_classifier(data_processed, classifier, 0)
 #
