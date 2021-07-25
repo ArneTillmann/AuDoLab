@@ -1,20 +1,37 @@
-from numpy import arange as np_arange
-from numpy import round as np_round
+import pandas as pd
 from AuDoLab.subclasses import abstractscraper
 from AuDoLab.subclasses import lda
 from AuDoLab.subclasses import one_class_svm
 from AuDoLab.subclasses import preprocessing
 from AuDoLab.subclasses import tf_idf
+from AuDoLab.subclasses import abstractscraper_arxiv
+from AuDoLab.subclasses import abstractscraper_pubmed
+import sys
 
 
 class AuDoLab:
+    """TODO
+        1) call asyncio func directly in class such that the user does not need to call advanced loop
+        2) Remove depreciationwarnings (scipy.sparse and imp)
+        3) include pyldavis function (or remove completely depending on utility for users)
+        4) adapt documentation that it is consistent within itself (documentation = summarys and datatypes)
+        5) check if further functions needed -> second loop of iteration in decision rule from (https://www.researchgate.net/profile/Astrid-Krenz/publication/344432349_Unsupervised_Document_Classification_integrating_Web_Scraping_One-Class_SVM_and_LDA_Topic_Modelling/links/5f749c97458515b7cf596d36/Unsupervised-Document-Classification-integrating-Web-Scraping-One-Class-SVM-and-LDA-Topic-Modelling.pdf)
+
+    """
     def __init__(self):
         4 + 4
 
-    async def scrape_abstracts(self, url=None, keywords=None, operator="OR",
-                               pages=2, in_data="author"):
-        """
-        Function to scrap abstracts of scientific papers from the givin url.
+    async def ieee_scraper(
+        self,
+        url=None,
+        keywords=None,
+        operator="OR",
+        pages=2,
+        in_data="author",
+        prepro=False,
+        ngram_type=2,
+    ):
+        """Function to scrape abstracts of scientific papers from the givin url.
         We used https://ieeexplore.ieee.org/search/advanced to generate a
         list like https://ieeexplore.ieee.org/search/searchresult.jsp?action=se
         arch&newsearch=true&matchBoolean=true&queryText=(%22Author%20Keywords%22
@@ -24,93 +41,125 @@ class AuDoLab:
         The abstracts of the papers listet on that list of search results will
         be stored in a .txt file with the givin file name.
 
-        :param url: when the user specifies an own search query on IEEEXplore,
-            defaults to None
-        :type url: string
-        :param keywords: keywords that are searched for, defaults to     None
-        :type keywords: list of strings
-        :param operator: "and" / "or" operator between keywords, defaults to "OR"
-        :type operator: string
-        :param pages: number of pages that is iterated over, defaults to 2
-        :type pages: int
-        :param in_data: "author" or "all_meta" whether to search in author
-                keywords or all metadata, defaults to "author"
-        :type in_data: string
+        Args:
+            url (str, optional): [description]. Defaults to None.
+            keywords (list, optional): List of keywords that are searched for. Defaults to None.
+            operator (str, optional): Operator between the keywords. "AND" or "OR". If "AND" the search results must include all keywords. Defaults to "OR".
+            pages (int, optional): Number of pages that are iterated over. Translates directly to number of abstracts that are scraped. Roughly there are 100 abstracts scraped per page. Defaults to 2.
+            in_data (str, optional): If the keywords are searched for in the author keywords or in all metadata. Defaults to "author".
+            prepro (bool, optional): if True, the scraped data will directly be preprocessed for later use. Defaults to False.
+            ngram_type (int, optional): number of ngrams in preprocessing. Defaults to 2.
 
-        :return: DataFrame with the scraped abstracs in column="text"
-        :rtype: pd.DataFrame
+        Returns:
+            pd.DataFrame: DataFrame with the stored abstracts and metadata
         """
+
+        number = pages
 
         ks = abstractscraper.AbstractScraper()
+        self.abstracts = await ks.get_abstracts(
+            url=url, keywords=keywords, operator=operator, pages=number, in_data=in_data
+        )
 
-        self.abstracts = await ks.get_abstracts(url, keywords, operator, pages, in_data)
-        print(self.abstracts)
-        #file_name = file_name + ".txt"
-        #self.abstracts.to_csv(self.abstracts, header=True, index=False)
+        if prepro == True:
+            self.abstracts = self.abstracts.reset_index(drop=True)
+            self.abstracts = self.text_cleaning(
+                self.abstracts, "abstract", ngram_type=ngram_type
+            )
+
+        if type(self.abstracts) != pd.DataFrame:
+            print(
+                "if using the ieee abstractscraper, please use the following code: \n \n"
+                + "async def scrape():"
+                + "\n     return await audo.ieee_scraper(keywords=[keywords], prepro=False, pages=1, ngram_type=2)"
+                + "\n\nscraped_documents = asyncio.get_event_loop().run_until_complete(scrape())"
+            )
+
+            sys.exit(
+                "please specify the code as indicated above, or use the function abstract_scraper to scrape from different websites"
+            )
+
         return self.abstracts
 
-    def preprocessing(self, data, column):
-        """Preprocessing function that calls the helper functions
+    def abstract_scraper(
+        self, type="arxiv", url=None, pages=2, prepro=False, ngram_type=2
+    ):
+        """Scapes the pages arxiv.org and pubmed.gov for paper abstracts
 
-        :param data: DataFrame that has the text data stored
-        :type data: pd.DataFrame
-        :param column: column name where raw text is stored
-        :type column: str
+        Args:
+            type (str, optional): "arxiv" or "pubmed". Defines for which page the scraping is done. Defaults to "arxiv".
+            url (str, optional): The given url after which the papers are scraped. Must be in line with type. Defaults to None.
+            pages (int, optional): Number of pages that are iterated over. Defaults to 2.
+            prepro (bool, optional): If True, the scraped documents are preprocessed directly. Defaults to False.
+            ngram_type (int, optional): Number of ngrams in preprocessing. Defaults to 2.
 
-        :return: DataFrame with preprocessed text
-        :rtype:  DataFrame
+        Returns:
+            pd.DataFrame: DataFrame with the stored abstracts
         """
+
+        if type == "arxiv":
+            ks = abstractscraper_arxiv.AbstractScraper_Arxiv()
+            self.abstracts = ks.scrape_arxiv(url, pages)
+
+        elif type == "pubmed":
+            ks = abstractscraper_pubmed.AbstractScraper_Pubmed()
+            self.abstracts = ks.scrape_pubmed(url, pages)
+
+        self.abstracts = self.abstracts.reset_index(drop=True)
+
+        if prepro == True:
+            self.abstracts = self.text_cleaning(
+                self.abstracts, "abstract", ngram_type=ngram_type
+            )
+
+        return self.abstracts
+
+    def text_cleaning(self, data, column, ngram_type=2):
+        """The data will be lemmatized, tokenized and the stopwords will be
+        deleted.
+
+        Args:
+            data (pd.DataFrame): Dataframe where the documents to be preprocessed are stored
+            column (str): Column name of the column where docs are stored
+            ngram_type (int, optional): Number of ngrams used. Defaults to 2.
+
+        Returns:
+            pd.DataFrame: DataFrame where the original docus and the preprocessed documents are stored
+        """
+
         prepro = preprocessing.Preprocessor()
         self.data_processed = prepro.basic_preprocessing(
-            data, column
+            data, column, ngram_type=ngram_type
         )
         return self.data_processed
 
-    # def tf_idf_features(self, data, papers, features=8000):
-    #     """The function tf_idf_features(...) calculates the tfidf scores, but
-    #     return only the <features> amount of words with the highest tfidf
-    #     scores.
-    #
-    #     Arguments:
-    #     - data (<class 'pandas.core.frame.DataFrame'>)
-    #     - papers (<class 'pandas.core.frame.DataFrame'>)
-    #     """
-    #     tfidf = tf_idf.Tf_idf()
-    #     self.data_tfidf_features, self.papers_tfidf_features =
-    #     tfidf.tfidf_features(
-    #         data, papers, features=features)
-    #     return self.data_tfidf_features, self.papers_tfidf_features
-
-    def tf_idf(self, data, papers, data_column="lemma", papers_column="lemma",
-               features=None, ngrams=2):
-        """creates tf-idf objects for one-class SVM classification. The tf-idf
+    def tf_idf(self, data, papers, data_column, papers_column, features=None, ngrams=2):
+        """[creates tf-idf objects for one-class SVM classification. The tf-idf
         scores are calculated over a joint corpus,
         however, the target data and the out-of-domain training data are stored
         in seperate, as the one-class SVM is only trained on
-        the tf-idf scores of the out-of-domain training data
+        the tf-idf scores of the out-of-domain training data]
 
-        :param data: preprocessed target documents
-        :type data: DataFrame
-        :param papers: preprocessed out-of-domain training data
-        :type papers: DataFrame
-        :param data_colum: name of columnin target dataframe where
-            lemmatized documents are stored, defaults to 'lemma'
-        :type data_column: String
-        :param papers_colum: name of column in out-of-domain training
-            dataframe where lemmatized documents are stored, defaults to 'lemma'
-        :type papers_colum: String
-        :param ngrams: whether ngram are formed, defaults to 2
-        :type ngrams: int
-        :param features: number of max features, defaults to 8000.
-        :type features: int
+        Args:
+            data (DataFrame): [preprocessed target documents]
+            papers (DataFrame): [preprocessed out-of-domain training data]
+            data_colum (String): [name of columnin target dataframe where
+            lemmatized documents are stored]. Defaults to 'lemma'
+            papers_colum (String): [name of column in out-of-domain training
+            dataframe where lemmatized documents are stored]. Defaults to
+            'lemma' ngrams (int, optional): [whether ngram are formed].
+            Defaults to 2.
+            features (int, optional): [number of max features].
+            Defaults to 8000.
 
-        :return: tfidf object data for target data and ou-of-domain training
-            data
-        :type: data and papers
+        Returns:
+            [data and papers]: [tfidf object data for target data and
+             ou-of-domain training data]
         """
+
         tfidf = tf_idf.Tf_idf()
         self.data_tfidf, self.papers_tfidf = tfidf.tfidf(
-            data, papers, data_column, papers_column, features
+            data, papers, data_column, papers_column, features, ngrams
         )
         return self.data_tfidf, self.papers_tfidf
 
@@ -118,48 +167,47 @@ class AuDoLab:
         self,
         training,
         predicting,
-        nus=np_round(np_arange(0.1, 0.5, 0.01), 5),
+        nus,
         quality_train=0.85,
         min_pred=0.05,
         max_pred=0.2,
+        gamma="auto",
+        kernel="rbf",
     ):
+        """[summary]
+
+        Args:
+            training (DataFrame): training dataset of preprocessed documents
+            predicting (DataFrame): target dataset of preprccessed documents
+            nus (list of floats): hyperparameters over which are looped. For each nu the classifier is trained
+            quality_train (float, optional): percentage of training data that seems to
+                                    belong to target class. Default: 0.85. Defaults to 0.85.
+            min_pred (float, optional): percentage of target data that has to be at
+                               least classified as belonging to target class
+            for classifier to be considered. Default: 0.0. Defaults to 0.05.
+            max_pred (float, optional): percentage of target class that is maximally
+                               allowed to be classified as belonging to
+            target class for classifier to be considered.. Defaults to 0.2.
+            gamma (str, optional): Hyperparamter of O-SVM. Defaults to "auto".
+            kernel (str, optional): Kernel function used in O_SVM. Defaults to "rbf".
+
+        Returns:
+            pd.DataFrame: DataFrame with stored classifiers that fulfill conditions
         """
-        trains a one-class SVM on the out-of-domain training data
 
-
-        :param training: training dataset of preprocessed documents
-        :type training: pd.DataFrame
-        :param predicting: target dataset of preprccessed documents
-        :type predicting: pd.DataFrame
-        :param nus: hyperparameters over which are looped. For each nu
-            the classifiers is trained
-        :type nus: list of floats
-        :param quality_train: percentage of training data that seems to
-            belong to target class, defaults to 0.85
-        :type quality_train: float
-        :param min_pred: percentage of target data that has to be at
-            least classified as belonging to target class
-            for classifier to be considered ,defaults to 0.05
-        :type min_pred: float
-        :param max_pred: percentage of target class that is maximally
-            allowed to be classified as belonging to
-            target class for classifier to be considered, defaults to 0.2
-        :type max_pred: float
-
-        :return: DataFrame with stored classifiers that
-            fulfill conditions
-        :rtype: pd.DataFrame
-        """
         one_Class_SVM = one_class_svm.One_Class_SVM()
-        self.classifier = one_Class_SVM.classification(
+        self.df = one_Class_SVM.classification(
             training=training,
             predicting=predicting,
             nus=nus,
             quality_train=quality_train,
             min_pred=min_pred,
             max_pred=max_pred,
+            gamma=gamma,
+            kernel=kernel,
         )
-        return self.classifier
+
+        return self.df
 
     def choose_classifier(self, df, classifier, i):
         """
@@ -182,48 +230,129 @@ class AuDoLab:
     def lda_modeling(
         self,
         data,
+        num_topics,
+        corpus=None,
+        dict=None,
         no_below=None,
         no_above=None,
-        num_topics=5,
         random_state=101,
         passes=20,
+        chunksize=500,
+        eta="auto",
+        eval_every=None,
+        multi=True,
+        alpha="asymmetric",
+        column="preprocessed",
     ):
-        """LDA model
+        """The function performs lda modelling as described in this
+        https://www.jmlr.org/papers/volume3/blei03a/blei03a.pdf paper.
 
-        :param data: DataFrame stat store tokenized text in col = "tokens"
-        :type data: pd.DataFrame
-        :param no_below: if word appears in less than no_below documents they
-            are not considered, defaults to None
-        :type no_below: float
-        :param no_above: if e.g. 0.9, no words are taken into account that
-            appear more often than 90%, defaults to None
-        :type no_above: float
-        :param num_topics: pre-defined number of topics
-        :type num_topics: int
-        :param random_state: for recreating exact identical output
-        :type random_state: int
-        :param passes: Number of passes through the corpus during training.
-        :type passes: int
+        Args:
+            corpus (iterable of list of (int, float), optional): Stream of document vectors or sparse matrix of shape
+            num_topics (int): pre-defined number of topics]
+            id2word ({dict of (int, str): gensim.corpora.dictionary.Dictionary}) –Mapping from word IDs to words. It is used to determine the vocabulary size, as well as for debugging and topic printing.
+            random_state (int): for recreating exact identical output. Defaults to 101.
+            passes (int): Number of passes through the corpus during training.Defaults to 20.
+            chunksize (int, optional): chunksize in lda passes. Defaults to 500.
+            eta (str, optional): [description]. Defaults to "auto".
+            eval_every ([type], optional): Hyperparameter in LDA used to initiliaze the Dirichlet distribution. Defaults to None.
+            multi (bool, optional): If true, the in gensim incorporated multicore variant is used. Defaults to True.
+            alpha (str, optional): OTher Dirichlet Prior. Defaults to "asymmetric".
 
-        :return: returns lda_model output
-        :rtype: lda_model
+        Returns:
+            [lda_model]: [returns lda_model output]
         """
 
-        self.dictionary, self.bow_corpus = lda.LDA._preperation(data, no_below,
-                                                               no_above)
+        if corpus == None:
+            self.dictionary, self.bow_corpus = lda.LDA.preperation(
+                data, no_below, no_above, column=column
+            )
+
+        else:
+            self.corpus = (corpus,)
+            self.dictionary = dict
+
         self.lda = lda.LDA()
         self.lda_model = self.lda.model(
-            self.bow_corpus,
+            corpus=self.bow_corpus,
             num_topics=num_topics,
             id2word=self.dictionary,
             random_state=random_state,
             passes=passes,
+            chunksize=chunksize,
+            eta=eta,
+            eval_every=eval_every,
+            multi=multi,
+            alpha=alpha,
         )
         return self.lda_model
 
-    def lda_visualize_topics(self):
-        """The lda model calculated with the function lda_modeling is visualized
-        in an html frame and opened in the standard browser.
+    def lda_visualize_topics(
+        self,
+        save_name="audolab_model.png",
+        lda_model=None,
+        bow_corpus=None,
+        dictionary=None,
+        type="pyldavis",
+        figsize=(20, 10),
+        facecolor="k",
+        width=1600,
+        height=800,
+        background_color="white",
+        topic=0,
+        words=100,
+        save=False,
+        n_clouds=1,
+    ):
+        """Visualizes the topic models output in wordclouds or pyldavis
+
+        TODO: pyldavis not yet working, especially not in jupyter notebooks. MAybe take out all together
+
+        Args:
+            lda_model (gensim.models.ldamodel.LdaModel): the created LDA model
+            bow_corpus (gensim.corpora.dictionary.Dictionary): Bag of words corpus of used documents
+            dictionary (gensim.corpora.dictionary.Dictionary): Dictionary of all words
+            save_name (str, optional): name under which the plots should be save. Defaults to "audolab_model.png".
+            type (str, optional): type of visualisation- either "clouds" or "pyldavis". Defaults to "clouds".
+            figsize (tuple, optional): Size of wordclouds. Defaults to (50, 30).
+            facecolor (str, optional): Colour of wordcloud Defaults to "k".
+            width (int, optional): width of plots. Defaults to 2000.
+            height (int, optional): height of plots. Defaults to 1000.
+            background_color (str, optional): Background colour of wordcloud. Defaults to "white".
+            topic (int, optional): IF only one wordcloud is plotted, index of topic that is plotted. Defaults to 0.
+            words (int, optional): Number of words per cloud. Defaults to 100.
+            save (bool, optional): whether the plots should be saved or not. Defaults to False.
+            n_clouds (int, optional): Number of word clouds that are plotted. Defaults to 1.
+
+        Raises:
+            ValueError: If save_name is not a string: no "Please specify a string as the name under which the plots should be saved"
+
+        Returns:
+            None:
         """
-        return lda.LDA.visualize_topics(self.lda_model, self.bow_corpus,
-                                 self.dictionary)
+
+        if bow_corpus == None:
+            bow_corpus = self.bow_corpus
+
+        if dictionary == None:
+            dictionary = self.dictionary
+
+        if lda_model == None:
+            lda_model = self.lda_model
+
+        lda.LDA.visualize_topics(
+            lda_model,
+            bow_corpus=bow_corpus,
+            dictionary=dictionary,
+            save_name=save_name,
+            type=type,
+            figsize=figsize,
+            facecolor=facecolor,
+            width=width,
+            height=height,
+            background_color=background_color,
+            topic=topic,
+            words=words,
+            save=save,
+            n_clouds=n_clouds,
+        )

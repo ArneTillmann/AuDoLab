@@ -1,23 +1,21 @@
 import pytest
 # import os
 # import sys
+# from numpy import round as np_round
+# from numpy import arange as np_arange
 # sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/..")
 # from AuDoLab import AuDoLab
-# from load_papers import papers
-# from load_data import data
-# import numpy as np
-# # from IPython.core.display import HTML
 # """Tests for `AuDoLab` package."""
-#
-#
+
+
 @pytest.fixture
 # def response():
 #     """Sample pytest fixture.
 #
 #     See more at: http://doc.pytest.org/en/latest/fixture.html
 #     """
-    # import requests
-    # return requests.get('https://github.com/audreyr/cookiecutter-pypackage')
+#     import requests
+#     return requests.get('https://github.com/audreyr/cookiecutter-pypackage')
 
 
 def test_content(response):
