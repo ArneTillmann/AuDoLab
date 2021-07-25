@@ -8,7 +8,7 @@ import pytest
 # """Tests for `AuDoLab` package."""
 
 
-@pytest.fixture
+# @pytest.fixture
 # def response():
 #     """Sample pytest fixture.
 #
