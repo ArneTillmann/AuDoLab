@@ -5,21 +5,21 @@
 # from numpy import arange as np_arange
 # sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/..")
 # from AuDoLab import AuDoLab
-"""Tests for `AuDoLab` package."""
+# """Tests for `AuDoLab` package."""
 
 
 # @pytest.fixture
-def response():
-    """Sample pytest fixture.
-
-    See more at: http://doc.pytest.org/en/latest/fixture.html
-    """
+# def response():
+#     """Sample pytest fixture.
+#
+#     See more at: http://doc.pytest.org/en/latest/fixture.html
+#     """
     # import requests
     # return requests.get('https://github.com/audreyr/cookiecutter-pypackage')
 
 
-def test_content(response):
-    """Sample pytest test function with the pytest fixture as an argument."""
+# def test_content(response):
+#     """Sample pytest test function with the pytest fixture as an argument."""
     # from bs4 import BeautifulSoup
     # assert 'GitHub' in BeautifulSoup(response.content).title.string
 
