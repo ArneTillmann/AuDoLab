@@ -31,21 +31,35 @@ def test_content(response):
 # #     pages=12,
 # #     operator="or"
 # # )
-# from load_data import data
-# from load_papers import papers
-# papers_processed = audo.text_cleaning(papers, "text")
-# data_processed = audo.text_cleaning(data, "transcription")
-# #
-# data_tfidf, papers_tfidf = audo.tf_idf(
-#     data, papers,"transcription", "text")
-# classifier = audo.one_class_svm(papers_tfidf, data_tfidf,     nus=np_round(np_arange(0.01,0.5,0.001) ,5),
+# papers_processed = audo.preprocessing(papers, "text")
+# data_processed = audo.preprocessing(data, "transcription")
+#
+# data_tfidf, papers_tfidf = audo.tf_idf( data_processed, papers_processed, data_column="lemma", papers_column="lemma")
+
+# nus = np.arange(0.001, 0.5, 0.001)
+# nus = np.round(nus, 5)
+#
+# classifier = audo.one_class_svm(
+#     training=papers_tfidf,
+#     predicting=data_tfidf,
+#     nus=[0.166,0.3],
 #     quality_train=0.85,
 #     min_pred=0.01,
-#     max_pred=0.1,)
+#     max_pred=0.1,
+# )
+#
 # df_data = audo.choose_classifier(data_processed, classifier, 0)
+#
 # if __name__ == '__main__':
-#     # lda = audo.lda_modeling(papers_processed)
-#     # audo.lda_visualize_topics()
+#     # lda = audo.lda_modeling(papers_processed, num_topics=3,
+#     # random_state=101,
+#     # passes=10,
+#     # no_below=2, no_above=0.9
+#     # )
+#
 #     lda2 = audo.lda_modeling(df_data, no_above=0.3)
-#     audo.lda_visualize_topics()
-print("Hello test")
+#
+#     a = audo.lda_visualize_topics()
+#     html = a.data
+#     with open('html_file.html', 'w') as f:
+#         f.write(html)

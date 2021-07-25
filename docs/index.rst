@@ -6,9 +6,8 @@ Welcome to AuDoLab's documentation!
    :caption: Contents:
 
    readme
-   installation
-   usage
    modules
+   usage_example
    contributing
    authors
    history

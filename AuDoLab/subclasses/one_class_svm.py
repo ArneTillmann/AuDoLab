@@ -8,17 +8,21 @@ class One_Class_SVM:
 
     @staticmethod
     def choose_classifier(df, classifier, i):
-        """returns dataframe where documents that are classified to target
-           class have 1, otherwise, 0
+        """
+        returns dataframe where documents that are classified to target class
+        have 1, otherwise, 0
 
-        Args:
-            df (dataframe): [dataframe of target documents]
-            classifier (list): [list of all possible o-svm classifiers]
-            i (int): [index of which classifier is chosen/preferred]
 
-        Returns:
-            [dataframe]: [documents that are classified as belonging to target
-                          class by o-svm]
+        :param df: dataframe of target documents
+        :type df: pd.Dataframe
+        :param classifier: list of all possible o-svm classifiers
+        :type classifier: list
+        :param i: index of which classifier is chosen/preferred
+        :type i: int
+
+        :return: documents that are classified as belonging to target
+        :rtype: pd.dataframe
+            class by o-svm
         """
         return df.iloc[classifier.index[classifier.iloc[:, i] == 1].tolist()]
 

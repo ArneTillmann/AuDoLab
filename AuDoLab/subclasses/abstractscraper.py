@@ -34,7 +34,7 @@ class AbstractScraper:
         :param pages: number of pages that is iterated over
         :type pages: int
         :param in_data: "author" or "all_meta" whether to search in author
-                        keywords or all metadata
+                         keywords or all metadata
         :type in_data: string
         """
 
@@ -172,7 +172,7 @@ class AbstractScraper:
             if (document in link) & (citation not in link):
                 self.data.append(link)
         # remove unnecessary results of the href search
-        self.data = np.array(self.data)
+        self.data = np_array(self.data)
         # remove duplicates that are in there due to multiple occurrence in the
         self.data = np.unique(self.data)
         print("Total number of abstracts that will be scraped:", len(self.data))
@@ -211,10 +211,10 @@ class AbstractScraper:
             # only "try" because sometimes the javascript is corrupted
             # get the html data of the webpage with metadata such as abstracts titles etc.
             try:
-                data = json.loads(
-                    re.search(
+                data = json_loads(
+                    search(
                         r"\.metadata=(.*?);",
-                        requests.get(self.data[i]).text,
+                        requests_get(self.data[i]).text,
                     ).group(1)
                 )
             except:

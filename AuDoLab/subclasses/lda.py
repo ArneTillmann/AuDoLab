@@ -16,7 +16,8 @@ class LDA:
         3 + 4
 
     @staticmethod
-    def preperation(df_processed, no_below=None, no_above=None, column="preprocessed"):
+    def preperation(df_processed, no_below=None, no_above=None,
+                    column="preprocessed"):
         """Preprocessing for LDA
 
         Args:

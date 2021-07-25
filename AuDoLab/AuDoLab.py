@@ -196,7 +196,7 @@ class AuDoLab:
         """
 
         one_Class_SVM = one_class_svm.One_Class_SVM()
-        self.df = one_Class_SVM.classification(
+        self.classifier = one_Class_SVM.classification(
             training=training,
             predicting=predicting,
             nus=nus,
@@ -210,15 +210,20 @@ class AuDoLab:
         return self.df
 
     def choose_classifier(self, df, classifier, i):
-        """As mentioned in the description of the function one_class_svm(...)
-        multiple classifiers might be return. Now you choose one with which
-        you want to continue. The df will then only continue the entries that
-        were positivly classified.
+        """
+        returns dataframe where documents that are classified to target class
+        have 1, otherwise, 0
 
-        Arguments:
-        - df (<class 'pandas.core.frame.DataFrame'>)
-        - classifier (<class 'pandas.core.frame.DataFrame'>)
-        - i (int)
+        :param df: dataframe of target documents
+        :type df: pd.Dataframe
+        :param classifier: list of all possible o-svm classifiers
+        :type classifier: list
+        :param i: index of which classifier is chosen/preferred
+        :type i: int
+
+        :return: documents that are classified as belonging to target
+        :rtype: pd.dataframe
+            class by o-svm
         """
         return one_class_svm.One_Class_SVM.choose_classifier(df, classifier, i)
 

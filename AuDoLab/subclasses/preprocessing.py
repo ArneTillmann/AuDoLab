@@ -7,6 +7,8 @@ from gensim.models import Phrases
 from tqdm import tqdm
 
 # Text preparation
+
+
 class Preprocessor:
     def __init__(self):
         4 + 5
@@ -58,12 +60,13 @@ class Preprocessor:
     def _preprocessing(self, df, column):
         """Preprocessing function that calls the helper functions
 
-        Args:
-            df (DataFrame): DataFrame that has the text data stored
-            column (str): column name where raw text is stored
+        :param df: DataFrame that has the text data stored
+        :type df: pd.DataFrame
+        :param column: column name where raw text is stored
+        :type column: str
 
-        Returns:
-            DataFrame: DataFrame with preprocessed text
+        :return: DataFrame with preprocessed text
+        :rtype:  DataFrame
         """
 
         df_temp = df.copy(deep=True)
