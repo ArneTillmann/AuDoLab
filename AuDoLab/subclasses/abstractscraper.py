@@ -2,8 +2,8 @@ import re
 from bs4 import BeautifulSoup
 import numpy as np
 import pandas as pd
-import requests
-import json
+from requests import get as requests_get
+from json import loads as json_loads
 import asyncio
 from pyppeteer import launch
 from tqdm import tqdm
@@ -172,10 +172,11 @@ class AbstractScraper:
             if (document in link) & (citation not in link):
                 self.data.append(link)
         # remove unnecessary results of the href search
-        self.data = np_array(self.data)
+        self.data = np.array(self.data)
         # remove duplicates that are in there due to multiple occurrence in the
         self.data = np.unique(self.data)
         print("Total number of abstracts that will be scraped:", len(self.data))
+
 
     def _find_abstracts(
         self,
@@ -212,7 +213,7 @@ class AbstractScraper:
             # get the html data of the webpage with metadata such as abstracts titles etc.
             try:
                 data = json_loads(
-                    search(
+                    re.search(
                         r"\.metadata=(.*?);",
                         requests_get(self.data[i]).text,
                     ).group(1)
@@ -309,7 +310,7 @@ if __name__ == "__main__":
         AS = AbstractScraper()
         data = await AS.get_abstracts(
             url="https://ieeexplore.ieee.org/search/searchresult.jsp?highlight=true&returnType=SEARCH&matchPubs=true&rowsPerPage=100&sortType=paper-citations&returnFacets=ALL&pageNumber=1",
-            pages=100,
+            pages=1,
         )
 
         return data

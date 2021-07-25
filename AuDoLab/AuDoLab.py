@@ -196,7 +196,7 @@ class AuDoLab:
         """
 
         one_Class_SVM = one_class_svm.One_Class_SVM()
-        self.classifier = one_Class_SVM.classification(
+        self.df = one_Class_SVM.classification(
             training=training,
             predicting=predicting,
             nus=nus,
