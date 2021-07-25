@@ -14,8 +14,8 @@ import pytest
 #
 #     See more at: http://doc.pytest.org/en/latest/fixture.html
 #     """
-    # import requests
-    # return requests.get('https://github.com/audreyr/cookiecutter-pypackage')
+#     import requests
+#     return requests.get('https://github.com/audreyr/cookiecutter-pypackage')
 
 
 # def test_content(response):
@@ -48,3 +48,4 @@ import pytest
 #     # audo.lda_visualize_topics()
 #     lda2 = audo.lda_modeling(df_data, no_above=0.3)
 #     audo.lda_visualize_topics()
+print("test succeded")
