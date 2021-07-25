@@ -1,4 +1,4 @@
-# import pytest
+import pytest
 # import os
 # import sys
 # from numpy import round as np_round
@@ -8,7 +8,7 @@
 # """Tests for `AuDoLab` package."""
 
 
-# @pytest.fixture
+@pytest.fixture
 # def response():
 #     """Sample pytest fixture.
 #
