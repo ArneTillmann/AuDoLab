@@ -1,3 +1,7 @@
+def warn(*args, **kwargs):
+    pass
+import warnings
+warnings.warn = warn
 import pandas as pd
 from AuDoLab.subclasses import abstractscraper
 from AuDoLab.subclasses import lda
@@ -7,79 +11,86 @@ from AuDoLab.subclasses import tf_idf
 from AuDoLab.subclasses import abstractscraper_arxiv
 from AuDoLab.subclasses import abstractscraper_pubmed
 import sys
+import asyncio
 
 
 class AuDoLab:
     """TODO
-        1) call asyncio func directly in class such that the user does not need to call advanced loop
-        2) Remove depreciationwarnings (scipy.sparse and imp)
+        1) call asyncio func directly in class such that the user does not need to call advanced loop # Done
+        2) Remove depreciationwarnings (scipy.sparse and imp) # done
         3) include pyldavis function (or remove completely depending on utility for users)
         4) adapt documentation that it is consistent within itself (documentation = summarys and datatypes)
         5) check if further functions needed -> second loop of iteration in decision rule from (https://www.researchgate.net/profile/Astrid-Krenz/publication/344432349_Unsupervised_Document_Classification_integrating_Web_Scraping_One-Class_SVM_and_LDA_Topic_Modelling/links/5f749c97458515b7cf596d36/Unsupervised-Document-Classification-integrating-Web-Scraping-One-Class-SVM-and-LDA-Topic-Modelling.pdf)
 
     """
     def __init__(self):
-        4 + 4
+        self.loop = asyncio.get_event_loop()
 
-    async def ieee_scraper(
-        self,
-        url=None,
-        keywords=None,
-        operator="OR",
-        pages=2,
-        in_data="author",
-        prepro=False,
-        ngram_type=2,
-    ):
-        """Function to scrape abstracts of scientific papers from the givin url.
-        We used https://ieeexplore.ieee.org/search/advanced to generate a
-        list like https://ieeexplore.ieee.org/search/searchresult.jsp?action=se
-        arch&newsearch=true&matchBoolean=true&queryText=(%22Author%20Keywords%22
-        :cotton)&highlight=true&returnFacets=ALL&returnType=SEARCH&matchPubs=Tru
-        e&rowsPerPage=100&pageNumber=1
-        with the search results.
-        The abstracts of the papers listet on that list of search results will
-        be stored in a .txt file with the givin file name.
+    def get_ieee(self, pages=10):
+        return self.loop.run_until_complete(self.__async__get_ieee(
+            "https://ieeexplore.ieee.org/search/searchresult.jsp?newsearch=true&queryText=cotton&highlight=true&returnFacets=ALL&returnType=SEARCH&matchPubs=true&rowsPerPage=100&pageNumber=1",
+            prepro=True,
+            pages=pages,
+        ))
 
-        Args:
-            url (str, optional): [description]. Defaults to None.
-            keywords (list, optional): List of keywords that are searched for. Defaults to None.
-            operator (str, optional): Operator between the keywords. "AND" or "OR". If "AND" the search results must include all keywords. Defaults to "OR".
-            pages (int, optional): Number of pages that are iterated over. Translates directly to number of abstracts that are scraped. Roughly there are 100 abstracts scraped per page. Defaults to 2.
-            in_data (str, optional): If the keywords are searched for in the author keywords or in all metadata. Defaults to "author".
-            prepro (bool, optional): if True, the scraped data will directly be preprocessed for later use. Defaults to False.
-            ngram_type (int, optional): number of ngrams in preprocessing. Defaults to 2.
+    async def __async__get_ieee(
+            self,
+            url=None,
+            keywords=None,
+            operator="OR",
+            pages=2,
+            in_data="author",
+            prepro=False,
+            ngram_type=2,
+        ):
+            """Function to scrape abstracts of scientific papers from the givin url.
+            We used https://ieeexplore.ieee.org/search/advanced to generate a
+            list like https://ieeexplore.ieee.org/search/searchresult.jsp?action=se
+            arch&newsearch=true&matchBoolean=true&queryText=(%22Author%20Keywords%22
+            :cotton)&highlight=true&returnFacets=ALL&returnType=SEARCH&matchPubs=Tru
+            e&rowsPerPage=100&pageNumber=1
+            with the search results.
+            The abstracts of the papers listet on that list of search results will
+            be stored in a .txt file with the givin file name.
 
-        Returns:
-            pd.DataFrame: DataFrame with the stored abstracts and metadata
-        """
+            Args:
+                url (str, optional): [description]. Defaults to None.
+                keywords (list, optional): List of keywords that are searched for. Defaults to None.
+                operator (str, optional): Operator between the keywords. "AND" or "OR". If "AND" the search results must include all keywords. Defaults to "OR".
+                pages (int, optional): Number of pages that are iterated over. Translates directly to number of abstracts that are scraped. Roughly there are 100 abstracts scraped per page. Defaults to 2.
+                in_data (str, optional): If the keywords are searched for in the author keywords or in all metadata. Defaults to "author".
+                prepro (bool, optional): if True, the scraped data will directly be preprocessed for later use. Defaults to False.
+                ngram_type (int, optional): number of ngrams in preprocessing. Defaults to 2.
 
-        number = pages
+            Returns:
+                pd.DataFrame: DataFrame with the stored abstracts and metadata
+            """
+            number = pages
 
-        ks = abstractscraper.AbstractScraper()
-        self.abstracts = await ks.get_abstracts(
-            url=url, keywords=keywords, operator=operator, pages=number, in_data=in_data
-        )
-
-        if prepro == True:
-            self.abstracts = self.abstracts.reset_index(drop=True)
-            self.abstracts = self.text_cleaning(
-                self.abstracts, "abstract", ngram_type=ngram_type
+            ks = abstractscraper.AbstractScraper()
+            self.abstracts = await ks.get_abstracts(
+                url=url, keywords=keywords, operator=operator, pages=number, in_data=in_data
             )
 
-        if type(self.abstracts) != pd.DataFrame:
-            print(
-                "if using the ieee abstractscraper, please use the following code: \n \n"
-                + "async def scrape():"
-                + "\n     return await audo.ieee_scraper(keywords=[keywords], prepro=False, pages=1, ngram_type=2)"
-                + "\n\nscraped_documents = asyncio.get_event_loop().run_until_complete(scrape())"
-            )
+            if prepro == True:
+                self.abstracts = self.abstracts.reset_index(drop=True)
+                self.abstracts = self.text_cleaning(
+                    self.abstracts, "abstract", ngram_type=ngram_type
+                )
 
-            sys.exit(
-                "please specify the code as indicated above, or use the function abstract_scraper to scrape from different websites"
-            )
+            if type(self.abstracts) != pd.DataFrame:
+                print(
+                    "if using the ieee abstractscraper, please use the following code: \n \n"
+                    + "async def scrape():"
+                    + "\n     return await audo.ieee_scraper(keywords=[keywords], prepro=False, pages=1, ngram_type=2)"
+                    + "\n\nscraped_documents = asyncio.get_event_loop().run_until_complete(scrape())"
+                )
 
-        return self.abstracts
+                sys.exit(
+                    "please specify the code as indicated above, or use the function abstract_scraper to scrape from different websites"
+                )
+
+            return self.abstracts
 
     def abstract_scraper(
         self, type="arxiv", url=None, pages=2, prepro=False, ngram_type=2

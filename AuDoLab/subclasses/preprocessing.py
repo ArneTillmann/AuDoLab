@@ -1,10 +1,14 @@
-import re
-import nltk
-from nltk.tokenize import RegexpTokenizer
-from nltk.corpus import stopwords
-from nltk.stem.porter import PorterStemmer
-from gensim.models import Phrases
-from tqdm import tqdm
+import warnings
+with warnings.catch_warnings():
+    warnings.filterwarnings("ignore",category=DeprecationWarning)
+    import re
+    import nltk
+    from nltk.tokenize import RegexpTokenizer
+    from nltk.corpus import stopwords
+    from nltk.stem.porter import PorterStemmer
+    from gensim.models import Phrases
+    from tqdm import tqdm
+
 
 # Text preparation
 

@@ -1,10 +1,4 @@
 from AuDoLab import AuDoLab
-import asyncio
-import nest_asyncio
-nest_asyncio.apply()
-from numpy import round as np_round
-from numpy import arange as np_arange
-
 
 audo = AuDoLab.AuDoLab()
 
@@ -34,17 +28,8 @@ if __name__ == "__main__":
     # clean theloaded data
     preprocessed_target = audo.text_cleaning(data=data, column="text")
 
-    # define async function to use ieee scraper.
-    # must be done in this fashion and called inside the if__name__=="__main__" wrapper
-    # for "arxiv" or "pubmed" it would simply be audo.abstract_scraper(...)
-    async def scrape():
-        return await audo.ieee_scraper(
-            url="https://ieeexplore.ieee.org/search/searchresult.jsp?newsearch=true&queryText=cotton&highlight=true&returnFacets=ALL&returnType=SEARCH&matchPubs=true&rowsPerPage=100&pageNumber=1",
-            prepro=True,
-            pages=10,
-        )
-
-    scraped_documents = asyncio.get_event_loop().run_until_complete(scrape())
+    # scrape ieee
+    scraped_documents = audo.get_ieee(pages=1)
 
     # clean the scraped papers
     preprocessed_paper = audo.text_cleaning(data=scraped_documents, column="abstract")
