@@ -1,5 +1,5 @@
-#import pyLDAvis.gensim_models
 import pyLDAvis
+#import pyLDAvis.gensim_models as gensimvis
 from gensim import corpora, models
 from pprint import pprint
 import matplotlib.pyplot as plt
@@ -144,9 +144,14 @@ class LDA:
             None:
         """
 
-        if type == "pyldavis":
-            visualization = pyLDAvis.gensim_models.prepare(
-                lda_model, bow_corpus, dictionary, sort_topics=False
+        if type == "pyldavis": # siehe: https://pyldavis.readthedocs.io/en/latest/modules/API.html
+            visualization = pyLDAvis.prepare( #lda_model, bow_corpus,
+                topic_term_dists=,
+                doc_topic_dists=,
+                doc_lengths=,
+                vocab=dictionary,
+                term_frequency=,
+                sort_topics=False
             )
 
             pyLDAvis.display(visualization)

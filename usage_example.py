@@ -58,4 +58,5 @@ if __name__ == "__main__":
 
     # perform topic modeling and plot the created topics
     lda_target = audo.lda_modeling(data=result, num_topics=5)
-    audo.lda_visualize_topics(type="clouds", n_clouds=4)
+    #audo.lda_visualize_topics(type="clouds", n_clouds=4)
+    audo.lda_visualize_topics(type="pyldavis")

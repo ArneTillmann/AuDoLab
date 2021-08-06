@@ -25,6 +25,10 @@ class AuDoLab:
     """
     def __init__(self):
         self.loop = asyncio.get_event_loop()
+        if self.is_notebook():
+            # prevent runtime error with asyncio in ipynb: https://medium.com/@vyshali.enukonda/how-to-get-around-runtimeerror-this-event-loop-is-already-running-3f26f67e762e
+            import nest_asyncio
+            nest_asyncio.apply()
 
     def get_ieee(self, pages=10):
         return self.loop.run_until_complete(self.__async__get_ieee(
@@ -297,6 +301,20 @@ class AuDoLab:
             alpha=alpha,
         )
         return self.lda_model
+
+
+    def is_notebook(self):
+        try:
+            shell = get_ipython().__class__.__name__
+            if shell == 'ZMQInteractiveShell':
+                return True   # Jupyter notebook or qtconsole
+            elif shell == 'TerminalInteractiveShell':
+                return False  # Terminal running IPython
+            else:
+                return False  # Other type (?)
+        except NameError:
+            return False      # Probably standard Python interpreter
+
 
     def lda_visualize_topics(
         self,
