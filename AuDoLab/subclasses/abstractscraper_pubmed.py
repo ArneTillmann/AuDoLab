@@ -7,7 +7,7 @@ from tqdm import tqdm
 
 class AbstractScraper_Pubmed:
     def __init__(self):
-        4 + 5
+        pass
 
     def _find_links(self, url, number_of_pages):
         """finds paper links associated with given url search query

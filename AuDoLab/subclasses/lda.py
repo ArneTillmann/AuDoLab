@@ -1,10 +1,15 @@
+def warn(*args, **kwargs):
+    pass
+import warnings
+warnings.warn = warn
 import pyLDAvis
-#import pyLDAvis.gensim_models as gensimvis
+import pyLDAvis.gensim
 from gensim import corpora, models
 from pprint import pprint
 import matplotlib.pyplot as plt
 from wordcloud import WordCloud
 import numpy as np
+import webbrowser
 
 
 class LDA:
@@ -13,7 +18,7 @@ class LDA:
     """
 
     def __init__(self):
-        3 + 4
+       pass
 
     @staticmethod
     def preperation(df_processed, no_below=None, no_above=None,
@@ -145,16 +150,17 @@ class LDA:
         """
 
         if type == "pyldavis": # siehe: https://pyldavis.readthedocs.io/en/latest/modules/API.html
-            visualization = pyLDAvis.prepare( #lda_model, bow_corpus,
-                topic_term_dists=,
-                doc_topic_dists=,
-                doc_lengths=,
-                vocab=dictionary,
-                term_frequency=,
+            #doc_lengths = list(preprocessed_column_target.apply(lambda x: len(x)))
+            visualization = pyLDAvis.gensim.prepare( 
+                lda_model, 
+                bow_corpus,
+                dictionary,
                 sort_topics=False
             )
+            pyLDAvis.save_html(visualization, 'your_latest_lda_visualization.html')
+            webbrowser.open('your_latest_lda_visualization.html')
+            
 
-            pyLDAvis.display(visualization)
 
         if type == "clouds" and n_clouds <= 1:
             plt.figure(figsize=figsize, facecolor=facecolor)
