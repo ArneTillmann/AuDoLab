@@ -1,11 +1,10 @@
 import warnings
 with warnings.catch_warnings():
-    warnings.filterwarnings("ignore",category=DeprecationWarning)
+    warnings.filterwarnings("ignore", category=DeprecationWarning)
     import re
     import nltk
     from nltk.tokenize import RegexpTokenizer
     from nltk.corpus import stopwords
-    from nltk.stem.porter import PorterStemmer
     from gensim.models import Phrases
     from tqdm import tqdm
 
@@ -22,8 +21,10 @@ class Preprocessor:
 
         Args:
             text (helper variable): None
-            language (str, optional): Sets language of stopwords to be removed. Defaults to "english".
-            stop_words (bool, optional): If true, the stopwords are removed, if not, stopwords are left as they are. Defaults to True.
+            language (str, optional): Sets language of stopwords to be removed.
+                Defaults to "english".
+            stop_words (bool, optional): If true, the stopwords are removed, if
+                not, stopwords are left as they are. Defaults to True.
 
         Returns:
             [type]: [description]
@@ -76,8 +77,10 @@ class Preprocessor:
         df_temp = df.copy(deep=True)
         df_temp[column] = df_temp[column].astype(str)
 
-        df_temp.loc[:, column] = [self._text_prepare(x) for x in df_temp[column].values]
-        df_temp[column] = [item for item in df_temp[column] if not item.isdigit()]
+        df_temp.loc[:, column] = [self._text_prepare(
+            x) for x in df_temp[column].values]
+        df_temp[column] = [
+            item for item in df_temp[column] if not item.isdigit()]
 
         tokenizer = RegexpTokenizer(r"\w+")
 
@@ -90,27 +93,26 @@ class Preprocessor:
         # apply prepro func
 
     def basic_preprocessing(self, df, column, ngram_type=2):
-        """text preparation function for text preprocessing
+        """The data will be lemmatized, tokenized and the stopwords will be
+        deleted.
 
         Args:
-            df (): None
-            column (str): Sets language of stopwords to be removed. Defaults to "english".
-            ngram_type (int, optional): If true, the stopwords are removed, if not, stopwords are left as they are. Defaults to 2.
+            df (pd.DataFrame): Dataframe where the documents to be preprocessed
+                are stored.
+            column (str):  Column name of the column where docs are stored.
+            ngram_type (int, optional): Number of ngrams used. Defaults to 2.
 
         Returns:
-            pd.DataFrame: DataFrame that contains 
+            pd.DataFrame: DataFrame where the original docus and the
+                preprocessed documents are stored.
         """
         df, df_txt = self._preprocessing(df=df, column=column)
-        index = list(range(len(df_txt)))
         df_txt = df_txt.reset_index()
         df_txt = df_txt.drop("index", axis=1)
         df_txt = df_txt["tokens"]
 
         df = df.reset_index()
         df = df.drop("index", axis=1)
-
-
-
 
         if ngram_type == 2:
             bigram = Phrases(df_txt, min_count=10)
@@ -165,4 +167,5 @@ if __name__ == "__main__":
 
     data = pd.read_csv("mtsamples.csv")
     prepro = Preprocessor()
-    test = prepro.basic_preprocessing(df=data, column="transcription", ngram_type=3)
+    test = prepro.basic_preprocessing(
+        df=data, column="transcription", ngram_type=3)

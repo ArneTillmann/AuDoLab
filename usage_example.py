@@ -22,17 +22,17 @@ if __name__ == "__main__":
     # store loaded data in dataframe
     data = pd.DataFrame(data, columns=["filename", "categories", "text"])
 
-    #####------
     # start using audolab
-
-    # clean theloaded data
-    preprocessed_target = audo.text_cleaning(data=data, column="text")
 
     # scrape ieee
     scraped_documents = audo.get_ieee(pages=1)
 
+    # clean theloaded data
+    preprocessed_target = audo.text_cleaning(data=data, column="text")
+
     # clean the scraped papers
-    preprocessed_paper = audo.text_cleaning(data=scraped_documents, column="abstract")
+    preprocessed_paper = audo.text_cleaning(
+        data=scraped_documents, column="abstract")
 
     # calculate tfidf values on joint corpus
     target_tfidf, training_tfidf = audo.tf_idf(
@@ -58,5 +58,5 @@ if __name__ == "__main__":
 
     # perform topic modeling and plot the created topics
     lda_target = audo.lda_modeling(data=result, num_topics=5)
-    #audo.lda_visualize_topics(type="clouds", n_clouds=4)
+    # audo.lda_visualize_topics(type="clouds", n_clouds=4)
     audo.lda_visualize_topics(type="pyldavis")

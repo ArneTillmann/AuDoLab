@@ -1,17 +1,21 @@
+import warnings
+import asyncio
+import sys
+from AuDoLab.subclasses import abstractscraper_pubmed
+from AuDoLab.subclasses import abstractscraper_arxiv
+from AuDoLab.subclasses import tf_idf
+from AuDoLab.subclasses import preprocessing
+from AuDoLab.subclasses import one_class_svm
+from AuDoLab.subclasses import lda
+from AuDoLab.subclasses import abstractscraper
+import pandas as pd
+
+
 def warn(*args, **kwargs):
     pass
-import warnings
+
+
 warnings.warn = warn
-import pandas as pd
-from AuDoLab.subclasses import abstractscraper
-from AuDoLab.subclasses import lda
-from AuDoLab.subclasses import one_class_svm
-from AuDoLab.subclasses import preprocessing
-from AuDoLab.subclasses import tf_idf
-from AuDoLab.subclasses import abstractscraper_arxiv
-from AuDoLab.subclasses import abstractscraper_pubmed
-import sys
-import asyncio
 
 
 class AuDoLab:
@@ -19,21 +23,22 @@ class AuDoLab:
     def __init__(self):
         self.loop = asyncio.get_event_loop()
         if self._is_notebook():
-            # prevent runtime error with asyncio in ipynb: https://medium.com/@vyshali.enukonda/how-to-get-around-runtimeerror-this-event-loop-is-already-running-3f26f67e762e
+            # prevent runtime error with asyncio in ipynb:
+            # https://medium.com/@vyshali.enukonda/how-to-get-around-runtimeerro
+            # r-this-event-loop-is-already-running-3f26f67e762e
             import nest_asyncio
             nest_asyncio.apply()
 
     def get_ieee(
-            self,
-            url=None,
-            keywords=None,
-            operator="OR",
-            pages=2,
-            in_data="author",
-            prepro=False,
-            ngram_type=2,
-        ):
-
+        self,
+        url=None,
+        keywords=None,
+        operator="OR",
+        pages=2,
+        in_data="author",
+        prepro=False,
+        ngram_type=2,
+    ):
         """Function to scrape abstracts of scientific papers from the givin url.
 
         We used https://ieeexplore.ieee.org/search/advanced to generate a
@@ -48,13 +53,13 @@ class AuDoLab:
         Args:
             url (str, optional): The url of the website, whos presented paper
                 abstracs will be scraped. Defaults to None.
-                keywords (list, optional): List of keywords that are searched for.
-                Defaults to None.
+                keywords (list, optional): List of keywords that are searched
+                for. Defaults to None.
             keywords (iist, optional): keywords that are searched for.
                 Defaults to None.
             operator (str, optional): Operator between the keywords.
-                "AND" or "OR". If "AND" the search results must include all keywords.
-                Defaults to "OR".
+                "AND" or "OR". If "AND" the search results must include all
+                keywords. Defaults to "OR".
             pages (int, optional): Number of pages that are iterated over.
                 Translates directly to number of abstracts that are scraped.
                 Roughly there are 100 abstracts scraped per page. Defaults to 2.
@@ -75,30 +80,34 @@ class AuDoLab:
         ))
 
     async def __async__get_ieee(
-            self,
-            url=None,
-            keywords=None,
-            operator="OR",
-            pages=2,
-            in_data="author",
-            prepro=False,
-            ngram_type=2,
-        ):
+        self,
+        url=None,
+        keywords=None,
+        operator="OR",
+        pages=2,
+        in_data="author",
+        prepro=False,
+        ngram_type=2,
+    ):
 
         number = pages
 
         ks = abstractscraper.AbstractScraper()
         self.abstracts = await ks.get_abstracts(
-            url=url, keywords=keywords, operator=operator, pages=number, in_data=in_data
+            url=url,
+            keywords=keywords,
+            operator=operator,
+            pages=number,
+            in_data=in_data
         )
 
-        if prepro == True:
+        if prepro is True:
             self.abstracts = self.abstracts.reset_index(drop=True)
             self.abstracts = self.text_cleaning(
                 self.abstracts, "abstract", ngram_type=ngram_type
             )
 
-        if type(self.abstracts) != pd.DataFrame:
+        if not isinstance(self.abstracts, pd.DataFrame):
             print(
                 "if using the ieee abstractscraper, please use the following code: \n \n"
                 + "async def scrape():"
@@ -118,11 +127,16 @@ class AuDoLab:
         """Scrapes the pages arxiv.org, pubmed.gov for paper abstracts
 
         Args:
-            type (str, optional): "arxiv" or "pubmed". Defines for which page the scraping is done. Defaults to "arxiv".
-            url (str, optional): The given url after which the papers are scraped. Must be in line with type. Defaults to None.
-            pages (int, optional): Number of pages that are iterated over. Defaults to 2.
-            prepro (bool, optional): If True, the scraped documents are preprocessed directly. Defaults to False.
-            ngram_type (int, optional): Number of ngrams in preprocessing. Defaults to 2.
+            type (str, optional): "arxiv" or "pubmed". Defines for which page
+                the scraping is done. Defaults to "arxiv".
+            url (str, optional): The given url after which the papers are
+                scraped. Must be in line with type. Defaults to None.
+            pages (int, optional): Number of pages that are iterated over.
+                Defaults to 2.
+            prepro (bool, optional): If True, the scraped documents are
+            preprocessed directly. Defaults to False.
+            ngram_type (int, optional): Number of ngrams in preprocessing.
+                Defaults to 2.
 
         Returns:
             pd.DataFrame: DataFrame with the stored abstracts
@@ -138,7 +152,7 @@ class AuDoLab:
 
         self.abstracts = self.abstracts.reset_index(drop=True)
 
-        if prepro == True:
+        if prepro is True:
             self.abstracts = self.text_cleaning(
                 self.abstracts, "abstract", ngram_type=ngram_type
             )
@@ -150,12 +164,14 @@ class AuDoLab:
         deleted.
 
         Args:
-            data (pd.DataFrame): Dataframe where the documents to be preprocessed are stored
+            data (pd.DataFrame): Dataframe where the documents to be
+                preprocessed are stored
             column (str): Column name of the column where docs are stored
             ngram_type (int, optional): Number of ngrams used. Defaults to 2.
 
         Returns:
-            pd.DataFrame: DataFrame where the original docus and the preprocessed documents are stored
+            pd.DataFrame: DataFrame where the original docus and the
+                preprocessed documents are stored
         """
 
         prepro = preprocessing.Preprocessor()
@@ -164,7 +180,15 @@ class AuDoLab:
         )
         return self.data_processed
 
-    def tf_idf(self, data, papers, data_column, papers_column, features=None, ngrams=2):
+    def tf_idf(
+        self,
+        data,
+        papers,
+        data_column,
+        papers_column,
+        features=None,
+        ngrams=2
+    ):
         """Creates tf-idf objects for one-class SVM classification.
 
         The tf-idf scores are calculated over a joint corpus, however the target
@@ -211,20 +235,24 @@ class AuDoLab:
         Args:
             training (DataFrame): training dataset of preprocessed documents
             predicting (DataFrame): target dataset of preprccessed documents
-            nus (list of floats): hyperparameters over which are looped. For each nu the classifier is trained
-            quality_train (float, optional): percentage of training data that seems to
-                                    belong to target class. Default: 0.85. Defaults to 0.85.
-            min_pred (float, optional): percentage of target data that has to be at
-                               least classified as belonging to target class
-            for classifier to be considered. Default: 0.0. Defaults to 0.05.
-            max_pred (float, optional): percentage of target class that is maximally
-                               allowed to be classified as belonging to
+            nus (list of floats): hyperparameters over which are looped. For
+                each nu the classifier is trained
+            quality_train (float, optional): percentage of training data that
+                seems to belong to target class. Default: 0.85. Defaults to
+                0.85.
+            min_pred (float, optional): percentage of target data that has to be
+                at least classified as belonging to target class for classifier
+                to be considered. Default: 0.0. Defaults to 0.05.
+            max_pred (float, optional): percentage of target class that is
+                maximally allowed to be classified as belonging to
             target class for classifier to be considered.. Defaults to 0.2.
             gamma (str, optional): Hyperparamter of O-SVM. Defaults to "auto".
-            kernel (str, optional): Kernel function used in O_SVM. Defaults to "rbf".
+            kernel (str, optional): Kernel function used in O_SVM. Defaults to
+                "rbf".
 
         Returns:
-            pd.DataFrame: DataFrame with stored classifiers that fulfill conditions
+            pd.DataFrame: DataFrame with stored classifiers that fulfill
+                conditions
         """
 
         one_Class_SVM = one_class_svm.One_Class_SVM()
@@ -276,22 +304,30 @@ class AuDoLab:
         https://www.jmlr.org/papers/volume3/blei03a/blei03a.pdf paper.
 
         Args:
-            corpus (iterable of list of (int, float), optional): Stream of document vectors or sparse matrix of shape
+            corpus (iterable of list of (int, float), optional): Stream of
+                document vectors or sparse matrix of shape
             num_topics (int): pre-defined number of topics
-            id2word ({dict of (int, str): gensim.corpora.dictionary.Dictionary}) –Mapping from word IDs to words. It is used to determine the vocabulary size, as well as for debugging and topic printing.
-            random_state (int): for recreating exact identical output. Defaults to 101.
-            passes (int): Number of passes through the corpus during training.Defaults to 20.
+            id2word ({dict of (int, str): gensim.corpora.dictionary.Dictionary})
+                –Mapping from word IDs to words. It is used to determine the
+                vocabulary size, as well as for debugging and topic printing.
+            random_state (int): for recreating exact identical output. Defaults
+                to 101.
+            passes (int): Number of passes through the corpus during training.
+                Defaults to 20.
             chunksize (int, optional): chunksize in lda passes. Defaults to 500.
             eta (str, optional): [description]. Defaults to "auto".
-            eval_every ([type], optional): Hyperparameter in LDA used to initiliaze the Dirichlet distribution. Defaults to None.
-            multi (bool, optional): If true, the in gensim incorporated multicore variant is used. Defaults to True.
-            alpha (str, optional): OTher Dirichlet Prior. Defaults to "asymmetric".
+            eval_every ([type], optional): Hyperparameter in LDA used to
+                initiliaze the Dirichlet distribution. Defaults to None.
+            multi (bool, optional): If true, the in gensim incorporated
+                multicore variant is used. Defaults to True.
+            alpha (str, optional): OTher Dirichlet Prior. Defaults to
+                "asymmetric".
 
         Returns:
             lda_model: returns lda_model output
         """
 
-        if corpus == None:
+        if corpus is None:
             self.dictionary, self.bow_corpus = lda.LDA.preperation(
                 data, no_below, no_above, column=column
             )
@@ -315,7 +351,6 @@ class AuDoLab:
         )
         return self.lda_model
 
-
     def _is_notebook(self):
         try:
             shell = get_ipython().__class__.__name__
@@ -327,7 +362,6 @@ class AuDoLab:
                 return False  # Other type (?)
         except NameError:
             return False      # Probably standard Python interpreter
-
 
     def lda_visualize_topics(
         self,
@@ -368,13 +402,13 @@ class AuDoLab:
             ValueError: If save_name is not a string: no "Please specify a string as the name under which the plots should be saved"
         """
 
-        if bow_corpus == None:
+        if bow_corpus is None:
             bow_corpus = self.bow_corpus
 
-        if dictionary == None:
+        if dictionary is None:
             dictionary = self.dictionary
 
-        if lda_model == None:
+        if lda_model is None:
             lda_model = self.lda_model
 
         lda.LDA.visualize_topics(

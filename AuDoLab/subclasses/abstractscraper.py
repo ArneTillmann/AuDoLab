@@ -46,11 +46,19 @@ class AbstractScraper:
         """[summary]
 
         Args:
-            url (string, optional): if given than the search defined in this url ist scraped. Defaults to None.
-            keywords (list, optional): f no url is given but a keyword list, a search after these keywords is performed and the results are scraped. Defaults to None.
-            operator (str, optional): Operator between the keywords. If "AND" the search results must include all specified keywords. Defaults to "OR".
-            in_data (str, optional): "author" or "all_meta" -> whether the keywords are only searched in the author keywords or in all metadata. Defaults to "author".
-            pages (int, optional): number of pages that are iterated over. Defaults to 2.
+            url (string, optional): if given than the search defined in this url
+                is scraped. Defaults to None.
+            keywords (list, optional): f no url is given but a keyword list, a
+                search after these keywords is performed and the results are
+                scraped. Defaults to None.
+            operator (str, optional): Operator between the keywords. If "AND"
+                the search results must include all specified keywords. Defaults
+                to "OR".
+            in_data (str, optional): "author" or "all_meta" -> whether the
+                keywords are only searched in the author keywords or in all
+                metadata. Defaults to "author".
+            pages (int, optional): number of pages that are iterated over.
+                Defaults to 2.
         """
 
         self._create_url(url, keywords, operator, in_data)
@@ -87,7 +95,7 @@ class AbstractScraper:
         self.url = (
             self.url[: position + len("pageNumber=")]
             + str(page)
-            + self.url[position + len("pageNumber=") + len(str(page - 1)) :]
+            + self.url[position + len("pageNumber=") + len(str(page - 1)):]
         )
 
     def _add_str_plus_page_number(self, page):
@@ -177,7 +185,6 @@ class AbstractScraper:
         self.data = np.unique(self.data)
         print("Total number of abstracts that will be scraped:", len(self.data))
 
-
     def _find_abstracts(
         self,
         features=[
@@ -194,11 +201,13 @@ class AbstractScraper:
         paper's abstract
 
         Args:
-            features (list, optional): [specify which information you want to have scraped].
-            Defaults to ["abstract", "title", "citationCountPaper", "doi", "totalDownloads"].
+            features (list, optional): specify which information you want to
+                have scraped. Defaults to ["abstract", "title",
+                "citationCountPaper", "doi", "totalDownloads"].
         """
 
-        # initialize emtpy dict to create attributes and set dict keys as features input and values as empty lists
+        # initialize emtpy dict to create attributes and set dict keys as
+        # features input and values as empty lists
         att_creator = {}
         for i in range(len(features)):
             att_creator[features[i]] = []
@@ -210,7 +219,8 @@ class AbstractScraper:
         # loop through number of  "link"
         for i in tqdm(range(len(self.data))):
             # only "try" because sometimes the javascript is corrupted
-            # get the html data of the webpage with metadata such as abstracts titles etc.
+            # get the html data of the webpage with metadata such as abstracts
+            # titles etc.
             try:
                 data = json_loads(
                     re.search(
@@ -218,27 +228,28 @@ class AbstractScraper:
                         requests_get(self.data[i]).text,
                     ).group(1)
                 )
-            except:
+            except BaseException:
                 pass
 
             # loop through list of desired features and extract information
             for i in features:
-                # if the data is not available, e.g. the paper has no citations, use None
+                # if the data is not available, e.g. the paper has no
+                # citations, use None
                 try:
                     temp = data[i]
-                except:
+                except BaseException:
                     temp = None
 
                 # for views the data is differently extracted
                 if i == "totalDownloads":
                     try:
                         temp = data["metrics"][i]
-                    except:
+                    except BaseException:
                         temp = None
                 if i == "keywords":
                     try:
                         temp = data[i][0]["kwd"]
-                    except:
+                    except BaseException:
                         temp = None
                 # append to obj attribute
                 getattr(self, i).append(temp)
@@ -246,17 +257,26 @@ class AbstractScraper:
     async def get(
         self, url=None, keywords=None, operator="OR", pages=2, in_data="author"
     ):
-        """simply runs the self._open function that open ieeeXplore and seraches for paper urls
+        """simply runs the self._open function that open ieeeXplore and seraches
+            for paper urls
 
         Args:
-            url (str, optional): when the user specifies an own search query on IEEEXplore. Defaults to None.
-            keywords (iist, optional): keywords that are searched for. Defaults to None.
+            url (str, optional): when the user specifies an own search query on
+                IEEEXplore. Defaults to None.
+            keywords (iist, optional): keywords that are searched for. Defaults
+                to None.
             operator (str, optional): [description]. Defaults to "OR".
-            pages (int, optional): Number of pages the algorithm iterates over. Defaults to 2.
-            in_data (str, optional): "author" or "all_meta" whether to search in author keywords or all metadata. Defaults to "author".
+            pages (int, optional): Number of pages the algorithm iterates over.
+                Defaults to 2.
+            in_data (str, optional): "author" or "all_meta" whether to search in
+                author keywords or all metadata. Defaults to "author".
         """
         await self._open(
-            url=url, keywords=keywords, operator=operator, pages=pages, in_data=in_data
+            url=url,
+            keywords=keywords,
+            operator=operator,
+            pages=pages,
+            in_data=in_data
         )
 
     async def get_abstracts(
@@ -288,19 +308,30 @@ class AbstractScraper:
         be stored in a .txt file with the givin file name.
 
         Args:
-            url (str, optional): when the user specifies an own search query on IEEEXplore. Defaults to None.
-            keywords (iist, optional): keywords that are searched for. Defaults to None.
+            url (str, optional): when the user specifies an own search query on
+                IEEEXplore. Defaults to None.
+            keywords (iist, optional): keywords that are searched for. Defaults
+                to None.
             operator (str, optional): [description]. Defaults to "OR".
-            pages (int, optional): Number of pages the algorithm iterates over. Defaults to 2.
-            in_data (str, optional): "author" or "all_meta" whether to search in author keywords or all metadata. Defaults to "author".
-            features (list, optional): which features should be scraped. Defaults to ["abstract", "title", "citationCount", "doi", "totalDownloads", "keywords", "publicationYear"].
+            pages (int, optional): Number of pages the algorithm iterates over.
+                Defaults to 2.
+            in_data (str, optional): "author" or "all_meta" whether to search in
+                author keywords or all metadata. Defaults to "author".
+            features (list, optional): which features should be scraped.
+                Defaults to ["abstract", "title", "citationCount", "doi",
+                "totalDownloads", "keywords", "publicationYear"].
 
         Returns:
-            pd.DataFrame: DataFrame containing the paper abstracts and the selected features
+            pd.DataFrame: DataFrame containing the paper abstracts and the
+                selected features
         """
 
         await self._open(
-            url=url, keywords=keywords, operator=operator, pages=pages, in_data=in_data
+            url=url,
+            keywords=keywords,
+            operator=operator,
+            pages=pages,
+            in_data=in_data
         )
         self._find_links()
         self._find_abstracts(features=features)

@@ -34,7 +34,7 @@ setup(
         "Natural Language :: English",
         "Programming Language :: Python :: 3.8",
     ],
-    description="With AuDoLab you can perform Latend Direchlet Allocation on highly imbalanced datasets.",
+    description="With AuDoLab you can do LDA on highly imbalanced datasets.",
     entry_points={"console_scripts": ["AuDoLab=AuDoLab.cli:main", ], },
     install_requires=requirements,
     license="GNU General Public License v3",

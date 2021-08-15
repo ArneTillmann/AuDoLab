@@ -1,4 +1,3 @@
-from AuDoLab.subclasses.preprocessing import Preprocessor
 from sklearn.feature_extraction.text import TfidfVectorizer
 
 
@@ -16,30 +15,28 @@ class Tf_idf:
         features=None,
         ngrams=2,
     ):
-        """creates tf-idf objects for one-class SVM classification. The tf-idf
-            scores are calculated over a joint corpus,
-            however, the target data and the out-of-domain training data are
-            stored in seperate, as the one-class SVM is only trained on
-            the tf-idf scores of the out-of-domain training data
+        """Creates tf-idf objects for one-class SVM classification.
 
-        :param data: preprocessed target documents
-        :type data: DataFrame
-        :param papers: preprocessed out-of-domain training data
-        :type papers: DataFrame
-        :param data_colum: name of columnin target dataframe where
-            lemmatized documents are stored, defaults to 'lemma'
-        :type data_colum: String
-        :param papers_colum: name of column in out-of-domain training
-            dataframe where lemmatized documents are stored, defaults to 'lemma'
-        :type papers_colum: String
-        :param ngrams: whether ngram are formed, defaults to 2
-        :type ngrams: int
-        :param features: number of max features, defaults to 8000.
-        :type features: int
+        The tf-idf scores are calculated over a joint corpus, however the target
+        data and the out-of-domain training data are stored in seperate, as the
+        one-class SVM is only trained on the tf-idf scores of the out-of-domain
+        training data.
 
-        :return: tfidf object data for target data and ou-of-domain training
-            data
-        :type: data and papers
+        Args:
+            data (DataFrame): preprocessed target documents
+            papers (DataFrame): preprocessed out-of-domain training data
+            data_colum (String): name of columnin target dataframe where
+                lemmatized documents are stored. Defaults to 'lemma'
+            papers_colum (String): name of column in out-of-domain training
+                dataframe where lemmatized documents are stored. Defaults to
+            'lemma' ngrams (int, optional): whether ngram are formed.
+                Defaults to 2.
+            features (int, optional): number of max features.
+                Defaults to 8000.
+
+        Returns:
+            data and papers: tfidf object data for target data and
+                out-of-domain training data
         """
 
         df_temp = data.copy(deep=True)

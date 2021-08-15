@@ -8,21 +8,16 @@ class One_Class_SVM:
 
     @staticmethod
     def choose_classifier(df, classifier, i):
-        """
-        returns dataframe where documents that are classified to target class
+        """Returns dataframe where documents that are classified to target class
         have 1, otherwise, 0
 
+        Args:
+            df (pd.Dataframe): dataframe of target documents
+            classifier (list): list of all possible o-svm classifiers
+            i (int): index of which classifier is chosen/preferred
 
-        :param df: dataframe of target documents
-        :type df: pd.Dataframe
-        :param classifier: list of all possible o-svm classifiers
-        :type classifier: list
-        :param i: index of which classifier is chosen/preferred
-        :type i: int
-
-        :return: documents that are classified as belonging to target
-        :rtype: pd.dataframe
-            class by o-svm
+        Returns:
+            pd.dataframe: documents that are classified as belonging to target
         """
         return df.iloc[classifier.index[classifier.iloc[:, i] == 1].tolist()]
 
@@ -37,22 +32,25 @@ class One_Class_SVM:
         gamma="auto",
         kernel="rbf",
     ):
-        """[summary]
+        """Returns the classifiers that fullfill the required conditions.
 
         Args:
             training (DataFrame): training dataset of preprocessed documents
             predicting (DataFrame): target dataset of preprccessed documents
-            nus (list of floats): hyperparameters over which are looped. For each nu the classifier is trained
-            quality_train (float, optional): percentage of training data that seems to
-                                    belong to target class. Default: 0.85. Defaults to 0.85.
-            min_pred (float, optional): percentage of target data that has to be at
-                               least classified as belonging to target class
-            for classifier to be considered. Default: 0.0. Defaults to 0.05.
-            max_pred (float, optional): percentage of target class that is maximally
-                               allowed to be classified as belonging to
+            nus (list of floats): hyperparameters over which are looped. For
+                each nu the classifier is trained
+            quality_train (float, optional): percentage of training data that
+                seems to belong to target class. Default: 0.85. Defaults to
+                0.85.
+            min_pred (float, optional): percentage of target data that has to be
+                at least classified as belonging to target class for classifier
+                to be considered. Default: 0.0. Defaults to 0.05.
+            max_pred (float, optional): percentage of target class that is
+                maximally allowed to be classified as belonging to
             target class for classifier to be considered.. Defaults to 0.2.
             gamma (str, optional): Hyperparamter of O-SVM. Defaults to "auto".
-            kernel (str, optional): Kernel function used in O_SVM. Defaults to "rbf".
+            kernel (str, optional): Kernel function used in O_SVM. Defaults to
+                "rbf".
 
         Returns:
             pd.DataFrame: DataFrame with stored classifiers that fulfill

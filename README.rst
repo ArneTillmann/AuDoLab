@@ -76,11 +76,6 @@ inside a python console.
 To use AuDoLab in a project::
 
     from AuDoLab import AuDoLab
-    import asyncio
-    import nest_asyncio
-    nest_asyncio.apply()
-    from numpy import round as np_round
-    from numpy import arange as np_arange
 
 Then you want to create an instance of the AuDoLab class
 
@@ -106,20 +101,15 @@ In this example we used publicly available data from the nltk package::
 
 Then you want to scrape abstracts, e.g. from IEEE with the abstract scraper::
 
-    async def scrape():
-        return await audo.scrape_abstracts(
-            url=None, keywords=["cotton"], in_data="all_meta", pages=5
-        )
-
-    scraped_documents = asyncio.get_event_loop().run_until_complete(scrape())
+    scraped_documents = audo.get_ieee(pages=1)
 
 The data as well as the scraped papers need to be preprocessed before use in the
 classifier::
 
-    preprocessed_target = audo.preprocessing(data=data, column="text")
+    preprocessed_target = audo.text_cleaning(data=data, column="text")
 
-    preprocessed_paper = audo.preprocessing(
-        data=scraped_documents, column="text")
+    preprocessed_paper = audo.text_cleaning(
+        data=scraped_documents, column="abstract")
 
     target_tfidf, training_tfidf = audo.tf_idf(
         data=preprocessed_target,
@@ -132,25 +122,22 @@ classifier::
 Afterwards we can train and use the classifiers and choose the desired
 one::
 
-    classifier = audo.one_class_svm(
+    o_svm_result = audo.one_class_svm(
         training=training_tfidf,
         predicting=target_tfidf,
-        nus=np.round(np.arange(0.01, 0.5, 0.01), 7),
+        nus=np.round(np.arange(0.001, 0.5, 0.01), 7),
         quality_train=0.9,
         min_pred=0.001,
         max_pred=0.05,
     )
 
-    df_data = audo.choose_classifier(preprocessed_target, classifier, 2)
+    result = audo.choose_classifier(preprocessed_target, o_svm_result, 0)
 
 And finally you can estimate the topics of the data::
 
-    audo.lda_modeling(df_data, num_topics=2)
+    lda_target = audo.lda_modeling(data=result, num_topics=5)
 
-    a = audo.lda_visualize_topics()
-    html = a.data
-    with open('html_file.html', 'w') as f:
-        f.write(html)
+    audo.lda_visualize_topics(type="pyldavis")
 
 * Free software: GNU General Public License v3
 * Documentation: https://AuDoLab.readthedocs.io.

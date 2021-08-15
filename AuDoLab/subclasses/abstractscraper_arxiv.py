@@ -50,7 +50,8 @@ class AbstractScraper_Arxiv:
         )
 
     def _scrape(self):
-        """loop through all found paper links and scrape abstracts, titles and authors."""
+        """loop through all found paper links and scrape abstracts, titles and
+        authors."""
 
         # initiliaze empty lists
         self.abstracts = []
@@ -73,21 +74,21 @@ class AbstractScraper_Arxiv:
                 abstract = abstract.text.replace("\n", "")
                 # append to data
                 self.abstracts.append(abstract)
-            except:
+            except BaseException:
                 self.abstracts.append(None)
 
             try:
                 title = soup.find("h1", class_="title")
                 title.span.extract()
                 self.titles.append(title.text)
-            except:
+            except BaseException:
                 self.titles.append(None)
 
             try:
                 authors = soup.find("div", class_="authors")
                 authors.span.extract()
                 self.authors.append(authors.text)
-            except:
+            except BaseException:
                 self.authors.append(None)
 
         data = pd.DataFrame(
@@ -101,20 +102,24 @@ class AbstractScraper_Arxiv:
         self.data = data.drop_duplicates()
 
     def scrape_arxiv(self, url, pages=8):
-        """Scrapes arxiv.org and returns a pd.DataFrame containing abstracts, titles and author names.
-        Returns these informations based on the users given url (search query), e.g.
-        url="https://arxiv.org/search/?query=deep+learning&searchtype=all&source=header&order=&size=100&abstracts=show&date-date_type=submitted_date&start=0"
+        """Scrapes arxiv.org and returns a pd.DataFrame containing abstracts,
+            titles and author names.
+
+        Returns these informations based on the users given url (search query),
+        e.g. url="https://arxiv.org/search/?query=deep+learning&searchtype=all&source=header&order=&size=100&abstracts=show&date-date_type=submitted_date&start=0"
 
         Args:
             url (str): link of searchquery from arxiv.org
-            pages (int, optional): number of pages the algorithm iterates through and searches for abstracts. Defaults to 8.
+            pages (int, optional): number of pages the algorithm iterates
+            through and searches for abstracts. Defaults to 8.
 
         Returns:
             pd.DataFrame: DataFrame that contains Abstracts, Titles and Authors
         """
 
-        if not "arxiv" in url:
-            return print("ERROR: Only specify a url/search query via arxiv.org")
+        if "arxiv" not in url:
+            return print(
+                "ERROR: Only specify a url/search query via arxiv.org")
         else:
             self._find_links(url=url, number_of_pages=pages)
             self._scrape()
