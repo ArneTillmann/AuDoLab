@@ -249,11 +249,11 @@ class AbstractScraper:
         """simply runs the self._open function that open ieeeXplore and seraches for paper urls
 
         Args:
-            url (str, optional): [description]. Defaults to None.
-            keywords ([type], optional): [description]. Defaults to None.
+            url (str, optional): when the user specifies an own search query on IEEEXplore. Defaults to None.
+            keywords (iist, optional): keywords that are searched for. Defaults to None.
             operator (str, optional): [description]. Defaults to "OR".
-            pages (int, optional): [description]. Defaults to 2.
-            in_data (str, optional): [description]. Defaults to "author".
+            pages (int, optional): Number of pages the algorithm iterates over. Defaults to 2.
+            in_data (str, optional): "author" or "all_meta" whether to search in author keywords or all metadata. Defaults to "author".
         """
         await self._open(
             url=url, keywords=keywords, operator=operator, pages=pages, in_data=in_data
@@ -276,7 +276,16 @@ class AbstractScraper:
             "publicationYear",
         ],
     ):
-        """[summary]
+        """Function to scrape abstracts of scientific papers from the givin url.
+
+        We used https://ieeexplore.ieee.org/search/advanced to generate a
+        list like https://ieeexplore.ieee.org/search/searchresult.jsp?action=se
+        arch&newsearch=true&matchBoolean=true&queryText=(%22Author%20Keywords%22
+        :cotton)&highlight=true&returnFacets=ALL&returnType=SEARCH&matchPubs=Tru
+        e&rowsPerPage=100&pageNumber=1
+        with the search results.
+        The abstracts of the papers listet on that list of search results will
+        be stored in a .txt file with the givin file name.
 
         Args:
             url (str, optional): when the user specifies an own search query on IEEEXplore. Defaults to None.
@@ -287,7 +296,7 @@ class AbstractScraper:
             features (list, optional): which features should be scraped. Defaults to ["abstract", "title", "citationCount", "doi", "totalDownloads", "keywords", "publicationYear"].
 
         Returns:
-            [pd.DataFrame]: DataFrame containing the paper abstracts and the selected features
+            pd.DataFrame: DataFrame containing the paper abstracts and the selected features
         """
 
         await self._open(

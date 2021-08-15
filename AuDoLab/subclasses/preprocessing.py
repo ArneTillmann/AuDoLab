@@ -90,6 +90,16 @@ class Preprocessor:
         # apply prepro func
 
     def basic_preprocessing(self, df, column, ngram_type=2):
+        """text preparation function for text preprocessing
+
+        Args:
+            df (): None
+            column (str): Sets language of stopwords to be removed. Defaults to "english".
+            ngram_type (int, optional): If true, the stopwords are removed, if not, stopwords are left as they are. Defaults to 2.
+
+        Returns:
+            pd.DataFrame: DataFrame that contains 
+        """
         df, df_txt = self._preprocessing(df=df, column=column)
         index = list(range(len(df_txt)))
         df_txt = df_txt.reset_index()

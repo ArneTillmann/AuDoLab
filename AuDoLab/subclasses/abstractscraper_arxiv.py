@@ -110,7 +110,7 @@ class AbstractScraper_Arxiv:
             pages (int, optional): number of pages the algorithm iterates through and searches for abstracts. Defaults to 8.
 
         Returns:
-            [pd.DataFrame]: DataFrame that contains: Abstracts, Titles and Authors
+            pd.DataFrame: DataFrame that contains Abstracts, Titles and Authors
         """
 
         if not "arxiv" in url:

@@ -3,7 +3,7 @@ def warn(*args, **kwargs):
 import warnings
 warnings.warn = warn
 import pyLDAvis
-import pyLDAvis.gensim
+import pyLDAvis.gensim_models
 from gensim import corpora, models
 from pprint import pprint
 import matplotlib.pyplot as plt
@@ -34,8 +34,8 @@ class LDA:
                                 account that appear more often than 90%]
 
         Returns:
-            [dictionary]: [returns the dictionary used for LDA]
-            [bow_corpus]: [Corpus used for LDA]
+            dictionary: [returns the dictionary used for LDA]
+            bow_corpus: [Corpus used for LDA]
         """
 
         dictionary = corpora.Dictionary(df_processed[column])
@@ -127,7 +127,7 @@ class LDA:
         TODO: pyldavis not yet working, especially not in jupyter notebooks. MAybe take out all together
 
         Args:
-            lda_model (gensim.models.ldamodel.LdaModel): the created LDA model
+            lda_model (gensim_models.ldamodel.LdaModel): the created LDA model
             bow_corpus (gensim.corpora.dictionary.Dictionary): Bag of words corpus of used documents
             dictionary (gensim.corpora.dictionary.Dictionary): Dictionary of all words
             save_name (str, optional): name under which the plots should be save. Defaults to "audolab_model.png".
@@ -151,15 +151,15 @@ class LDA:
 
         if type == "pyldavis": # siehe: https://pyldavis.readthedocs.io/en/latest/modules/API.html
             #doc_lengths = list(preprocessed_column_target.apply(lambda x: len(x)))
-            visualization = pyLDAvis.gensim.prepare( 
-                lda_model, 
+            visualization = pyLDAvis.gensim_models.prepare(
+                lda_model,
                 bow_corpus,
                 dictionary,
                 sort_topics=False
             )
             pyLDAvis.save_html(visualization, 'your_latest_lda_visualization.html')
             webbrowser.open('your_latest_lda_visualization.html')
-            
+
 
 
         if type == "clouds" and n_clouds <= 1:

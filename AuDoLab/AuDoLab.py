@@ -15,22 +15,59 @@ import asyncio
 
 
 class AuDoLab:
-    """TODO
-        1) call asyncio func directly in class such that the user does not need to call advanced loop # Done
-        2) Remove depreciationwarnings (scipy.sparse and imp) # done
-        3) include pyldavis function (or remove completely depending on utility for users)
-        4) adapt documentation that it is consistent within itself (documentation = summarys and datatypes)
-        5) check if further functions needed -> second loop of iteration in decision rule from (https://www.researchgate.net/profile/Astrid-Krenz/publication/344432349_Unsupervised_Document_Classification_integrating_Web_Scraping_One-Class_SVM_and_LDA_Topic_Modelling/links/5f749c97458515b7cf596d36/Unsupervised-Document-Classification-integrating-Web-Scraping-One-Class-SVM-and-LDA-Topic-Modelling.pdf)
 
-    """
     def __init__(self):
         self.loop = asyncio.get_event_loop()
-        if self.is_notebook():
+        if self._is_notebook():
             # prevent runtime error with asyncio in ipynb: https://medium.com/@vyshali.enukonda/how-to-get-around-runtimeerror-this-event-loop-is-already-running-3f26f67e762e
             import nest_asyncio
             nest_asyncio.apply()
 
-    def get_ieee(self, pages=10):
+    def get_ieee(
+            self,
+            url=None,
+            keywords=None,
+            operator="OR",
+            pages=2,
+            in_data="author",
+            prepro=False,
+            ngram_type=2,
+        ):
+
+        """Function to scrape abstracts of scientific papers from the givin url.
+
+        We used https://ieeexplore.ieee.org/search/advanced to generate a
+        list like https://ieeexplore.ieee.org/search/searchresult.jsp?action=se
+        arch&newsearch=true&matchBoolean=true&queryText=(%22Author%20Keywords%22
+        :cotton)&highlight=true&returnFacets=ALL&returnType=SEARCH&matchPubs=Tru
+        e&rowsPerPage=100&pageNumber=1
+        with the search results.
+        The abstracts of the papers listet on that list of search results will
+        be stored in a .txt file with the givin file name.
+
+        Args:
+            url (str, optional): The url of the website, whos presented paper
+                abstracs will be scraped. Defaults to None.
+                keywords (list, optional): List of keywords that are searched for.
+                Defaults to None.
+            keywords (iist, optional): keywords that are searched for.
+                Defaults to None.
+            operator (str, optional): Operator between the keywords.
+                "AND" or "OR". If "AND" the search results must include all keywords.
+                Defaults to "OR".
+            pages (int, optional): Number of pages that are iterated over.
+                Translates directly to number of abstracts that are scraped.
+                Roughly there are 100 abstracts scraped per page. Defaults to 2.
+            in_data (str, optional): If the keywords are searched for in the
+                author keywords or in all metadata. Defaults to "author".
+            prepro (bool, optional): if True, the scraped data will directly be
+                preprocessed for later use. Defaults to False.
+            ngram_type (int, optional): number of ngrams in preprocessing.
+                Defaults to 2.
+
+        Returns:
+            pd.DataFrame: DataFrame with the stored abstracts and metadata
+        """
         return self.loop.run_until_complete(self.__async__get_ieee(
             "https://ieeexplore.ieee.org/search/searchresult.jsp?newsearch=true&queryText=cotton&highlight=true&returnFacets=ALL&returnType=SEARCH&matchPubs=true&rowsPerPage=100&pageNumber=1",
             prepro=True,
@@ -47,59 +84,38 @@ class AuDoLab:
             prepro=False,
             ngram_type=2,
         ):
-            """Function to scrape abstracts of scientific papers from the givin url.
-            We used https://ieeexplore.ieee.org/search/advanced to generate a
-            list like https://ieeexplore.ieee.org/search/searchresult.jsp?action=se
-            arch&newsearch=true&matchBoolean=true&queryText=(%22Author%20Keywords%22
-            :cotton)&highlight=true&returnFacets=ALL&returnType=SEARCH&matchPubs=Tru
-            e&rowsPerPage=100&pageNumber=1
-            with the search results.
-            The abstracts of the papers listet on that list of search results will
-            be stored in a .txt file with the givin file name.
 
-            Args:
-                url (str, optional): [description]. Defaults to None.
-                keywords (list, optional): List of keywords that are searched for. Defaults to None.
-                operator (str, optional): Operator between the keywords. "AND" or "OR". If "AND" the search results must include all keywords. Defaults to "OR".
-                pages (int, optional): Number of pages that are iterated over. Translates directly to number of abstracts that are scraped. Roughly there are 100 abstracts scraped per page. Defaults to 2.
-                in_data (str, optional): If the keywords are searched for in the author keywords or in all metadata. Defaults to "author".
-                prepro (bool, optional): if True, the scraped data will directly be preprocessed for later use. Defaults to False.
-                ngram_type (int, optional): number of ngrams in preprocessing. Defaults to 2.
+        number = pages
 
-            Returns:
-                pd.DataFrame: DataFrame with the stored abstracts and metadata
-            """
-            number = pages
+        ks = abstractscraper.AbstractScraper()
+        self.abstracts = await ks.get_abstracts(
+            url=url, keywords=keywords, operator=operator, pages=number, in_data=in_data
+        )
 
-            ks = abstractscraper.AbstractScraper()
-            self.abstracts = await ks.get_abstracts(
-                url=url, keywords=keywords, operator=operator, pages=number, in_data=in_data
+        if prepro == True:
+            self.abstracts = self.abstracts.reset_index(drop=True)
+            self.abstracts = self.text_cleaning(
+                self.abstracts, "abstract", ngram_type=ngram_type
             )
 
-            if prepro == True:
-                self.abstracts = self.abstracts.reset_index(drop=True)
-                self.abstracts = self.text_cleaning(
-                    self.abstracts, "abstract", ngram_type=ngram_type
-                )
+        if type(self.abstracts) != pd.DataFrame:
+            print(
+                "if using the ieee abstractscraper, please use the following code: \n \n"
+                + "async def scrape():"
+                + "\n     return await audo.ieee_scraper(keywords=[keywords], prepro=False, pages=1, ngram_type=2)"
+                + "\n\nscraped_documents = asyncio.get_event_loop().run_until_complete(scrape())"
+            )
 
-            if type(self.abstracts) != pd.DataFrame:
-                print(
-                    "if using the ieee abstractscraper, please use the following code: \n \n"
-                    + "async def scrape():"
-                    + "\n     return await audo.ieee_scraper(keywords=[keywords], prepro=False, pages=1, ngram_type=2)"
-                    + "\n\nscraped_documents = asyncio.get_event_loop().run_until_complete(scrape())"
-                )
+            sys.exit(
+                "please specify the code as indicated above, or use the function abstract_scraper to scrape from different websites"
+            )
 
-                sys.exit(
-                    "please specify the code as indicated above, or use the function abstract_scraper to scrape from different websites"
-                )
-
-            return self.abstracts
+        return self.abstracts
 
     def abstract_scraper(
         self, type="arxiv", url=None, pages=2, prepro=False, ngram_type=2
     ):
-        """Scapes the pages arxiv.org and pubmed.gov for paper abstracts
+        """Scrapes the pages arxiv.org, pubmed.gov for paper abstracts
 
         Args:
             type (str, optional): "arxiv" or "pubmed". Defines for which page the scraping is done. Defaults to "arxiv".
@@ -149,27 +165,28 @@ class AuDoLab:
         return self.data_processed
 
     def tf_idf(self, data, papers, data_column, papers_column, features=None, ngrams=2):
-        """[creates tf-idf objects for one-class SVM classification. The tf-idf
-        scores are calculated over a joint corpus,
-        however, the target data and the out-of-domain training data are stored
-        in seperate, as the one-class SVM is only trained on
-        the tf-idf scores of the out-of-domain training data]
+        """Creates tf-idf objects for one-class SVM classification.
+
+        The tf-idf scores are calculated over a joint corpus, however the target
+        data and the out-of-domain training data are stored in seperate, as the
+        one-class SVM is only trained on the tf-idf scores of the out-of-domain
+        training data.
 
         Args:
-            data (DataFrame): [preprocessed target documents]
-            papers (DataFrame): [preprocessed out-of-domain training data]
-            data_colum (String): [name of columnin target dataframe where
-            lemmatized documents are stored]. Defaults to 'lemma'
-            papers_colum (String): [name of column in out-of-domain training
-            dataframe where lemmatized documents are stored]. Defaults to
-            'lemma' ngrams (int, optional): [whether ngram are formed].
-            Defaults to 2.
-            features (int, optional): [number of max features].
-            Defaults to 8000.
+            data (DataFrame): preprocessed target documents
+            papers (DataFrame): preprocessed out-of-domain training data
+            data_colum (String): name of columnin target dataframe where
+                lemmatized documents are stored. Defaults to 'lemma'
+            papers_colum (String): name of column in out-of-domain training
+                dataframe where lemmatized documents are stored. Defaults to
+            'lemma' ngrams (int, optional): whether ngram are formed.
+                Defaults to 2.
+            features (int, optional): number of max features.
+                Defaults to 8000.
 
         Returns:
-            [data and papers]: [tfidf object data for target data and
-             ou-of-domain training data]
+            data and papers: tfidf object data for target data and
+                out-of-domain training data
         """
 
         tfidf = tf_idf.Tf_idf()
@@ -189,7 +206,7 @@ class AuDoLab:
         gamma="auto",
         kernel="rbf",
     ):
-        """[summary]
+        """Returns the classifiers that fullfill the required conditions.
 
         Args:
             training (DataFrame): training dataset of preprocessed documents
@@ -225,20 +242,16 @@ class AuDoLab:
         return self.df
 
     def choose_classifier(self, df, classifier, i):
-        """
-        returns dataframe where documents that are classified to target class
+        """Returns dataframe where documents that are classified to target class
         have 1, otherwise, 0
 
-        :param df: dataframe of target documents
-        :type df: pd.Dataframe
-        :param classifier: list of all possible o-svm classifiers
-        :type classifier: list
-        :param i: index of which classifier is chosen/preferred
-        :type i: int
+        Args:
+            df (pd.Dataframe): dataframe of target documents
+            classifier (list): list of all possible o-svm classifiers
+            i (int): index of which classifier is chosen/preferred
 
-        :return: documents that are classified as belonging to target
-        :rtype: pd.dataframe
-            class by o-svm
+        Returns:
+            pd.dataframe: documents that are classified as belonging to target
         """
         return one_class_svm.One_Class_SVM.choose_classifier(df, classifier, i)
 
@@ -264,7 +277,7 @@ class AuDoLab:
 
         Args:
             corpus (iterable of list of (int, float), optional): Stream of document vectors or sparse matrix of shape
-            num_topics (int): pre-defined number of topics]
+            num_topics (int): pre-defined number of topics
             id2word ({dict of (int, str): gensim.corpora.dictionary.Dictionary}) –Mapping from word IDs to words. It is used to determine the vocabulary size, as well as for debugging and topic printing.
             random_state (int): for recreating exact identical output. Defaults to 101.
             passes (int): Number of passes through the corpus during training.Defaults to 20.
@@ -275,7 +288,7 @@ class AuDoLab:
             alpha (str, optional): OTher Dirichlet Prior. Defaults to "asymmetric".
 
         Returns:
-            [lda_model]: [returns lda_model output]
+            lda_model: returns lda_model output
         """
 
         if corpus == None:
@@ -303,7 +316,7 @@ class AuDoLab:
         return self.lda_model
 
 
-    def is_notebook(self):
+    def _is_notebook(self):
         try:
             shell = get_ipython().__class__.__name__
             if shell == 'ZMQInteractiveShell':
@@ -335,8 +348,6 @@ class AuDoLab:
     ):
         """Visualizes the topic models output in wordclouds or pyldavis
 
-        TODO: pyldavis not yet working, especially not in jupyter notebooks. MAybe take out all together
-
         Args:
             lda_model (gensim.models.ldamodel.LdaModel): the created LDA model
             bow_corpus (gensim.corpora.dictionary.Dictionary): Bag of words corpus of used documents
@@ -355,9 +366,6 @@ class AuDoLab:
 
         Raises:
             ValueError: If save_name is not a string: no "Please specify a string as the name under which the plots should be saved"
-
-        Returns:
-            None:
         """
 
         if bow_corpus == None:

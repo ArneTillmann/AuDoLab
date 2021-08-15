@@ -55,8 +55,8 @@ class One_Class_SVM:
             kernel (str, optional): Kernel function used in O_SVM. Defaults to "rbf".
 
         Returns:
-            pd.DataFrame: DataFrame with
-                          stored classifiers that fulfill conditions
+            pd.DataFrame: DataFrame with stored classifiers that fulfill
+                conditions
         """
 
         df = DataFrame()
