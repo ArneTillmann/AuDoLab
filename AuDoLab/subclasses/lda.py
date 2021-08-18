@@ -1,18 +1,19 @@
 import warnings
-import webbrowser
-from wordcloud import WordCloud
-import matplotlib.pyplot as plt
-from gensim import corpora, models
-import pyLDAvis.gensim_models
-import pyLDAvis
-
+with warnings.catch_warnings():
+    warnings.filterwarnings("ignore", category=DeprecationWarning)
+    import webbrowser
+    from wordcloud import WordCloud
+    import matplotlib.pyplot as plt
+    from gensim import corpora, models
+    import pyLDAvis.gensim_models
+    import pyLDAvis
 
 def warn(*args, **kwargs):
     pass
 
-
 warnings.warn = warn
 
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 class LDA:
     """

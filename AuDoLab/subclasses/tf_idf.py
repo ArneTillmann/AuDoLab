@@ -1,5 +1,10 @@
+import warnings
 from sklearn.feature_extraction.text import TfidfVectorizer
 
+def warn(*args, **kwargs):
+    pass
+
+warnings.warn = warn
 
 class Tf_idf:
 

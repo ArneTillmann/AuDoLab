@@ -1,9 +1,14 @@
+import warnings
 from bs4 import BeautifulSoup
 import requests
 import pandas as pd
 import unicodedata
 from tqdm import tqdm
 
+def warn(*args, **kwargs):
+    pass
+
+warnings.warn = warn
 
 class AbstractScraper_Pubmed:
     def __init__(self):

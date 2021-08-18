@@ -1,3 +1,4 @@
+import warnings
 import re
 from bs4 import BeautifulSoup
 import numpy as np
@@ -8,6 +9,10 @@ import asyncio
 from pyppeteer import launch
 from tqdm import tqdm
 
+def warn(*args, **kwargs):
+    pass
+
+warnings.warn = warn
 
 class AbstractScraper:
     """

@@ -1,9 +1,14 @@
+import warnings
 from bs4 import BeautifulSoup
 import requests
 import pandas as pd
 import re
 from tqdm import tqdm
 
+def warn(*args, **kwargs):
+    pass
+
+warnings.warn = warn
 
 class AbstractScraper_Arxiv:
     def __init__(self):

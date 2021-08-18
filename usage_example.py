@@ -56,7 +56,9 @@ if __name__ == "__main__":
     # select a classifier
     result = audo.choose_classifier(preprocessed_target, o_svm_result, 0)
 
+    print("test")
     # perform topic modeling and plot the created topics
     lda_target = audo.lda_modeling(data=result, num_topics=5)
+    print("test2")
     # audo.lda_visualize_topics(type="clouds", n_clouds=4)
     audo.lda_visualize_topics(type="pyldavis")

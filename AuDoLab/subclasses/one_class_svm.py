@@ -1,6 +1,11 @@
+import warnings
 from sklearn.svm import OneClassSVM
 from pandas import DataFrame
 
+def warn(*args, **kwargs):
+    pass
+
+warnings.warn = warn
 
 class One_Class_SVM:
     def __init__(self):
