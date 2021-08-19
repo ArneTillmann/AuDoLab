@@ -7,7 +7,6 @@ Welcome to AuDoLab's documentation!
 
    readme
    modules
-   usage_example
    contributing
    authors
    history

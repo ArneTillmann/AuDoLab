@@ -29,13 +29,19 @@ class Tf_idf:
 
         Args:
             data (DataFrame): preprocessed target documents
+
             papers (DataFrame): preprocessed out-of-domain training data
+
             data_colum (String): name of columnin target dataframe where
                 lemmatized documents are stored. Defaults to 'lemma'
+
             papers_colum (String): name of column in out-of-domain training
                 dataframe where lemmatized documents are stored. Defaults to
-            'lemma' ngrams (int, optional): whether ngram are formed.
+                'lemma'
+
+            ngrams (int, optional): whether ngram are formed.
                 Defaults to 2.
+
             features (int, optional): number of max features.
                 Defaults to 8000.
 

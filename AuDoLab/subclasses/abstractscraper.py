@@ -262,19 +262,24 @@ class AbstractScraper:
     async def get(
         self, url=None, keywords=None, operator="OR", pages=2, in_data="author"
     ):
-        """simply runs the self._open function that open ieeeXplore and seraches
-            for paper urls
+        """Simply runs the self._open function that open ieeeXplore and seraches
+            for paper urls.
 
         Args:
             url (str, optional): when the user specifies an own search query on
                 IEEEXplore. Defaults to None.
+
             keywords (iist, optional): keywords that are searched for. Defaults
                 to None.
+
             operator (str, optional): [description]. Defaults to "OR".
+
             pages (int, optional): Number of pages the algorithm iterates over.
                 Defaults to 2.
+
             in_data (str, optional): "author" or "all_meta" whether to search in
                 author keywords or all metadata. Defaults to "author".
+
         """
         await self._open(
             url=url,
@@ -315,13 +320,18 @@ class AbstractScraper:
         Args:
             url (str, optional): when the user specifies an own search query on
                 IEEEXplore. Defaults to None.
+
             keywords (iist, optional): keywords that are searched for. Defaults
                 to None.
+
             operator (str, optional): [description]. Defaults to "OR".
+            
             pages (int, optional): Number of pages the algorithm iterates over.
                 Defaults to 2.
+
             in_data (str, optional): "author" or "all_meta" whether to search in
                 author keywords or all metadata. Defaults to "author".
+
             features (list, optional): which features should be scraped.
                 Defaults to ["abstract", "title", "citationCount", "doi",
                 "totalDownloads", "keywords", "publicationYear"].

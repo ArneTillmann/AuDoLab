@@ -53,20 +53,27 @@ class AuDoLab:
         Args:
             url (str, optional): The url of the website, whos presented paper
                 abstracs will be scraped. Defaults to None.
-                keywords (list, optional): List of keywords that are searched
+
+            keywords (list, optional): List of keywords that are searched
                 for. Defaults to None.
+
             keywords (iist, optional): keywords that are searched for.
                 Defaults to None.
+
             operator (str, optional): Operator between the keywords.
                 "AND" or "OR". If "AND" the search results must include all
                 keywords. Defaults to "OR".
+
             pages (int, optional): Number of pages that are iterated over.
                 Translates directly to number of abstracts that are scraped.
                 Roughly there are 100 abstracts scraped per page. Defaults to 2.
+
             in_data (str, optional): If the keywords are searched for in the
                 author keywords or in all metadata. Defaults to "author".
+
             prepro (bool, optional): if True, the scraped data will directly be
                 preprocessed for later use. Defaults to False.
+
             ngram_type (int, optional): number of ngrams in preprocessing.
                 Defaults to 2.
 
@@ -129,12 +136,17 @@ class AuDoLab:
         Args:
             type (str, optional): "arxiv" or "pubmed". Defines for which page
                 the scraping is done. Defaults to "arxiv".
+
             url (str, optional): The given url after which the papers are
                 scraped. Must be in line with type. Defaults to None.
+
             pages (int, optional): Number of pages that are iterated over.
                 Defaults to 2.
+
             prepro (bool, optional): If True, the scraped documents are
+
             preprocessed directly. Defaults to False.
+
             ngram_type (int, optional): Number of ngrams in preprocessing.
                 Defaults to 2.
 
@@ -166,7 +178,9 @@ class AuDoLab:
         Args:
             data (pd.DataFrame): Dataframe where the documents to be
                 preprocessed are stored
+
             column (str): Column name of the column where docs are stored
+
             ngram_type (int, optional): Number of ngrams used. Defaults to 2.
 
         Returns:
@@ -198,13 +212,19 @@ class AuDoLab:
 
         Args:
             data (DataFrame): preprocessed target documents
+
             papers (DataFrame): preprocessed out-of-domain training data
+
             data_colum (String): name of columnin target dataframe where
                 lemmatized documents are stored. Defaults to 'lemma'
+
             papers_colum (String): name of column in out-of-domain training
                 dataframe where lemmatized documents are stored. Defaults to
-            'lemma' ngrams (int, optional): whether ngram are formed.
+                'lemma'
+
+            ngrams (int, optional): whether ngram are formed.
                 Defaults to 2.
+
             features (int, optional): number of max features.
                 Defaults to 8000.
 
@@ -234,19 +254,27 @@ class AuDoLab:
 
         Args:
             training (DataFrame): training dataset of preprocessed documents
+
             predicting (DataFrame): target dataset of preprccessed documents
+
             nus (list of floats): hyperparameters over which are looped. For
                 each nu the classifier is trained
+
             quality_train (float, optional): percentage of training data that
                 seems to belong to target class. Default: 0.85. Defaults to
                 0.85.
+
             min_pred (float, optional): percentage of target data that has to be
                 at least classified as belonging to target class for classifier
                 to be considered. Default: 0.0. Defaults to 0.05.
+
             max_pred (float, optional): percentage of target class that is
                 maximally allowed to be classified as belonging to
+
             target class for classifier to be considered.. Defaults to 0.2.
+
             gamma (str, optional): Hyperparamter of O-SVM. Defaults to "auto".
+
             kernel (str, optional): Kernel function used in O_SVM. Defaults to
                 "rbf".
 
@@ -275,7 +303,9 @@ class AuDoLab:
 
         Args:
             df (pd.Dataframe): dataframe of target documents
+
             classifier (list): list of all possible o-svm classifiers
+
             i (int): index of which classifier is chosen/preferred
 
         Returns:
@@ -306,20 +336,29 @@ class AuDoLab:
         Args:
             corpus (iterable of list of (int, float), optional): Stream of
                 document vectors or sparse matrix of shape
+
             num_topics (int): pre-defined number of topics
+
             id2word ({dict of (int, str): gensim.corpora.dictionary.Dictionary})
                 –Mapping from word IDs to words. It is used to determine the
                 vocabulary size, as well as for debugging and topic printing.
+
             random_state (int): for recreating exact identical output. Defaults
                 to 101.
+
             passes (int): Number of passes through the corpus during training.
                 Defaults to 20.
+
             chunksize (int, optional): chunksize in lda passes. Defaults to 500.
+
             eta (str, optional): [description]. Defaults to "auto".
+
             eval_every ([type], optional): Hyperparameter in LDA used to
                 initiliaze the Dirichlet distribution. Defaults to None.
+
             multi (bool, optional): If true, the in gensim incorporated
                 multicore variant is used. Defaults to True.
+
             alpha (str, optional): OTher Dirichlet Prior. Defaults to
                 "asymmetric".
 
@@ -384,18 +423,31 @@ class AuDoLab:
 
         Args:
             lda_model (gensim.models.ldamodel.LdaModel): the created LDA model
+
             bow_corpus (gensim.corpora.dictionary.Dictionary): Bag of words corpus of used documents
+
             dictionary (gensim.corpora.dictionary.Dictionary): Dictionary of all words
+
             save_name (str, optional): name under which the plots should be save. Defaults to "audolab_model.png".
+
             type (str, optional): type of visualisation- either "clouds" or "pyldavis". Defaults to "clouds".
+
             figsize (tuple, optional): Size of wordclouds. Defaults to (50, 30).
+
             facecolor (str, optional): Colour of wordcloud Defaults to "k".
+
             width (int, optional): width of plots. Defaults to 2000.
+
             height (int, optional): height of plots. Defaults to 1000.
+
             background_color (str, optional): Background colour of wordcloud. Defaults to "white".
+
             topic (int, optional): IF only one wordcloud is plotted, index of topic that is plotted. Defaults to 0.
+
             words (int, optional): Number of words per cloud. Defaults to 100.
+
             save (bool, optional): whether the plots should be saved or not. Defaults to False.
+
             n_clouds (int, optional): Number of word clouds that are plotted. Defaults to 1.
 
         Raises:

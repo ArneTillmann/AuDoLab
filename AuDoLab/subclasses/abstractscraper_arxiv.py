@@ -19,6 +19,7 @@ class AbstractScraper_Arxiv:
 
         Args:
             url (str): Link from arxiv.org with search query
+
             number_of_pages (int): number of pages that should be scraped
         """
 
@@ -115,8 +116,9 @@ class AbstractScraper_Arxiv:
 
         Args:
             url (str): link of searchquery from arxiv.org
+
             pages (int, optional): number of pages the algorithm iterates
-            through and searches for abstracts. Defaults to 8.
+                through and searches for abstracts. Defaults to 8.
 
         Returns:
             pd.DataFrame: DataFrame that contains Abstracts, Titles and Authors

@@ -21,8 +21,10 @@ class Preprocessor:
 
         Args:
             text (helper variable): None
+
             language (str, optional): Sets language of stopwords to be removed.
                 Defaults to "english".
+
             stop_words (bool, optional): If true, the stopwords are removed, if
                 not, stopwords are left as they are. Defaults to True.
 
@@ -99,7 +101,9 @@ class Preprocessor:
         Args:
             df (pd.DataFrame): Dataframe where the documents to be preprocessed
                 are stored.
+
             column (str):  Column name of the column where docs are stored.
+
             ngram_type (int, optional): Number of ngrams used. Defaults to 2.
 
         Returns:

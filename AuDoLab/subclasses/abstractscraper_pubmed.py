@@ -19,6 +19,7 @@ class AbstractScraper_Pubmed:
 
         Args:
             url (str): Link from arxiv.org with search query
+
             number_of_pages (int): number of pages that should be scraped.
         """
 
@@ -110,7 +111,9 @@ class AbstractScraper_Pubmed:
 
         Args:
             url (string): link of searchquery from arxiv.org
+
             pages (int, optional): number of pages the algorithm iterates
+
             through and searches for abstracts. Defaults to 8.
 
         Returns:

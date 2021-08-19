@@ -31,13 +31,16 @@ class LDA:
         Args:
             df_processed (pd.DataFrame): DataFrame that stores tokenized text in
                 col ["tokens"]
+
             no_below (int): if word appears in less than
                 no_below documents they are not considered. Defaults to None.
+
             no_above (float): if e.g. 0.9, no words are taken into
                 account that appear more often than 90%. Defaults to None.
 
         Returns:
             dictionary: [returns the dictionary used for LDA]
+
             bow_corpus: [Corpus used for LDA]
         """
 
@@ -67,21 +70,30 @@ class LDA:
         Args:
             corpus (iterable of list of (int, float), optional): Stream of
                 document vectors or sparse matrix of shape
+
             num_topics (int): pre-defined number of topics
+
             id2word ({dict of (int, str):
                 gensim.corpora.dictionary.Dictionary}) –Mapping from word IDs to
                 words. It is used to determine the vocabulary size, as well as
                 for debugging and topic printing.
+
             random_state (int): for recreating exact identical output. Defaults
                 to 101.
+
             passes (int): Number of passes through the corpus during training.
                 Defaults to 20.
+
             chunksize (int, optional): chunksize in lda passes. Defaults to 500.
+
             eta (str, optional): [description]. Defaults to "auto".
+
             eval_every ([type], optional): Hyperparameter in LDA used to
                 initiliaze the Dirichlet distribution. Defaults to None.
+
             multi (bool, optional): If true, the in gensim incorporated
                 multicore variant is used. Defaults to True.
+
             alpha (str, optional): OTher Dirichlet Prior. Defaults to
                 "asymmetric".
 
@@ -138,25 +150,38 @@ class LDA:
 
         Args:
             lda_model (gensim_models.ldamodel.LdaModel): the created LDA model
+
             bow_corpus (gensim.corpora.dictionary.Dictionary): Bag of words
                 corpus of used documents
+
             dictionary (gensim.corpora.dictionary.Dictionary): Dictionary of
                 all words
+
             save_name (str, optional): name under which the plots should be
                 save. Defaults to "audolab_model.png".
+
             type (str, optional): type of visualisation- either "clouds" or
                 "pyldavis". Defaults to "clouds".
+
             figsize (tuple, optional): Size of wordclouds. Defaults to (50, 30).
+
             facecolor (str, optional): Colour of wordcloud Defaults to "k".
+
             width (int, optional): width of plots. Defaults to 2000.
+
             height (int, optional): height of plots. Defaults to 1000.
+
             background_color (str, optional): Background colour of wordcloud.
                 Defaults to "white".
+
             topic (int, optional): IF only one wordcloud is plotted, index of
                 topic that is plotted. Defaults to 0.
+
             words (int, optional): Number of words per cloud. Defaults to 100.
+
             save (bool, optional): whether the plots should be saved or not.
                 Defaults to False.
+
             n_clouds (int, optional): Number of word clouds that are plotted.
                 Defaults to 1.
 
