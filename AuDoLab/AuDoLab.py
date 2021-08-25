@@ -198,6 +198,7 @@ class AuDoLab:
         """
 
         prepro = preprocessing.Preprocessor()
+        print("start preprocessing the documents")
         self.data_processed = prepro.basic_preprocessing(
             data, column, ngram_type=ngram_type
         )
