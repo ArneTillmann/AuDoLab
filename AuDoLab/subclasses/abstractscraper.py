@@ -9,10 +9,13 @@ import asyncio
 from pyppeteer import launch
 from tqdm import tqdm
 
+
 def warn(*args, **kwargs):
     pass
 
+
 warnings.warn = warn
+
 
 class AbstractScraper:
     """
@@ -21,6 +24,7 @@ class AbstractScraper:
     """
 
     def __init__(self):
+        """Define url for when a search query in the form of keywords are given"""
         self.first = "https://ieeexplore.ieee.org/search/searchresult.jsp?action=search&newsearch=true&matchBoolean=true&"
         self.second = "&highlight=true&returnFacets=ALL&returnType=SEARCH&matchPubs=true&rowsPerPage=100&pageNumber=1"
 
@@ -28,7 +32,7 @@ class AbstractScraper:
         self, url=None, keywords=None, operator="OR", in_data="author", pages=2
     ):
         """
-        defines the users search query
+        defines the users search query and pbuilds a suitable URL according to the specified keywords
 
         :param url: when the user specifies an own search query on IEEEXplore
         :type url: string
@@ -48,7 +52,7 @@ class AbstractScraper:
     async def _open_pypeteer(
         self, url=None, keywords=None, operator="OR", in_data="author", pages=2
     ):
-        """[summary]
+        """function that opens a web browser in the background and
 
         Args:
             url (string, optional): if given than the search defined in this url
@@ -68,7 +72,13 @@ class AbstractScraper:
 
         self._create_url(url, keywords, operator, in_data)
         self.html_page = []
-        print("The algorithm is iterating through", pages, "pages")
+
+        # Print statement so everyone knows what is currently happening
+        if pages == 1:
+            print("The algorithm is iterating through", pages, "page")
+        else:
+            print("The algorithm is iterating through", pages, "pages")
+
         browser = await launch()
         page = await browser.newPage()
         await page.goto(self.url, {"waitUntil": "networkidle0"})
@@ -80,7 +90,7 @@ class AbstractScraper:
             self.linkstorage.append(
                 await page.evaluate("(element) => element.href", element)
             )
-        for i in range(2, pages + 1):
+        for i in tqdm(range(2, pages + 1)):
             self._create_new_url(i)
             await page.goto(self.url, {"waitUntil": "networkidle0"})
             elements = await page.querySelectorAll("a")
@@ -91,23 +101,23 @@ class AbstractScraper:
         await browser.close()
 
     def _add_page_number(self, page, position):
-        """[summary]
+        """helper func that extracts the pages from the users search query
 
         Args:
-            page ([type]): [description]
-            position ([type]): [description]
+            page (int): helper variable for number of page
+            position (int): helper variable for position at which it has already been scraped
         """
         self.url = (
             self.url[: position + len("pageNumber=")]
             + str(page)
-            + self.url[position + len("pageNumber=") + len(str(page - 1)):]
+            + self.url[position + len("pageNumber=") + len(str(page - 1)) :]
         )
 
     def _add_str_plus_page_number(self, page):
-        """[summary]
+        """helper func to iterate through pages
 
         Args:
-            page ([type]): [description]
+            page (int): page
         """
         if self.url[-1] == "?":
             self.url = self.url + "pageNumber=" + str(page)
@@ -115,10 +125,10 @@ class AbstractScraper:
             self.url = self.url + "?pageNumber" + str(page)
 
     def _create_new_url(self, page):
-        """[summary]
+        """helper func
 
         Args:
-            page ([type]): [description]
+            page (int): -
         """
 
         if "pageNumber=" in self.url:
@@ -127,13 +137,13 @@ class AbstractScraper:
             self._add_str_plus_page_number(page)
 
     def _create_url(self, url, keywords, operator, in_data):
-        """[summary]
+        """helper func to create the URL that is generated according to the useres keywords
 
         Args:
-            url ([type]): [description]
-            keywords ([type]): [description]
-            operator ([type]): [description]
-            in_data ([type]): [description]
+            url (str): if a url is given, the function is not building a new url
+            keywords (list): if keywords are given a search query is implemented
+            operator (str): operator between keywords, "AND" or "OR"
+            in_data (str): either "author", or "all_meta - specifies whether the keywords must appear only in the author keywords or can appera in all metadata
         """
 
         operator = ")%20" + operator.upper() + "%20("
@@ -200,6 +210,7 @@ class AbstractScraper:
             "totalDownloads",
             "keywords",
             "publicationYear",
+            "authors",
         ],
     ):
         """Opens all links for the webpages for each paper and scrapes the
@@ -207,8 +218,8 @@ class AbstractScraper:
 
         Args:
             features (list, optional): specify which information you want to
-                have scraped. Defaults to ["abstract", "title",
-                "citationCountPaper", "doi", "totalDownloads"].
+                have scraped. Defaults to ["abstract", "title", "citationCount", "doi",
+                "totalDownloads", "keywords", "publicationYear", "authors"].
         """
 
         # initialize emtpy dict to create attributes and set dict keys as
@@ -251,11 +262,22 @@ class AbstractScraper:
                         temp = data["metrics"][i]
                     except BaseException:
                         temp = None
+
                 if i == "keywords":
                     try:
                         temp = data[i][0]["kwd"]
                     except BaseException:
                         temp = None
+
+                if i == "authors":
+                    try:
+                        temp = []
+                        n_authors = len(data[i])
+                        for j in range(n_authors):
+                            temp.append(data[i][j]["name"])
+                    except BaseException:
+                        temp = None
+
                 # append to obj attribute
                 getattr(self, i).append(temp)
 
@@ -282,11 +304,7 @@ class AbstractScraper:
 
         """
         await self._open(
-            url=url,
-            keywords=keywords,
-            operator=operator,
-            pages=pages,
-            in_data=in_data
+            url=url, keywords=keywords, operator=operator, pages=pages, in_data=in_data
         )
 
     async def get_abstracts(
@@ -304,6 +322,7 @@ class AbstractScraper:
             "totalDownloads",
             "keywords",
             "publicationYear",
+            "authors",
         ],
     ):
         """Function to scrape abstracts of scientific papers from the givin url.
@@ -325,7 +344,7 @@ class AbstractScraper:
                 to None.
 
             operator (str, optional): [description]. Defaults to "OR".
-            
+
             pages (int, optional): Number of pages the algorithm iterates over.
                 Defaults to 2.
 
@@ -334,7 +353,7 @@ class AbstractScraper:
 
             features (list, optional): which features should be scraped.
                 Defaults to ["abstract", "title", "citationCount", "doi",
-                "totalDownloads", "keywords", "publicationYear"].
+                "totalDownloads", "keywords", "publicationYear", "authors"].
 
         Returns:
             pd.DataFrame: DataFrame containing the paper abstracts and the
@@ -342,11 +361,7 @@ class AbstractScraper:
         """
 
         await self._open(
-            url=url,
-            keywords=keywords,
-            operator=operator,
-            pages=pages,
-            in_data=in_data
+            url=url, keywords=keywords, operator=operator, pages=pages, in_data=in_data
         )
         self._find_links()
         self._find_abstracts(features=features)
@@ -372,4 +387,4 @@ if __name__ == "__main__":
 
     data = asyncio.get_event_loop().run_until_complete(main())
 
-    data.to_csv("cit_patents.csv")
+    # data.to_csv("cit_patents.csv")
