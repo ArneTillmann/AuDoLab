@@ -1,4 +1,5 @@
 import warnings
+
 with warnings.catch_warnings():
     warnings.filterwarnings("ignore", category=DeprecationWarning)
     import webbrowser
@@ -8,12 +9,15 @@ with warnings.catch_warnings():
     import pyLDAvis.gensim_models
     import pyLDAvis
 
+
 def warn(*args, **kwargs):
     pass
+
 
 warnings.warn = warn
 
 warnings.filterwarnings("ignore", category=DeprecationWarning)
+
 
 class LDA:
     """
@@ -24,8 +28,7 @@ class LDA:
         pass
 
     @staticmethod
-    def preperation(df_processed, no_below=None, no_above=None,
-                    column="preprocessed"):
+    def preperation(df_processed, no_below=None, no_above=None, column="preprocessed"):
         """Preprocessing for LDA
 
         Args:
@@ -136,7 +139,7 @@ class LDA:
         dictionary,
         save_name="audolab_model.png",
         type="clouds",
-        figsize=(50, 30),
+        figsize=(50, 50),
         facecolor="k",
         width=2000,
         height=1000,
@@ -196,23 +199,21 @@ class LDA:
             #   preprocessed_column_target.apply(lambda x: len(x))
             #   )
             visualization = pyLDAvis.gensim_models.prepare(
-                lda_model,
-                bow_corpus,
-                dictionary,
-                sort_topics=False
+                lda_model, bow_corpus, dictionary, sort_topics=False
             )
-            pyLDAvis.save_html(
-                visualization,
-                'your_latest_lda_visualization.html')
-            webbrowser.open('your_latest_lda_visualization.html')
+            pyLDAvis.save_html(visualization, "your_latest_lda_visualization.html")
+            webbrowser.open("your_latest_lda_visualization.html")
+
+        if type == "clouds" and n_clouds > len(lda_model.print_topics()):
+            raise ValueError(
+                "n_clouds must be <= the number of topics in your LDA computation"
+            )
 
         if type == "clouds" and n_clouds <= 1:
             plt.figure(figsize=figsize, facecolor=facecolor)
             plt.imshow(
                 WordCloud(
-                    width=width,
-                    height=height,
-                    background_color=background_color
+                    width=width, height=height, background_color=background_color
                 ).fit_words(dict(lda_model.show_topic(topic, words)))
             )
             plt.axis("off")
@@ -227,18 +228,27 @@ class LDA:
             ).fit_words(dict(lda_model.show_topic(topic, words)))
             return wordcloud
 
-        if type == "clouds" and n_clouds >= 1:
-            fig = plt.figure()
-            if n_clouds >= 10:
+        if type == "clouds" and n_clouds > 1:
+            # initiliaze figure
+            fig = plt.figure(figsize=figsize)
+            # different plot sizes for different number of clouds
+            if n_clouds % 2 != 0 and n_clouds >= 10:
                 for i in range(n_clouds):
-                    ax = fig.add_subplot(
-                        int(n_clouds / 3), int(n_clouds / 3), i + 1)
+                    ax = fig.add_subplot(int(n_clouds / 3), int(n_clouds / 3), i + 1)
                     wordcloud = _wordclouds(i)
                     ax.imshow(wordcloud)
                     ax.axis("off")
-            else:
+
+            elif n_clouds % 2 == 0 and n_clouds < 10:
                 for i in range(n_clouds):
                     ax = fig.add_subplot(2, int(n_clouds / 2), i + 1)
+                    wordcloud = _wordclouds(i)
+                    ax.imshow(wordcloud)
+                    ax.axis("off")
+
+            else:
+                for i in range(n_clouds):
+                    ax = fig.add_subplot(3, int(n_clouds / 2), i + 1)
                     wordcloud = _wordclouds(i)
                     ax.imshow(wordcloud)
                     ax.axis("off")
