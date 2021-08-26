@@ -101,7 +101,13 @@ In this example we used publicly available data from the nltk package::
 
 Then you want to scrape abstracts, e.g. from IEEE with the abstract scraper::
 
-    scraped_documents = audo.get_ieee(pages=1)
+    scraped_documents = audo.get_ieee("https://ieeexplore.ieee.org/search
+                                       /searchresult.jsp?newsearch=true&
+                                       queryText=cotton&highlight=true&
+                                       returnFacets=ALL&returnType=SEARCH&
+                                       matchPubs=true&rowsPerPage=100&
+                                       pageNumber=1\",
+                                       pages=1)
 
 The data as well as the scraped papers need to be preprocessed before use in the
 classifier::

@@ -39,13 +39,14 @@ class AuDoLab:
         prepro=False,
         ngram_type=2,
     ):
-        """Function to scrape abstracts of scientific papers from the givin url.
+        """Function to scrape abstracts of scientific papers from the givin
+        url.
 
         We used https://ieeexplore.ieee.org/search/advanced to generate a
         list like https://ieeexplore.ieee.org/search/searchresult.jsp?action=se
-        arch&newsearch=true&matchBoolean=true&queryText=(%22Author%20Keywords%22
-        :cotton)&highlight=true&returnFacets=ALL&returnType=SEARCH&matchPubs=Tru
-        e&rowsPerPage=100&pageNumber=1
+        arch&newsearch=true&matchBoolean=true&queryText=(%22Author%20Keywords%2
+        2:cotton)&highlight=true&returnFacets=ALL&returnType=SEARCH&matchPubs=T
+        rue&rowsPerPage=100&pageNumber=1
         with the search results.
         The abstracts of the papers listet on that list of search results will
         be stored in a .txt file with the givin file name.
@@ -81,10 +82,14 @@ class AuDoLab:
             pd.DataFrame: DataFrame with the stored abstracts and metadata
         """
         return self.loop.run_until_complete(self.__async__get_ieee(
-            "https://ieeexplore.ieee.org/search/searchresult.jsp?newsearch=true&queryText=cotton&highlight=true&returnFacets=ALL&returnType=SEARCH&matchPubs=true&rowsPerPage=100&pageNumber=1",
-            prepro=True,
+            url=url,
+            keywords=keywords,
+            operator=operator,
             pages=pages,
-        ))
+            in_data=in_data,
+            prepro=prepro,
+            ngram_type=ngram_type
+            ))
 
     async def __async__get_ieee(
         self,
@@ -116,14 +121,18 @@ class AuDoLab:
 
         if not isinstance(self.abstracts, pd.DataFrame):
             print(
-                "if using the ieee abstractscraper, please use the following code: \n \n"
+                """ if using the ieee abstractscraper, please use the following
+                    code: \n \n"""
                 + "async def scrape():"
-                + "\n     return await audo.ieee_scraper(keywords=[keywords], prepro=False, pages=1, ngram_type=2)"
-                + "\n\nscraped_documents = asyncio.get_event_loop().run_until_complete(scrape())"
+                + """\n     return await audo.ieee_scraper(keywords=[keywords],
+                    prepro=False, pages=1, ngram_type=2)"""
+                + """\n\nscraped_documents =
+                    asyncio.get_event_loop().run_until_complete(scrape())"""
             )
 
             sys.exit(
-                "please specify the code as indicated above, or use the function abstract_scraper to scrape from different websites"
+                """please specify the code as indicated above, or use the
+                function abstract_scraper to scrape from different websites"""
             )
 
         return self.abstracts
@@ -189,6 +198,7 @@ class AuDoLab:
         """
 
         prepro = preprocessing.Preprocessor()
+        print("start preprocessing the documents")
         self.data_processed = prepro.basic_preprocessing(
             data, column, ngram_type=ngram_type
         )
@@ -205,10 +215,10 @@ class AuDoLab:
     ):
         """Creates tf-idf objects for one-class SVM classification.
 
-        The tf-idf scores are calculated over a joint corpus, however the target
-        data and the out-of-domain training data are stored in seperate, as the
-        one-class SVM is only trained on the tf-idf scores of the out-of-domain
-        training data.
+        The tf-idf scores are calculated over a joint corpus, however the
+        target data and the out-of-domain training data are stored in seperate,
+        as the one-class SVM is only trained on the tf-idf scores of the
+        out-of-domain training data.
 
         Args:
             data (DataFrame): preprocessed target documents
@@ -264,9 +274,9 @@ class AuDoLab:
                 seems to belong to target class. Default: 0.85. Defaults to
                 0.85.
 
-            min_pred (float, optional): percentage of target data that has to be
-                at least classified as belonging to target class for classifier
-                to be considered. Default: 0.0. Defaults to 0.05.
+            min_pred (float, optional): percentage of target data that has to
+                be at least classified as belonging to target class for
+                classifier to be considered. Default: 0.0. Defaults to 0.05.
 
             max_pred (float, optional): percentage of target class that is
                 maximally allowed to be classified as belonging to
@@ -298,8 +308,8 @@ class AuDoLab:
         return self.df
 
     def choose_classifier(self, df, classifier, i):
-        """Returns dataframe where documents that are classified to target class
-        have 1, otherwise, 0
+        """Returns dataframe where documents that are classified to target
+        class have 1, otherwise, 0.
 
         Args:
             df (pd.Dataframe): dataframe of target documents
@@ -339,9 +349,10 @@ class AuDoLab:
 
             num_topics (int): pre-defined number of topics
 
-            id2word ({dict of (int, str): gensim.corpora.dictionary.Dictionary})
-                –Mapping from word IDs to words. It is used to determine the
-                vocabulary size, as well as for debugging and topic printing.
+            id2word ({dict of (int, str):
+                gensim.corpora.dictionary.Dictionary}): Mapping from word IDs
+                to words. It is used to determine the vocabulary size, as well
+                as for debugging and topic printing.
 
             random_state (int): for recreating exact identical output. Defaults
                 to 101.
@@ -349,7 +360,8 @@ class AuDoLab:
             passes (int): Number of passes through the corpus during training.
                 Defaults to 20.
 
-            chunksize (int, optional): chunksize in lda passes. Defaults to 500.
+            chunksize (int, optional): chunksize in lda passes. Defaults to
+                500.
 
             eta (str, optional): [description]. Defaults to "auto".
 
@@ -424,15 +436,20 @@ class AuDoLab:
         Args:
             lda_model (gensim.models.ldamodel.LdaModel): the created LDA model
 
-            bow_corpus (gensim.corpora.dictionary.Dictionary): Bag of words corpus of used documents
+            bow_corpus (gensim.corpora.dictionary.Dictionary): Bag of words
+                corpus of used documents
 
-            dictionary (gensim.corpora.dictionary.Dictionary): Dictionary of all words
+            dictionary (gensim.corpora.dictionary.Dictionary): Dictionary of
+                all words
 
-            save_name (str, optional): name under which the plots should be save. Defaults to "audolab_model.png".
+            save_name (str, optional): name under which the plots should be
+                save. Defaults to "audolab_model.png".
 
-            type (str, optional): type of visualisation- either "clouds" or "pyldavis". Defaults to "clouds".
+            type (str, optional): type of visualisation- either "clouds" or
+                "pyldavis". Defaults to "clouds".
 
-            figsize (tuple, optional): Size of wordclouds. Defaults to (50, 30).
+            figsize (tuple, optional): Size of wordclouds. Defaults to
+                (50, 30).
 
             facecolor (str, optional): Colour of wordcloud Defaults to "k".
 
@@ -440,18 +457,23 @@ class AuDoLab:
 
             height (int, optional): height of plots. Defaults to 1000.
 
-            background_color (str, optional): Background colour of wordcloud. Defaults to "white".
+            background_color (str, optional): Background colour of wordcloud.
+                Defaults to "white".
 
-            topic (int, optional): IF only one wordcloud is plotted, index of topic that is plotted. Defaults to 0.
+            topic (int, optional): IF only one wordcloud is plotted, index of
+                topic that is plotted. Defaults to 0.
 
             words (int, optional): Number of words per cloud. Defaults to 100.
 
-            save (bool, optional): whether the plots should be saved or not. Defaults to False.
+            save (bool, optional): whether the plots should be saved or not.
+                Defaults to False.
 
-            n_clouds (int, optional): Number of word clouds that are plotted. Defaults to 1.
+            n_clouds (int, optional): Number of word clouds that are plotted.
+                Defaults to 1.
 
         Raises:
-            ValueError: If save_name is not a string: no "Please specify a string as the name under which the plots should be saved"
+            ValueError: If save_name is not a string: no "Please specify a
+                string as the name under which the plots should be saved"
         """
 
         if bow_corpus is None:

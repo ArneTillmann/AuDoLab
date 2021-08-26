@@ -5,10 +5,13 @@ import pandas as pd
 import unicodedata
 from tqdm import tqdm
 
+
 def warn(*args, **kwargs):
     pass
 
+
 warnings.warn = warn
+
 
 class AbstractScraper_Pubmed:
     def __init__(self):
@@ -25,15 +28,22 @@ class AbstractScraper_Pubmed:
 
         html = requests.get(url).text
 
-        self.pages = [url + "&page=" + str(i)
-                      for i in range(1, number_of_pages)]
+        # get urls of pages staring from 1
+        self.pages = [url + "&page=" + str(i) for i in range(1, number_of_pages + 1)]
 
         self.pages = list(set(self.pages))
 
         self.document_links = []
 
-        for page in self.pages:
-            html = requests.get(page).text
+        # print statement so everybody knows what is happening
+        if len(self.pages) == 1:
+            print("The algorithm is iterating through", len(self.pages), "page")
+        else:
+            print("The algorithm is iterating through", len(self.pages), "pages")
+
+        # loop through all pages and extract links
+        for i in tqdm(range(len(self.pages))):
+            html = requests.get(self.pages[i]).text
 
             for link in BeautifulSoup(html, features="html.parser").findAll(
                 "a", {"class": "docsum-title"}
@@ -48,9 +58,13 @@ class AbstractScraper_Pubmed:
             " unique abstracts to in your query. \n Try increasing the number of pages if you want to scrape more papers",
         )
 
-    def _scrape(self):
+    def _scrape(self, author=True):
         """loop through all found paper links and scrape abstracts, titles and
-            authors."""
+        authors.
+
+        Args:
+            author (bool, optional): if true all author names are scraped as well. Defaults to True.
+        """
 
         # initiliaze empty lists
         self.abstracts = []
@@ -82,27 +96,35 @@ class AbstractScraper_Pubmed:
             except BaseException:
                 self.titles.append(None)
 
-            try:
-                authors = soup.find("div", class_="authors")
-                authors = authors.text.replace("\n", "")
-                authors = unicodedata.normalize("NFKD", authors)
-                authors = authors.replace("  ", "")
-                authors = "".join(i for i in authors if not i.isdigit())
-                self.authors.append(authors)
-            except BaseException:
-                self.authors.append(None)
+            if author == True:
+                try:
+                    authors = soup.find("div", class_="authors")
+                    authors = authors.text.replace("\n", "")
+                    authors = unicodedata.normalize("NFKD", authors)
+                    authors = authors.replace("  ", "")
+                    authors = "".join(i for i in authors if not i.isdigit())
+                    self.authors.append(authors)
+                except BaseException:
+                    self.authors.append(None)
 
-        data = pd.DataFrame(
-            {
-                "abstract": self.abstracts,
-                "title": self.titles,
-                "authors": self.authors,
-            }
-        )
+                data = pd.DataFrame(
+                    {
+                        "abstract": self.abstracts,
+                        "title": self.titles,
+                        "authors": self.authors,
+                    }
+                )
+            else:
+                data = pd.DataFrame(
+                    {
+                        "abstract": self.abstracts,
+                        "title": self.titles,
+                    }
+                )
 
         self.data = data.drop_duplicates()
 
-    def scrape_pubmed(self, url, pages=8):
+    def scrape_pubmed(self, url, pages=8, author=True):
         """Scrapes https://pubmed.ncbi and returns a pd.DataFrame containing
             abstracts, titles and author names.
 
@@ -112,9 +134,9 @@ class AbstractScraper_Pubmed:
         Args:
             url (string): link of searchquery from arxiv.org
 
-            pages (int, optional): number of pages the algorithm iterates
+            pages (int, optional): number of pages the algorithm iterates through and searches for abstracts. Defaults to 8.
 
-            through and searches for abstracts. Defaults to 8.
+            author (bool, optional): if true all author names are scraped as well. Defaults to True.
 
         Returns:
             pd.DataFrame: DataFrame that contains: Abstracts, Titles and Authors
@@ -126,7 +148,7 @@ class AbstractScraper_Pubmed:
             )
         else:
             self._find_links(url=url, number_of_pages=pages)
-            self._scrape()
+            self._scrape(author)
 
         return self.data
 
@@ -134,7 +156,4 @@ class AbstractScraper_Pubmed:
 if __name__ == "__main__":
     AS = AbstractScraper_Pubmed()
 
-    test = AS.scrape_pubmed(
-        "https://pubmed.ncbi.nlm.nih.gov/?term=medicine",
-        3,
-    )
+    test = AS.scrape_pubmed("https://pubmed.ncbi.nlm.nih.gov/?term=medicine", 3, False)

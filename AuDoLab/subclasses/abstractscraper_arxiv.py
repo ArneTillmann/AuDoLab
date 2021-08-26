@@ -5,14 +5,17 @@ import pandas as pd
 import re
 from tqdm import tqdm
 
+
 def warn(*args, **kwargs):
     pass
 
+
 warnings.warn = warn
+
 
 class AbstractScraper_Arxiv:
     def __init__(self):
-        4 + 5
+        pass
 
     def _find_links(self, url, number_of_pages):
         """finds paper links associated with given url search query
@@ -41,8 +44,13 @@ class AbstractScraper_Arxiv:
 
         self.document_links = []
 
-        for page in self.pages:
-            html = requests.get(page).text
+        if len(self.pages) == 1:
+            print("The algorithm is iterating through", len(self.pages), "page")
+        else:
+            print("The algorithm is iterating through", len(self.pages), "pages")
+
+        for i in tqdm(range(len(self.pages))):
+            html = requests.get(self.pages[i]).text
 
             for link in BeautifulSoup(html, features="html.parser").find_all(
                 "a", href=re.compile("/abs")
@@ -52,12 +60,16 @@ class AbstractScraper_Arxiv:
         print(
             "The algorithm found ",
             len(self.document_links),
-            " unique abstracts to in your query. \n Try increasing the number of pages if you want to scrape more papers",
+            " unique abstracts in your query. \n Try increasing the number of pages if you want to scrape more papers",
         )
 
-    def _scrape(self):
+    def _scrape(self, author=True):
         """loop through all found paper links and scrape abstracts, titles and
-        authors."""
+        authors.
+
+        Args:
+            author (bool, optional): if true all author names are scraped as well. Defaults to True.
+        """
 
         # initiliaze empty lists
         self.abstracts = []
@@ -90,24 +102,32 @@ class AbstractScraper_Arxiv:
             except BaseException:
                 self.titles.append(None)
 
-            try:
-                authors = soup.find("div", class_="authors")
-                authors.span.extract()
-                self.authors.append(authors.text)
-            except BaseException:
-                self.authors.append(None)
+            if author == True:
+                try:
+                    authors = soup.find("div", class_="authors")
+                    authors.span.extract()
+                    self.authors.append(authors.text)
+                except BaseException:
+                    self.authors.append(None)
 
-        data = pd.DataFrame(
-            {
-                "abstract": self.abstracts,
-                "title": self.titles,
-                "authors": self.authors,
-            }
-        )
+                data = pd.DataFrame(
+                    {
+                        "abstract": self.abstracts,
+                        "title": self.titles,
+                        "authors": self.authors,
+                    }
+                )
+            else:
+                data = pd.DataFrame(
+                    {
+                        "abstract": self.abstracts,
+                        "title": self.titles,
+                    }
+                )
 
         self.data = data.drop_duplicates()
 
-    def scrape_arxiv(self, url, pages=8):
+    def scrape_arxiv(self, url, pages=8, author=True):
         """Scrapes arxiv.org and returns a pd.DataFrame containing abstracts,
             titles and author names.
 
@@ -120,16 +140,17 @@ class AbstractScraper_Arxiv:
             pages (int, optional): number of pages the algorithm iterates
                 through and searches for abstracts. Defaults to 8.
 
+            author (bool, optional): if true all author names are scraped as well. Defaults to True.
+
         Returns:
             pd.DataFrame: DataFrame that contains Abstracts, Titles and Authors
         """
 
         if "arxiv" not in url:
-            return print(
-                "ERROR: Only specify a url/search query via arxiv.org")
+            return print("ERROR: Only specify a url/search query via arxiv.org")
         else:
             self._find_links(url=url, number_of_pages=pages)
-            self._scrape()
+            self._scrape(author)
 
         return self.data
 
@@ -139,5 +160,5 @@ if __name__ == "__main__":
 
     test = AS.scrape_arxiv(
         "https://arxiv.org/search/?query=deep+learning&searchtype=all&source=header&order=&size=100&abstracts=show&date-date_type=submitted_date&start=0",
-        5,
+        1,
     )
