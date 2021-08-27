@@ -14,6 +14,8 @@ authors:
     affiliation: 1
   - name: Anton Thielmann
     affiliation: 1
+  - name: Gillian Kant
+    affiliation: 1
   - name: Christoph Weisser
     affiliation: "1, 2"
   - name: Benjamin Säfken
@@ -41,7 +43,7 @@ aas-journal: Astrophysical Journal <- The name of the AAS journal.
 AuDoLab provides a novel approach to one-class document classification for heavily imbalanced datasets, even if labelled training data is not available.
 Our package enables the user to create specific out-of-domain training data to classify a heavily underrepresented target class
 in a document dataset using a recently developed integration of Web Scraping, Latent Dirichlet Allocation Topic Modelling and One-class Support Vector Machines [@Thielmann]. AuDoLab can achieve high quality results even on higly specific classification problems without the need to invest in the time and cost intensive
-labelling of training documents by humans. Hence, AuDoLab has a broad range of scientific research or business applications. The following section provides an overview of AuDoLab. AuDoLab can be installed conveniently via pip. A detailed description of the package and installation and can be found in the packages repository or on the documentation website.^[https://AuDoLab.readthedocs.io] 
+labelling of training documents by humans. Hence, AuDoLab has a broad range of scientific research or business applications. The following section provides an overview of AuDoLab. AuDoLab can be installed conveniently via pip. A detailed description of the package and installation and can be found in the packages repository or on the documentation website.^[https://AuDoLab.readthedocs.io]
 
 # Statement of need
 
