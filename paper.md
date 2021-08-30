@@ -1,6 +1,6 @@
 
 ---
-title: 'AuDoLab: Automatic document labelling and classfication for extremely unbalanced data'
+title: 'AuDoLab: Automatic document labelling and classification  for extremely unbalanced data'
 tags:
   - Python
   - One-class SVM
