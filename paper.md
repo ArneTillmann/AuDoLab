@@ -9,7 +9,7 @@ tags:
   - LDA Topic Modelling
   - Out-of-domain Training Data
 authors:
-  - name: Arne Tillmann^[Custom footnotes for e.g. denoting who the corresponding author is can be included like this.]
+  - name: Arne Tillmann
     orcid: 0000-0003-0872-7098
     affiliation: 1
   - name: Anton Thielmann
@@ -31,11 +31,6 @@ affiliations:
    index: 2
 date: 24 April 2021
 bibliography: paper.bib
-
-# Optional fields if submitting to a AAS journal too, see this blog post:
-# https://blog.joss.theoj.org/2018/12/a-new-collaboration-with-aas-publishing
-aas-doi: 10.3847/xxxxx <- update this with the DOI from AAS once you know it.
-aas-journal: Astrophysical Journal <- The name of the AAS journal.
 ---
 
 # Summary
