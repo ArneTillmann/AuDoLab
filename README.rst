@@ -14,6 +14,14 @@ AuDoLab
 
 With AuDoLab you can perform Latend Direchlet Allocation on highly imbalanced datasets.
 
+=======
+Summary
+=======
+
+AuDoLab provides a novel approach to one-class document classification for heavily imbalanced datasets, even if labelled training data is not available. Our package enables the user to create specific out-of-domain training data to classify a heavily underrepresented target class in a document dataset using a recently developed integration of Web Scraping, Latent Dirichlet Allocation Topic Modelling and One-class Support Vector Machines. AuDoLab can achieve high quality results even on higly specific classification problems without the need to invest in the time and cost intensive labelling of training documents by humans. Hence, AuDoLab has a broad range of scientific research or business applications.
+
+Unsupervised document classification is mainly performed to gain insight into the underlying topics of large text corpora. In this process, documents covering highly underrepresented topics have only a minor impact on the algorithm's topic definitions. As a result, underrepresented topics can sometimes be "overlooked" and documents are assigned topic prevalences that do not reflect the underlying content. Thus, labeling underrepresented topics in large text corpora is often done manually and can therefore be very labour-intensive and time-consuming. AuDoLab enables the user to tackle this problem and perform unsupervised one-class document classification for heavily underrepresented document classes.
+
 ============
 Installation
 ============
