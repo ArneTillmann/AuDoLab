@@ -8,7 +8,8 @@ deploy:
   provider: pypi
   distributions: sdist bdist_wheel
   username: ArneTillmann
-  password: 2AQeUe5iHHEe0MrEv7
+  password:
+    secure: N+43r/2dkFEuH6tJaz+6OkTeJmPJbTTLeLfL1JqG8akNHCqtDjozKVueUTADOTxFvYJJf4tEYnt8r389CuzM/mpm4afL72AHxOdkeEVlEs9oFe1J59qmPDahPtgcGjiqXpSNWe6BfSxPa0MflX05MismxpzOZF/GvOjdyWc4hkcT97n4L/cG0wrfE4segOi02QcO1UmDOQ0jcT1haqL3Y8tQfIkOz3kAJTkWusEUjGC0eJaahzot2Biai1W8kG8a+jTYg67n/wz4oydWI8mWlSxvECYP2vndsTK9kare0m1fIQkX8qcawCHvtOtS8gSpisxVZLER1f+0+SUbYAQgx8tfj9WluWj36URWGSECYD3z8/6S203QnMDA4B5qk4pvJ2tyFvp5ks53VEdAXbp30P6d/Hz6RHn4t1SIjiIX6LcdotYr/ZC5BIhdnhq33mhcBjfj1K+An0u9zGVKPyEEBakZD94sWF2qI+kfKvVVU1e3lnMKDpEjikyS5rk8FZhZpUX4Q3pGKXQKUYIIcQc4+OVfw+wOF/iqbI+1CJgRfokV2VpXIUG5wEGnjtlmXG08omj7WRhhFkx4X/8AWm+N0UiDFoeyjeVG98RyvuQ8OqtSfNxA8unViKX1zVoggoTiHUq0aZ52nlEPHtJPqH8HRN9q8T/wPpMjjd5EXGp2Owg=
   on:
     tag: true
     branch: main
