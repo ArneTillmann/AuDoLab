@@ -30,7 +30,7 @@ Installation
 Stable release
 --------------
 
-To install AuDoLab, run this command in your terminal:
+To install AuDoLab, run this command in your terminal (bash, PowerShell, etc.), given that you have python 3 and pip installed :
 
 .. code-block:: console
 
